@@ -171,7 +171,7 @@
       </nav>
     </div>
     <!-- ヘッダー本体 -->
-    <div class='hero-body py-5'>
+    <div class='hero-body py-5 mb-2'>
       <p class='title is-unselectable'><data:blog.title/></p>
     </div>
   </header>
