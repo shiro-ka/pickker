@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <!-- Blogger自動生成メタタグ -->
+  <b:include data='blog' name='all-head-content'/>
+  <!-- メタタグ -->
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <b:if cond='data:blog.pageType == &quot;index&quot; '>
+    <title><data:blog.pageTitle/></title>
+    <meta content='website' property='og:type'/>
+  <b:else/>
+    <title><data:blog.pageName/> - <data:blog.title/></title>
+    <meta content='article' property='og:type'/>
+  </b:if>
+  <meta expr:content='data:blog.title' property='og:site_name'/>
+  <!-- デフォルトcssを削除 -->
+  &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
+  <!-- Bulma CSS v1.0.0 | MIT License | https://github.com/jgthms/bulma -->
+  <link href='https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css' rel='stylesheet'/>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' rel='stylesheet'/>
+  <!-- M PLUS Rounded 1c | 自家製フォント工房 (http://jikasei.me/font/rounded-mplus/about.html) -->
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300&amp;display=swap' rel='stylesheet'/>
+  <!-- = = = = = = CSS = = = = = = -->
+  <style>
+    /* webフォント */
+      body{font-family: &quot;M PLUS Rounded 1c&quot;,sans-serif; font-weight: 300; font-style: normal;}
+    /* テーマの色 */
+      :root {
+        /* ダークモード */
+        --none-hero-bg-dark: #14161A;
+        --none-main-bg-dark: #21232A;
+        --none-foot-bg-dark: #1F2229;
+        --none-text-h-dark: 252deg;
+        --none-text-s-dark: 32%;
+        --none-text-l-dark: 98%;
+        /* ライトモード */
+        --none-hero-bg-light: #eaf5ff;
+        --none-main-bg-light: #F3F4F6;
+        --none-foot-bg-light: #ABB1BF;
+        --none-text-h-light: 252deg;
+        --none-text-s-light: 4%;
+        --none-text-l-light: 4%;
+      }
+    /* 設定したテーマの色をセット */
+      body {background: var(--none-main-bg);} header {background: var(--none-hero-bg);} footer {background: var(--none-foot-bg);}
+      :root{
+        --none-hero-bg: var(--none-hero-bg-dark); --none-main-bg: var(--none-main-bg-dark); --none-foot-bg: var(--none-foot-bg-dark);
+        --bulma-text-h: var(--none-text-h-dark); --bulma-text-s: var(--none-text-s-dark); --bulma-text-l: var(--none-text-l-dark);
+      }
+      @media (prefers-color-scheme: light) {
+        --none-hero-bg: var(--none-hero-bg-light); --none-main-bg: var(--none-main-bg-light); --none-foot-bg: var(--none-foot-bg-light);
+        --bulma-text-h: var(--none-text-h-light); --bulma-text-s: var(--none-text-s-light); --bulma-text-l: var(--none-text-l-light);
+      }
+      [data-theme=dark] {
+        --none-hero-bg: var(--none-hero-bg-dark); --none-main-bg: var(--none-main-bg-dark); --none-foot-bg: var(--none-foot-bg-dark);
+        --bulma-text-h: var(--none-text-h-dark); --bulma-text-s: var(--none-text-s-dark); --bulma-text-l: var(--none-text-l-dark);
+      }
+      [data-theme=light] {
+        --none-hero-bg: var(--none-hero-bg-light); --none-main-bg: var(--none-main-bg-light); --none-foot-bg: var(--none-foot-bg-light);
+        --bulma-text-h: var(--none-text-h-light); --bulma-text-s: var(--none-text-s-light); --bulma-text-l: var(--none-text-l-light);
+      }
+    /* 枠線の削除 */
+      .st-border-none {border: none !important;}
+    /* メインコンテナのmargin */
+      .st-main-space {margin-top: 4rem; margin-bottom: 6rem !important;}
+      @media (width &lt; 768px) {.st-main-space {margin-top : 1rem; margin-bottom: 2rem !important;}}
+    /* indexのカード */
+      .st-index-card:hover {box-shadow: 0 4px 8px hsl(232 37.5% 50% / 0.25); transform: translateX(-1px) translateY(-2px); transition: transform 0.3s ease;}
+      .st-card-image img {object-fit: cover; aspect-ratio: 4/3; border-radius: 0.75rem 0.75rem 0 0;}
+      .st-card-date {border-bottom: solid 1px #ccda;}
+      .st-index-card a.button {position: relative; z-index: 2;}
+      .st-card-link {position: absolute; inset: 0; z-index: 1;}
+    /* 見出しのスタイル */
+      h2, h3, h4 {--none-h-border: solid #ccda;}
+      h2 {
+        border-left: 8px var(--none-h-border); padding-left: .5em;
+        border-bottom: 2px var(--none-h-border); padding-bottom: .5em;
+      }
+      h3 {
+        border-bottom: 1px var(--none-h-border); padding-bottom: .5em;
+      }
+      h4 {
+        border-left: 4px var(--none-h-border); padding-left: .5em;
+      }
+    /* 本文のスタイル */
+      .content b {font-weight: 600;}
+      .content span {display: block; border-bottom: dashed 2px #ccda; margin: 2rem 0;}
+    /* はてなブログカード */
+      .hatenablogcard {filter: invert(0.94) hue-rotate(169deg);}
+      @media(prefers-color-scheme: light) {.hatenablogcard {filter: invert(0) hue-rotate(0deg);}}
+      [data-theme=light] .hatenablogcard {filter: invert(0) hue-rotate(0deg);}
+    /* サイドカラムの固定コンテナ */
+      .st-sticky-container {position: sticky; top: 3rem;}
+      .st-scroll-y {max-height: calc(100dvh - 28rem); overflow-y: auto;}
+    /* テキスト色(リンクのテキスト色補正) */
+      .st-text-color {color: hsl(var(--bulma-text-h), var(--bulma-text-s), var(--bulma-text-l));}
+    /* スムーススクロール */
+      html {scroll-behavior: smooth;}
+    /* アクティブな目次の背景色 */
+      .menu-list a.js-is-active {background: hsl(232 37.5% 50% / 0.25);}
+    /* インセンティブ記事の角を丸める */
+      .st-insentive-media, .st-insentive-media img {border-radius: 0.25rem;}
+    /* インセンティブ記事のホバー */
+      .st-insentive-media:hover {background: hsl(var(--bulma-text-h) var(--bulma-text-s) var(--bulma-text-l) / 0.05); transition: background 0.3s ease;}
+    /* 人気記事の2,3件目を非表示(item) */
+      .st-popular-posts &gt; a:nth-child(n+2) {display: none;}
+    /* 画像モーダル */
+      .st-modal-content {width: auto; pointer-events: none;}
+      .st-modal-image {width: 96dvw !important; height:calc(100vh - var(--bulma-modal-content-spacing-mobile)) !important; object-fit: contain;}
+      @media(width &gt; 769px) {
+        .st-modal-image {width: 68dvw !important; height:calc(100vh - var(--bulma-modal-content-spacing-tablet)) !important;}
+      }
+    /* レスポンシブ対応 */
+      @media(width &lt; 768px) {
+        /* indexカードのレイアウト */
+          .st-index-card {display: flex;}
+          .st-card-image {width: 112px; padding: 1rem 0 0 1rem;}
+          .st-card-image img {width: 100% !important; aspect-ratio: 1/1; border-radius: 0.75rem;}
+          .st-card-content {flex: 1; padding: 1rem;}
+          .st-card-date {font-size: 14px;}
+        /* ボタンサイズ */
+          .st-button-responsive {font-size: 0.75rem; padding: 0.5em;}
+        /* h1のフォントサイズ */
+          .st-post-title {font-size: 1.5rem !important;}
+        /* サイドカラム表示ボタン */
+          .st-side-button {
+            position: fixed; bottom: 1rem; right: 1rem; z-index: 200;
+            width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center;
+            background: hsl(var(--bulma-text-h), var(--bulma-text-s), var(--bulma-text-l), 0.6); border-radius: 50%; box-shadow: 0 2px 4px hsl(232 37.5% 50% / 0.25);
+          }
+          .st-side-button.js-is-active {pointer-events: none;}
+        /* サイドカラムの固定コンテナ */
+          .st-scroll-y {max-height: calc(100dvh - 16rem);}
+        /* サイドカラムの表示,非表示 */
+          .st-side-column {display: none; position: fixed; bottom: 4rem; left: 0; z-index: 100; width: calc(100dvw - 2rem);}
+          .st-side-column.js-is-active {display: block; animation: sideColumnSlideIn 0.35s cubic-bezier(.4,.8,.4,1) forwards;}
+          .st-side-column.js-side-out {display: block; animation: sideColumnSlideOut 0.35s cubic-bezier(.4,.8,.4,1) forwards;}
+          @keyframes sideColumnSlideIn {from {transform: translateX(100%);} to {transform: translateX(0);}}
+          @keyframes sideColumnSlideOut {from {transform: translateX(0);} to {transform: translateX(100%);}}
+        /* サイドカラムのオーバーレイ */
+          .st-side-bg {display: none;}
+          .st-side-bg.js-is-active {display: block; position: fixed; z-index: 50; inset: 0; background: hsla(211 14% 4% / 0.86);}
+      }
+  </style>
+&lt;/head&gt;&lt;!--</head>--&gt;
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<body>
+  <!-- = = = = = = = = = = ヘッダー = = = = = = = = = = -->
+  <header class='hero'>
+    <!-- ヘッダー上部 -->
+    <div class='hero-head'>
+      <nav class='navbar'>
+        <div class='navbar-brand'>
+          <a class='navbar-item is-unselectable pr-4' expr:href='data:blog.homepageUrl'>
+            <span class='icon mx-1'><i class='fas fa-home'/></span>
+            <p>Home</p>
+          </a>
+        </div>
+        <div class='navbar-menu'>
+          <div class='navbar-start'>
+          </div>
+          <div class='navbar-end buttons'>
+            <button class='js-theme-switch st-border-none button my-2 mr-5'>
+              <span class='icon'><i class='fas'/></span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <!-- ヘッダー本体 -->
+    <div class='hero-body py-5'>
+      <p class='title is-unselectable'><data:blog.title/></p>
+    </div>
+  </header>
+  <!-- = = = = = = = = = = メイン = = = = = = = = = = = -->
+  <main class='st-main-space container is-widescreen columns'>
+      <!-- メインカラム -  -  -  -  -  -  -  -->
+      <div class='column'>
+        <b:section class='p-0' id='メインカラム'>
+          <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+              <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='showShareButtons'>false</b:widget-setting>
+              <b:widget-setting name='showCommentLink'>false</b:widget-setting>
+              <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='showAuthor'>true</b:widget-setting>
+              <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
+              <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='reactionsLabel'/>
+              <b:widget-setting name='showAuthorProfile'>false</b:widget-setting>
+              <b:widget-setting name='style.layout'>1x1</b:widget-setting>
+              <b:widget-setting name='showLabels'>true</b:widget-setting>
+              <b:widget-setting name='showLocation'>false</b:widget-setting>
+              <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+              <b:widget-setting name='postsPerAd'>1</b:widget-setting>
+              <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+              <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
+              <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+              <b:widget-setting name='showReactions'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <!-- index(記事リスト) -->
+              <b:if cond='data:blog.pageType == &quot;index&quot;'>
+                <div class='fixed-grid has-1-cols-mobile'>
+                  <div class='grid is-gap-4'>
+                    <b:loop values='data:posts' var='post'>
+                      <div class='cell'>
+                        <div class='st-index-card card'>
+                          <div class='st-card-image card-image'>
+                            <figure class='image'>
+                              <img expr:src='data:post.firstImageUrl'/>
+                            </figure>
+                          </div>
+                          <div class='st-card-content card-content'>
+                            <p class='st-card-date pb-2'><data:post.date/></p>
+                            <p class='is-size-5 mt-2'><data:post.title/></p>
+                            <div class='buttons is-justify-content-end mt-4'>
+                              <b:loop values='data:post.labels' var='label'>
+                                <a class='st-button-responsive button is-rounded' expr:href='data:label.url'><data:label.name/></a>
+                              </b:loop>
+                            </div>
+                          </div>
+                          <a class='st-card-link' expr:href='data:post.url'/>
+                        </div>
+                      </div>
+                    </b:loop>
+                  </div>
+                </div>
+                <nav aria-label='pagination' class='pagination is-centered' role='navigation'>
+                  <b:if cond='data:newerPageUrl'>
+                    <a class='pagination-previous' expr:href='data:newerPageUrl'>Next</a>
+                  <b:else/>
+                    <a class='pagination-previous is-disabled'>Next</a>
+                  </b:if>
+                  <b:if cond='data:olderPageUrl'>
+                    <a class='pagination-next' expr:href='data:olderPageUrl'>Prev</a>
+                  <b:else/>
+                    <a class='pagination-next is-disabled'>Prev</a>
+                  </b:if>
+                </nav>
+              </b:if>
+              <!-- 個別記事(item) -->
+              <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                <b:loop values='data:posts' var='post'>
+                  <div class='box content'>
+                    <p class='is-size-5'><data:post.date/></p>
+                    <h1 class='st-post-title mb-5'><data:post.title/></h1>
+                    <div class='js-post-labels buttons is-right mb-6'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <a class='st-button-responsive button is-rounded' expr:href='data:label.url'><data:label.name/></a>
+                      </b:loop>
+                    </div>
+                    <div class='js-post-body'>
+                      <data:post.body/>
+                    </div>
+                  </div>
+                </b:loop>
+              </b:if>
+            </b:includable>
+            <b:includable id='backlinkDeleteIcon'/>
+            <b:includable id='backlinks'/>
+            <b:includable id='comment-form'/>
+            <b:includable id='commentDeleteIcon'/>
+            <b:includable id='comment_count_picker'/>
+            <b:includable id='comment_picker'/>
+            <b:includable id='comments'/>
+            <b:includable id='feedLinks'/>
+            <b:includable id='feedLinksBody'/>
+            <b:includable id='iframe_comments'/>
+            <b:includable id='mobile-index-post'/>
+            <b:includable id='mobile-main'/>
+            <b:includable id='mobile-nextprev'/>
+            <b:includable id='mobile-post'/>
+            <b:includable id='nextprev'/>
+            <b:includable id='post'/>
+            <b:includable id='postQuickEdit'/>
+            <b:includable id='shareButtons'/>
+            <b:includable id='status-message'/>
+            <b:includable id='threaded-comment-form'/>
+            <b:includable id='threaded_comment_js'/>
+            <b:includable id='threaded_comments'/>
+          </b:widget>
+        </b:section>
+      </div>
+      <!-- サイドカラム -  -  -  -  -  -  -->
+      <div class='st-side-column js-side-column column pl-6 is-4'>
+        <!-- 検索欄 -->
+        <b:section class='p-0' id='検索欄'>
+          <b:widget id='BlogSearch0' locked='false' title='このブログを検索' type='BlogSearch' version='1'>
+            <b:includable id='main'>
+                <form class='box is-hidden-touch field is-horizontal mb-5 py-3' expr:action='data:blog.searchUrl' method='get'>
+                  <input class='input mr-2' expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;' name='q' type='text'/>
+                  <button class='st-border-none button' type='submit'>
+                    <span class='icon'><i class='fas fa-search'/></span>
+                  </button>
+                </form>
+            </b:includable>
+          </b:widget>
+        </b:section>
+        <!-- 固定コンテナ -->
+        <div class='st-sticky-container'>
+          <!-- ラベルリスト(index) / 目次(item) -->
+          <b:section class='p-0' id='ラベルリスト/目次'>
+            <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
+              <b:widget-settings>
+                <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+                <b:widget-setting name='display'>CLOUD</b:widget-setting>
+                <b:widget-setting name='selectedLabelsList'/>
+                <b:widget-setting name='showType'>ALL</b:widget-setting>
+                <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+              </b:widget-settings>
+              <b:includable id='main'>
+                <!-- ラベルリスト(index) -->
+                <b:if cond='data:blog.pageType == &quot;index&quot;'>
+                  <div class='box mb-5'>
+                    <div class='st-scroll-y buttons'>
+                      <b:loop values='data:labels' var='label'>
+                        <a class='button is-rounded' expr:href='data:label.url'><data:label.name/></a>
+                      </b:loop>
+                    </div>
+                  </div>
+                </b:if>
+                <!-- 目次(item) -->
+                <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                  <div class='box mb-5'>
+                    <div class='menu'>
+                      <p class='st-text-color menu-label is-unselectable'>目次</p>
+                      <div class='js-side-toc st-scroll-y'>
+                      </div>
+                    </div>
+                  </div>
+                </b:if>
+              </b:includable>
+            </b:widget>
+          </b:section>
+          <!-- インセンティブ -->
+          <b:section class='p-0' id='インセンティブ'>
+            <b:widget id='PopularPosts0' locked='false' title='関連記事' type='PopularPosts' version='1'>
+              <b:widget-settings>
+                <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
+                <b:widget-setting name='showThumbnails'>true</b:widget-setting>
+                <b:widget-setting name='showSnippets'>false</b:widget-setting>
+                <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
+              </b:widget-settings>
+              <b:includable id='main'>
+                <ul class='box is-hidden-touch pb-3'>
+                  <!-- 人気記事3件(index) -->
+                  <b:if cond='data:blog.pageType == &quot;index&quot;'>
+                    <b:loop values='data:posts' var='post'>
+                      <a expr:href='data:post.href'>
+                        <li class='st-insentive-media media content mb-2'>
+                          <p class='media-left image is-64x64 mb-0'>
+                            <img expr:src='data:post.thumbnail'/>
+                          </p>
+                          <p class='st-text-color media-content mr-2'>
+                            <data:post.title/>
+                          </p>
+                        </li>
+                      </a>
+                    </b:loop>
+                  </b:if>
+                  <!-- 人気記事1件(item) -->
+                  <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                    <div class='st-popular-posts'>
+                      <b:loop values='data:posts' var='post'>
+                        <a expr:href='data:post.href'>
+                          <li class='st-insentive-media media content mb-2'>
+                            <p class='media-left image is-64x64 mb-0'>
+                              <img expr:src='data:post.thumbnail'/>
+                            </p>
+                            <p class='st-text-color media-content mr-2'>
+                              <data:post.title/>
+                            </p>
+                          </li>
+                        </a>
+                      </b:loop>
+                    </div>
+                  </b:if>
+                  <!-- 同ラベル最新1件,ランダム1件(item) -->
+                  <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                    <div class='js-latest-post'>読み込み中...</div>
+                    <div class='js-random-post'>読み込み中...</div>
+                  </b:if>
+                </ul>
+              </b:includable>
+            </b:widget>
+          </b:section>
+        </div>
+      </div>
+  </main>
+  <!-- = = = = = = = = = = フッター = = = = = = = = = = -->
+  <footer class='footer'>
+    <div class='container is-max-desktop is-flex is-justify-content-space-between is-align-items-center'>
+      <p class='has-text-centered'>Framework : <a href='https://bulma.io'>Bulma CSS</a></p>
+      <p class='has-text-centered'>Theme : <a href='https://noneprev.blogspot.com/2025/04/blogger.html'>のねしんぷる</a></p>
+      <p class='has-text-centered'>Font :  <a href='https://fonts.google.com/specimen/Zen+Maru+Gothic'>Zen Maru Gothic</a></p>
+    </div>
+  </footer>
+  <!-- = = = = = = = = = 画像モーダル = = = = = = = = = -->
+  <div class='js-image-modal modal'>
+    <div class='js-modal-bg modal-background'/>
+    <div class='st-modal-content modal-content'>
+      <p class='image'>
+        <img alt='' class='st-modal-image js-modal-image' src=''/>
+      </p>
+    </div>
+    <button aria-label='close' class='js-modal-close modal-close is-large'/>
+  </div>
+  <!-- = = = = = = = サイドカラム(スマホ) = = = = = = = -->
+  <button class='st-side-button js-side-button is-hidden-desktop'>
+    <span class="icon is-large">
+      <i class="fas fa-lg fa-chevron-left"></i>
+    </span>
+  </button>
+  <div class='st-side-bg js-side-bg is-hidden-desktop'/>
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <script>
+    // テーマ切り替え
+    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
+      const icon = document.querySelector(&#39;.js-theme-switch i&#39;);
+      let currentTheme = localStorage.getItem(&#39;theme&#39;);
+      if (!currentTheme) {
+        currentTheme = window.matchMedia(&#39;(prefers-color-scheme: light)&#39;).matches ? &#39;light&#39; : &#39;dark&#39;;
+      }
+      function applyTheme(theme) {
+        document.documentElement.setAttribute(&#39;data-theme&#39;, theme);
+        localStorage.setItem(&#39;theme&#39;, theme);
+        icon.classList.remove(&#39;fa-sun&#39;, &#39;fa-moon&#39;);
+        icon.classList.add(theme === &#39;light&#39; ? &#39;fa-sun&#39; : &#39;fa-moon&#39;);
+      }
+      applyTheme(currentTheme);
+      document.querySelector(&#39;.js-theme-switch&#39;).addEventListener(&#39;click&#39;, function () {
+        currentTheme = currentTheme === &#39;dark&#39; ? &#39;light&#39; : &#39;dark&#39;;
+        applyTheme(currentTheme);
+      });
+    });
+    // はてなブログカード
+    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
+      document.querySelectorAll(&#39;.js-post-body a[href]&#39;).forEach(function (a) {
+        const href = a.getAttribute(&#39;href&#39;);
+        if (!href.startsWith(&#39;http&#39;)) return;
+        const p = a.closest(&#39;p&#39;);
+        if (!p) return;
+        const iframe = document.createElement(&#39;iframe&#39;);
+        iframe.className = &#39;hatenablogcard&#39;;
+        iframe.style = &#39;display:block;width:100%;height:auto;margin:12px 0;max-width:680px;&#39;;
+        iframe.title = href;
+        iframe.src = &#39;https://hatenablog-parts.com/embed?url=&#39; + encodeURIComponent(href);
+        iframe.setAttribute(&#39;frameborder&#39;, &#39;0&#39;);
+        iframe.setAttribute(&#39;scrolling&#39;, &#39;no&#39;);
+        p.parentNode.insertBefore(iframe, p.nextSibling);
+      });
+    });
+    // 目次作成
+    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
+      const content = document.querySelector(&#39;.js-post-body&#39;);
+      if (!content) return;
+      const headings = content.querySelectorAll(&#39;h2, h3, h4&#39;);
+      const tocList = document.createElement(&#39;ul&#39;);
+      tocList.className = &#39;menu-list&#39;;
+      const stack = [];
+      headings.forEach(function (el, index) {
+        const tag = el.tagName.toLowerCase();
+        const text = el.textContent.trim();
+        const id = &#39;toc-&#39; + index;
+        if (!el.id) el.id = id;
+        const level = parseInt(tag.slice(1));
+        const li = document.createElement(&#39;li&#39;);
+        const a = document.createElement(&#39;a&#39;);
+        a.href = &#39;#&#39; + id;
+        a.textContent = text;
+        li.appendChild(a);
+        while (stack.length &amp;&amp; stack[stack.length - 1].level &gt;= level) {
+          stack.pop();
+        }
+        if (stack.length === 0) {
+          tocList.appendChild(li);
+          stack.push({ level: level, ul: tocList, li: li });
+        } else {
+          const parentLi = stack[stack.length - 1].li;
+          let subUl = parentLi.querySelector(&#39;ul&#39;);
+          if (!subUl) {
+            subUl = document.createElement(&#39;ul&#39;);
+            parentLi.appendChild(subUl);
+          }
+          subUl.appendChild(li);
+          stack.push({ level: level, ul: subUl, li: li });
+        }
+      });
+      const sideToc = document.querySelector(&#39;.js-side-toc&#39;);
+      if (sideToc) sideToc.appendChild(tocList);
+    });
+    // 目次スクロールハイライト
+    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
+      const tocLinks = document.querySelectorAll(&#39;.js-side-toc a&#39;);
+      const headingSelector = &#39;h2, h3, h4&#39;;
+      const tocContainer = document.querySelector(&#39;.js-side-toc&#39;);
+      let lastActiveLink = null;
+      window.addEventListener(&#39;scroll&#39;, function () {
+        const currentScroll = window.scrollY;
+        let currentId = null;
+        document.querySelectorAll(headingSelector).forEach(function (heading) {
+          const offsetTop = heading.getBoundingClientRect().top + window.scrollY;
+          if (currentScroll &gt;= offsetTop - 225) {
+            currentId = heading.id;
+          }
+        });
+        tocLinks.forEach(function (link) {
+          link.classList.remove(&#39;js-is-active&#39;);
+          if (currentId &amp;&amp; link.getAttribute(&#39;href&#39;) === &#39;#&#39; + currentId) {
+            link.classList.add(&#39;js-is-active&#39;);
+            if (lastActiveLink !== link) {
+              lastActiveLink = link;
+              link.scrollIntoView({
+                behavior: &#39;smooth&#39;,
+                block: &#39;nearest&#39;
+              });
+            }
+          }
+        });
+      });
+    });
+    // インセンティブ表示
+    /* 初期設定を行ってください
+    document.addEventListener('DOMContentLoaded', function() {
+      var labels = [];
+      document.querySelectorAll('.js-post-labels a').forEach(function(a){
+        var t = a.textContent.replace(/\s+/g, ' ').trim();
+        if (t) labels.push(t);
+      });
+      if (!labels.length) return;
+      function buildFeedUrl(label) {
+        var base = 'https:// !ここにURLを入力! /feeds/posts/summary/-/' + encodeURIComponent(label);
+        var u = new URL(base);
+        u.search = new URLSearchParams({ alt: 'json', 'max-results': '10' }).toString(); 
+        return u.toString();
+      }
+      Promise.all(labels.map(function(label){
+        return fetch(buildFeedUrl(label))
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            var posts = (data.feed &amp;&amp; data.feed.entry) ? data.feed.entry : [];
+            return { label: label, count: posts.length };
+          })
+          .catch(function(){ return { label: label, count: 0 }; });
+      })).then(function(results){
+        var maxLabel = results.reduce(function(a, b){ return (b.count &gt; a.count) ? b : a; }, results[0]).label;
+        return fetch(buildFeedUrl(maxLabel))
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            var posts = (data.feed &amp;&amp; data.feed.entry) ? data.feed.entry : [];
+            if (!posts.length) return;
+            var latest = posts.find(function(p){
+              try {
+                var link = p.link.find(function(l){ return l.rel === 'alternate'; }).href;
+                return !window.location.href.includes(link);
+              } catch(e) { return false; }
+            });
+            if (latest) {
+              var title = latest.title.$t;
+              var link = latest.link.find(function(l){ return l.rel === 'alternate'; }).href;
+              var thumbnail = latest.media$thumbnail ? latest.media$thumbnail.url : '';
+              document.querySelector('.js-latest-post').innerHTML =
+                `&lt;a href='${link}'&gt;
+                  &lt;li class='st-insentive-media media content mb-2'&gt;
+                    &lt;p class='media-left image is-64x64 mb-0'&gt;
+                      ${thumbnail ? `&lt;img src='${thumbnail}' alt='${title}'&gt;` : ''}
+                    &lt;/p&gt;
+                  &lt;p class='st-text-color media-content mr-2'&gt;${title}&lt;/p&gt;
+                &lt;/li&gt;
+              &lt;/a&gt;`;
+            }
+            var others = posts.filter(function(p){
+              try {
+                var link = p.link.find(function(l){ return l.rel === 'alternate'; }).href;
+                var latestLink = latest ? latest.link.find(function(l){ return l.rel === 'alternate'; }).href : '';
+                return !window.location.href.includes(link) &amp;&amp; link !== latestLink;
+              } catch(e) { return false; }
+            });
+            if (others.length) {
+              var rp = others[Math.floor(Math.random() * others.length)];
+              var rTitle = rp.title.$t;
+              var rLink = rp.link.find(function(l){ return l.rel === 'alternate'; }).href;
+              var rThumb = rp.media$thumbnail ? rp.media$thumbnail.url : '';
+              document.querySelector('.js-random-post').innerHTML =
+                `&lt;a href='${rLink}'&gt;
+                  &lt;li class='st-insentive-media media content mb-2'&gt;
+                    &lt;p class='media-left image is-64x64 mb-0'&gt;
+                      ${rThumb ? `&lt;img src='${rThumb}' alt='${rTitle}'&gt;` : ''}
+                    &lt;/p&gt;
+                  &lt;p class='st-text-color media-content mr-2'&gt;${rTitle}&lt;/p&gt;
+                &lt;/li&gt;
+              &lt;/a&gt;`;
+            }
+          })
+          .catch(function(){
+            document.querySelector('.js-latest-post').innerText = '関連記事取得失敗';
+            document.querySelector('.js-random-post').innerText = '関連記事取得失敗';
+          });
+      });
+    });*/
+    // 画像モーダル
+    document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
+      const postImages = document.querySelectorAll(&#39;.js-post-body img&#39;);
+      const modal = document.querySelector(&#39;.js-image-modal&#39;);
+      const modalImage = modal.querySelector(&#39;.js-modal-image&#39;);
+      const modalClose = modal.querySelector(&#39;.js-modal-close&#39;);
+      const modalBg = modal.querySelector(&#39;.js-modal-bg&#39;);
+      postImages.forEach(img =&gt; {
+        img.addEventListener(&#39;click&#39;, () =&gt; {
+          let src = img.src;
+          src = src.replace(/s\d{2,4}(-c)?/, &#39;s1600&#39;);
+          modalImage.src = src;
+          modal.classList.add(&#39;is-active&#39;);
+        });
+      });
+      [modalClose, modalBg].forEach(el =&gt; {
+        el.addEventListener(&#39;click&#39;, () =&gt; {
+          modal.classList.remove(&#39;is-active&#39;);
+        });
+      });
+    });
+    // サイドカラム表示(モバイル)
+    document.addEventListener('DOMContentLoaded', function () {
+      var sideButton = document.querySelector('.js-side-button');
+      var sideColumn = document.querySelector('.js-side-column');
+      var sideBg = document.querySelector('.js-side-bg');
+      var sideIcon = sideButton ? sideButton.querySelector('i') : null;
+      if (sideButton &amp;&amp; sideColumn &amp;&amp; sideBg &amp;&amp; sideIcon) {
+        sideButton.addEventListener('click', function () {
+          sideColumn.classList.remove('js-side-out');
+          sideColumn.classList.add('js-is-active');
+          sideBg.classList.add('js-is-active');
+          sideButton.classList.add('js-is-active');
+          sideIcon.classList.remove('fa-chevron-left');
+          sideIcon.classList.add('fa-chevron-right');
+        });
+        sideBg.addEventListener('click', function () {
+          sideColumn.classList.remove('js-is-active');
+          sideColumn.classList.add('js-side-out');
+          sideBg.classList.remove('js-is-active');
+          sideButton.classList.remove('js-is-active');
+          sideIcon.classList.remove('fa-chevron-right');
+          sideIcon.classList.add('fa-chevron-left');
+          setTimeout(function(){
+            sideColumn.classList.remove('js-side-out');
+          }, 350);
+        });
+        var tocLinks = document.querySelectorAll('.js-side-toc a');
+        tocLinks.forEach(function(link){
+          link.addEventListener('click', function(){
+            sideColumn.classList.remove('js-is-active');
+            sideColumn.classList.add('js-side-out');
+            sideBg.classList.remove('js-is-active');
+            sideButton.classList.remove('js-is-active');
+            sideIcon.classList.remove('fa-chevron-right');
+            sideIcon.classList.add('fa-chevron-left');
+            setTimeout(function(){
+              sideColumn.classList.remove('js-side-out');
+            }, 350);
+          });
+        });
+      }
+    });
+  </script>
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+</body>
+</html>
