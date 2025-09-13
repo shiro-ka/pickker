@@ -87,7 +87,7 @@
       }
     /* 本文のスタイル */
       .content b {font-weight: 600;}
-      .content span {display: block; border-bottom: dashed 2px #ccda; margin: 2rem 0;}
+      .content span:empty {display: block; border-bottom: dashed 2px #ccda; margin: 2rem 0;}
     /* はてなブログカード */
       .hatenablogcard {filter: invert(0.94) hue-rotate(169deg);}
       @media(prefers-color-scheme: light) {.hatenablogcard {filter: invert(0) hue-rotate(0deg);}}
