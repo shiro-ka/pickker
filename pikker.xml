@@ -16,6 +16,12 @@
   <!-- Pico CSS v2 classless | MIT License | https://picocss.com -->
   <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
   <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/github.min.css' media='(prefers-color-scheme: light)' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/github-dark.min.css' media='(prefers-color-scheme: dark)' rel='stylesheet'/>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.browser.min.js'></script>
+  <script defer='defer' src='https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js'></script>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:300&amp;display=swap' rel='stylesheet'/>
   <style>
@@ -25,42 +31,41 @@
     :root {--pico-font-family: "M PLUS Rounded 1c", sans-serif;}
     body {font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 300;}
     /* ヘッダー */
-    header nav input {width: 14rem;}
     header hgroup > :not(:first-child):last-child {font-size: 0.9rem;}
+    header button {background: none; border: none; padding: .3rem .6rem; cursor: pointer; color: var(--pico-muted-color);}
+    header button:hover {background: var(--pico-muted-border-color);}
+    /* 検索ボックス */
+    header nav input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
+    header nav input[type="search"].is-open { width: 14rem; cursor: text; }
     /* 2カラムレイアウト */
     main {grid-template-columns: 1fr 18rem !important;}
     article > header > time {font-size: 0.8rem; margin-bottom: 0.2rem;}
     /* indexカード */
-    .cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing);}
-    .cards article {position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0;}
-    .cards article > a:first-child {position: absolute; inset: 0; z-index: 1;}
-    .cards article img {aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block;}
-    .cards article > header {padding: 0.2rem 0.5rem 0 !important; margin: 0;}
-    .cards article > footer {margin-top: auto; padding: 0 1.5rem 1.5rem;}
-    .cards article > footer a {position: relative; z-index: 2;}
+    .index-cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing);}
+    .index-cards article {position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0;}
+    .index-cards article > a:first-child {position: absolute; inset: 0; z-index: 1;}
+    .index-cards article img {aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block;}
+    .index-cards article > header {padding: .2rem .5rem 0 !important; margin: 0;}
+    .index-cards article > footer {margin-top: auto; padding: 0 1.5rem 1.5rem;}
+    .index-cards article > footer a {position: relative; z-index: 2;}
+    /* 記事本文 */
+    article :is(h2, h3, h4) {margin-left: -.5rem; margin-bottom: 1.7rem;}
+    article h2 {border-left: 6px solid var(--pico-primary); border-bottom: var(--pico-border-width) solid var(--pico-table-border-color); padding: 0 0 .4rem .5rem;}
+    article h3 {border-bottom: 2px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem;}
+    article h4 {border-left: 3px solid var(--pico-primary); padding-left: .7rem;}
+    article b {font-weight: 600;}
     /* サイドカラム */
     main > aside {position: sticky; top: 1rem;}
     .sticky-shelf {max-height: calc(100dvh - 26rem); overflow-y: auto;}
-
-
     /* Pico標準無効化 */
     article > header, article > footer {background: none; border: none; padding: var(--pico-spacing);}
 
-    
-    
-
-    /* 記事見出し */
-    .post-body h2 { border-left: 6px solid var(--pico-primary); border-bottom: var(--pico-border-width) solid var(--pico-table-border-color); padding: 0 0 .4em .5em; }
-    .post-body h3 { border-bottom: var(--pico-border-width) solid var(--pico-table-border-color); padding-bottom: .4em; }
-    .post-body h4 { border-left: 3px solid var(--pico-table-border-color); padding-left: .5em; }
-    .post-body b { font-weight: 600; }
-    .post-body span:is(:empty, a) { display: block; border-bottom: dashed 2px var(--pico-table-border-color); margin: 2rem 2.5rem; }
 
     /* ラベル */
     .labels { display: flex; flex-wrap: wrap; gap: .4rem; }
     .labels a { font-size: .8em; padding: .2em .7em; border-radius: 999px; border: 1px solid var(--pico-primary); color: var(--pico-primary); text-decoration: none; }
     .labels a:hover { background: var(--pico-primary); color: var(--pico-primary-inverse); }
-    .cards article footer .labels,
+    .index-cards article footer .labels,
     article > header .labels { justify-content: flex-end; margin-top: .75rem; }
 
     /* ページネーション */
@@ -79,6 +84,7 @@
     .image-modal::backdrop { background: rgba(0,0,0,.88); }
     .image-modal img { max-width: 92dvw; max-height: 92dvh; object-fit: contain; display: block; }
     .post-body img { cursor: zoom-in; }
+    .markdown img.emoji { width: 1.2em; height: 1.2em; vertical-align: -0.2em; }
 
     /* 目次アクティブ */
     .toc a[aria-current] { background: color-mix(in srgb, var(--pico-primary) 15%, transparent); border-radius: var(--pico-border-radius); padding: .1em .4em; }
@@ -90,9 +96,6 @@
     .incentive-list img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--pico-border-radius); flex-shrink: 0; }
     .incentive-list .js-popular-item:nth-child(n+2) { display: none; }
 
-    /* テーマスイッチ */
-    .theme-switch { background: none; border: none; padding: .3rem .6rem; cursor: pointer; color: var(--pico-color); }
-    .theme-switch:hover { background: none; }
 
     /* フッター */
     footer, footer a { color: var(--pico-muted-color); }
@@ -127,12 +130,18 @@
             <ul>
               <li>
                 <input
+                  expr:class='data:view.isSearch ? &quot;is-open&quot; : &quot;&quot;'
                   expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
                   name='q'
                   type='search'
                   placeholder='検索...'
                   aria-label='ブログ内を検索'
                 />
+              </li>
+              <li>
+                <button class='tag-list-toggle' aria-label='タグ一覧'>
+                  <i class='fas fa-tag'/>
+                </button>
               </li>
               <li>
                 <button class='theme-switch' aria-label='テーマ切り替え'>
@@ -167,7 +176,7 @@
           <b:includable id='main'>
             <!-- index(記事リスト) -->
             <b:if cond='data:blog.pageType == &quot;index&quot;'>
-              <div class='cards'>
+              <div class='index-cards'>
                 <b:loop values='data:posts' var='post'>
                   <article>
                     <a expr:href='data:post.url'/>
@@ -215,7 +224,7 @@
                     </div>
                     <hr />
                   </header>
-                  <div class='post-body js-post-body'>
+                  <div class='markdown js-post-body'>
                     <data:post.body/>
                   </div>
                 </article>
@@ -354,6 +363,26 @@
     <i class='fas fa-chevron-left'/>
   </button>
   <script>
+    // markdown-it レンダリング
+    document.addEventListener('DOMContentLoaded', function () {
+      const el = document.querySelector('.markdown');
+      if (!el) return;
+      const md = window.markdownit({
+        html: true,
+        linkify: true,
+        typographer: true,
+        langPrefix: 'hljs language-',
+        highlight: function (str, lang) {
+          if (lang &amp;&amp; hljs.getLanguage(lang)) {
+            try { return hljs.highlight(str, { language: lang, ignoreIllegals: true }).value; } catch (e) {}
+          }
+          return '';
+        }
+      });
+      md.use(window.markdownitEmoji);
+      el.innerHTML = md.render(el.innerText);
+      twemoji.parse(el, { base: 'https://cdn.jsdelivr.net/npm/twemoji@14/assets/' });
+    });
     // テーマ切り替え
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
       const btn = document.querySelector(&#39;.theme-switch&#39;);
@@ -509,6 +538,19 @@
           });
       });
     });*/
+    // 検索ボックス
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.querySelector('header nav input[type="search"]');
+      if (!searchInput) return;
+      searchInput.addEventListener('focus', function () {
+        searchInput.classList.add('is-open');
+      });
+      searchInput.addEventListener('blur', function () {
+        if (!searchInput.value) {
+          searchInput.classList.remove('is-open');
+        }
+      });
+    });
     // 画像モーダル
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
       const modal = document.querySelector(&#39;.image-modal&#39;);
