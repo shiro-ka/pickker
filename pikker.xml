@@ -15,21 +15,21 @@
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
   <!-- Pico CSS v2 classless | MIT License | https://picocss.com -->
   <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
-  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' rel='stylesheet'/>
-  <link href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/github.min.css' media='(prefers-color-scheme: light)' rel='stylesheet'/>
-  <link href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/github-dark.min.css' media='(prefers-color-scheme: dark)' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css' rel='stylesheet'/>
+  <link class='js-hljs-theme' rel='stylesheet'/>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.browser.min.js'></script>
-  <script defer='defer' src='https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
-  <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:300&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
   <style>
     /* スムーズスクロール */
     html {scroll-behavior: smooth;}
     /* webフォント */
-    :root {--pico-font-family: "M PLUS Rounded 1c", sans-serif;}
-    body {font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 300;}
+    :root {--pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%;}
+    @media (min-width: 1280px) {:host, :root {--pico-font-size: 118.75%;}}
+    body {font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 400;}
     /* ヘッダー */
     header hgroup > :not(:first-child):last-child {font-size: 0.9rem;}
     header button {background: none; border: none; padding: .3rem .6rem; cursor: pointer; color: var(--pico-muted-color);}
@@ -49,14 +49,36 @@
     .index-cards article > footer {margin-top: auto; padding: 0 1.5rem 1.5rem;}
     .index-cards article > footer a {position: relative; z-index: 2;}
     /* 記事本文 */
+    article h1 {margin-bottom: 1.5rem;}
     article :is(h2, h3, h4) {margin-left: -.5rem; margin-bottom: 1.7rem;}
-    article h2 {border-left: 6px solid var(--pico-primary); border-bottom: var(--pico-border-width) solid var(--pico-table-border-color); padding: 0 0 .4rem .5rem;}
-    article h3 {border-bottom: 2px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem;}
+    article h2 {border-left: 6px solid var(--pico-primary); border-bottom: 1px solid var(--pico-primary-focus); padding: 0 0 .4rem .5rem;}
+    article h3 {border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem;}
     article h4 {border-left: 3px solid var(--pico-primary); padding-left: .7rem;}
     article b {font-weight: 600;}
+    article :not(.link-card) img:not(.emoji) {margin-bottom: var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius);}
+    /* リンクカード */
+    .link-card {display: flex; margin: 1rem 0; max-width: 768px; border: var(--pico-border-width) solid var(--pico-table-border-color); border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); overflow: hidden; transition: background .15s;}
+    .link-card:hover {background: color-mix(in srgb, var(--pico-primary) 6%, transparent);}
+    .link-card > div {flex: 1; padding: .75rem 1rem; min-width: 0; display: flex; flex-direction: column; gap: .3rem;}
+    .link-card strong {font-size: .95rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+    .link-card > div > small:first-of-type {color: var(--pico-muted-color); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+    .link-card > div > small:last-of-type {display: flex; align-items: center; gap: .4rem; margin-top: auto; color: var(--pico-muted-color);}
+    .link-card img {margin: 0 !important;}
+    .link-card small img {width: 16px; height: 16px; flex-shrink: 0;}
+    .link-card > img {max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block;}
     /* サイドカラム */
-    main > aside {position: sticky; top: 1rem;}
-    .sticky-shelf {max-height: calc(100dvh - 26rem); overflow-y: auto;}
+    .sticky-shelf {position: sticky; top: 1rem; height: calc(100dvh - 2rem); overflow-x: hidden; overflow-y: auto;}
+    /* 目次 */
+    .toc {margin-left: -1rem;}
+    .toc li {position: relative; padding: 0;}
+    .toc > ul > li {left: 1.5rem;}
+    .toc > ul > li > ul {border-left: 1px solid var(--pico-color); margin-left: 0.2rem;}
+    .toc > ul > li > ul > li {left: 1rem;}
+    .toc > ul > li > ul > li > ul {border-left: 1px dashed var(--pico-color); margin-left: 0.2rem;}
+    .toc > ul > li > ul > li > ul > li {left: 0.5rem;}
+    .toc > ul > li > ul > li > ul > li > a::before {content: "- ";}
+    .toc a {color: var(--pico-secondary);}
+    .toc a:hover {color: var(--pico-contrast); text-decoration: none;}
     /* Pico標準無効化 */
     article > header, article > footer {background: none; border: none; padding: var(--pico-spacing);}
 
@@ -72,12 +94,7 @@
     .pagination { display: flex; justify-content: center; gap: 1rem; }
     .pagination a[aria-disabled] { opacity: .4; pointer-events: none; }
 
-    /* はてなブログカード */
-    .hatenablogcard { display: block; width: 100%; height: 155px; margin: 12px 0; max-width: 680px; border: none; }
-    [data-theme=dark] .hatenablogcard { filter: invert(0.94) hue-rotate(169deg); }
-    @media (prefers-color-scheme: dark) {
-      html:not([data-theme]) .hatenablogcard { filter: invert(0.94) hue-rotate(169deg); }
-    }
+
 
     /* 画像モーダル */
     .image-modal { background: transparent; border: none; padding: 0; max-width: 100dvw; max-height: 100dvh; }
@@ -86,8 +103,7 @@
     .post-body img { cursor: zoom-in; }
     .markdown img.emoji { width: 1.2em; height: 1.2em; vertical-align: -0.2em; }
 
-    /* 目次アクティブ */
-    .toc a[aria-current] { background: color-mix(in srgb, var(--pico-primary) 15%, transparent); border-radius: var(--pico-border-radius); padding: .1em .4em; }
+    
 
     /* インセンティブリスト */
     .incentive-list { list-style: none; padding: 0; margin: 0; }
@@ -258,11 +274,12 @@
     </section>
     <!-- サイドカラム -->
     <aside>
-      <!-- ラベルリスト(index) / 目次(item) -->
-      <b:section id='ラベルリスト/目次'>
-        <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
-          <b:widget-settings>
-            <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+      <div class="sticky-shelf">
+        <!-- ラベルリスト(index) / 目次(item) -->
+        <b:section id='ラベルリスト/目次'>
+          <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
               <b:widget-setting name='display'>CLOUD</b:widget-setting>
               <b:widget-setting name='selectedLabelsList'/>
               <b:widget-setting name='showType'>ALL</b:widget-setting>
@@ -280,7 +297,6 @@
               </b:if>
               <b:if cond='data:blog.pageType == &quot;item&quot;'>
                 <article>
-                  <strong>目次</strong>
                   <nav class='toc'/>
                 </article>
               </b:if>
@@ -327,9 +343,9 @@
             </b:includable>
           </b:widget>
         </b:section>
-      </aside>
+      </div>
+    </aside>
   </main>
-
   <!-- フッター -->
   <footer class='container'>
     <nav>
@@ -343,12 +359,12 @@
       <ul>
         <li><small>
           <a href='https://picocss.com'>Pico CSS</a> /
+          <a href='https://markdown-it.github.io'>markdown-it</a> /
           <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
           <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
           <a href='https://fontawesome.com'>Font Awesome</a> /
-          <a href='https://markdown-it.github.io'>markdown-it</a> /
-          <a href='https://highlightjs.org'>Highlight.js</a> /
-          LinkMeta
+          <a href='https://linkmeta.dev/'>LinkMeta</a> /
+          <a href='https://highlightjs.org'>Highlight.js</a>
         </small></li>
       </ul>
     </nav>
@@ -371,17 +387,15 @@
         html: true,
         linkify: true,
         typographer: true,
-        langPrefix: 'hljs language-',
-        highlight: function (str, lang) {
-          if (lang &amp;&amp; hljs.getLanguage(lang)) {
-            try { return hljs.highlight(str, { language: lang, ignoreIllegals: true }).value; } catch (e) {}
-          }
-          return '';
-        }
+        langPrefix: 'hljs language-'
       });
       md.use(window.markdownitEmoji);
-      el.innerHTML = md.render(el.innerText);
-      twemoji.parse(el, { base: 'https://cdn.jsdelivr.net/npm/twemoji@14/assets/' });
+      const _src = el.innerHTML
+        .replace(/&lt;p[^&gt;]*&gt;\s*/gi, '')
+        .replace(/\s*&lt;\/p&gt;/gi, '\n\n');
+      el.innerHTML = md.render(_src);
+      el.querySelectorAll(&#39;pre code&#39;).forEach(function (block) { hljs.highlightElement(block); });
+      twemoji.parse(el, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' });
     });
     // テーマ切り替え
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
@@ -393,6 +407,8 @@
         document.documentElement.setAttribute(&#39;data-theme&#39;, t);
         localStorage.setItem(&#39;theme&#39;, t);
         icon.className = &#39;fas &#39; + (t === &#39;light&#39; ? &#39;fa-sun&#39; : &#39;fa-moon&#39;);
+        var hlLink = document.querySelector(&#39;.js-hljs-theme&#39;);
+        if (hlLink) hlLink.href = &#39;https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/&#39; + (t === &#39;light&#39; ? &#39;github.min.css&#39; : &#39;github-dark.min.css&#39;);
       }
       applyTheme(theme);
       btn.addEventListener(&#39;click&#39;, function () {
@@ -400,19 +416,53 @@
         applyTheme(theme);
       });
     });
-    // はてなブログカード
+    // リンクカード (linkmeta)
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
       document.querySelectorAll(&#39;.js-post-body a[href]&#39;).forEach(function (a) {
-        const href = a.getAttribute(&#39;href&#39;);
+        var href = a.getAttribute(&#39;href&#39;);
         if (!href.startsWith(&#39;http&#39;)) return;
-        const p = a.closest(&#39;p&#39;);
+        var p = a.closest(&#39;p&#39;);
         if (!p) return;
-        const iframe = document.createElement(&#39;iframe&#39;);
-        iframe.className = &#39;hatenablogcard&#39;;
-        iframe.title = href;
-        iframe.src = &#39;https://hatenablog-parts.com/embed?url=&#39; + encodeURIComponent(href);
-        iframe.setAttribute(&#39;scrolling&#39;, &#39;no&#39;);
-        p.parentNode.insertBefore(iframe, p.nextSibling);
+        fetch(&#39;https://linkmeta.dev/api/v1/extract?url=&#39; + encodeURIComponent(href))
+          .then(function (r) { return r.json(); })
+          .then(function (json) {
+            if (json.status !== &#39;success&#39;) return;
+            var d = json.data;
+            var card = document.createElement(&#39;a&#39;);
+            card.className = &#39;link-card&#39;;
+            card.href = href;
+            card.target = &#39;_blank&#39;;
+            card.rel = &#39;noopener noreferrer&#39;;
+            var div = document.createElement(&#39;div&#39;);
+            var titleEl = document.createElement(&#39;strong&#39;);
+            titleEl.textContent = d.title || href;
+            div.appendChild(titleEl);
+            if (d.description) {
+              var desc = document.createElement(&#39;small&#39;);
+              desc.textContent = d.description;
+              div.appendChild(desc);
+            }
+            var metaEl = document.createElement(&#39;small&#39;);
+            if (d.favicon) {
+              var fav = document.createElement(&#39;img&#39;);
+              fav.src = d.favicon;
+              fav.alt = &#39;&#39;;
+              fav.onerror = function () { this.style.display = &#39;none&#39;; };
+              metaEl.appendChild(fav);
+            }
+            try { metaEl.appendChild(document.createTextNode(new URL(href).hostname)); } catch (e) { metaEl.appendChild(document.createTextNode(href)); }
+            div.appendChild(metaEl);
+            card.appendChild(div);
+            if (d.image) {
+              var img = document.createElement(&#39;img&#39;);
+              img.src = d.image;
+              img.alt = &#39;&#39;;
+              img.loading = &#39;lazy&#39;;
+              card.appendChild(img);
+            }
+            p.parentNode.insertBefore(card, p.nextSibling);
+          })
+          .catch(function () {});
       });
     });
     // 目次生成
