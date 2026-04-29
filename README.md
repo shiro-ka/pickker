@@ -1,5 +1,13 @@
-## のねしんぷる - [none ɕiɴpwrw]
+## pickker
 
-プレビュー / インストール方法
+pickker はミニマルなフレームワーク Pico CSS をベースとした Blogger テーマです。
 
-https://noneprev.blogspot.com/2025/04/blogger.html
+### install / use
+
+[https://oqlbodlpo.blogspot.com/2026/04/bloggerpickker.html](https://oqlbodlpo.blogspot.com/2026/04/bloggerpickker.html)
+
+### preview
+
+![PC_Light](preview_img/PC_Light.png)
+
+![PC_Dark](preview_img/PC_Dark.png)
