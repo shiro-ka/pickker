@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:js='false' b:responsive='true' b:version='3' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:x-on='alpine:on' xmlns:x-bind='alpine:bind'>
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
@@ -24,6 +24,7 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js'></script>
   <!-- ダークテーマの FOUC 対策 -->
   <script>
     (function () {
@@ -50,7 +51,8 @@
     body > header nav > ul:last-child > li:first-child {display: none;}
     /* 検索ボックス */
     body > header nav input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
-    body > header nav input[type="search"].is-open { width: 14rem; cursor: text; }
+    body > header nav input[type="search"]:focus,
+    body > header nav input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }
     /* 2カラムレイアウト */
     main {grid-template-columns: 1fr 18rem !important;}
     article > header > time {font-size: 0.8rem; margin-bottom: 0.2rem;}
@@ -104,14 +106,14 @@
       left: -7px; top: 16px;
     }
     .content-toc nav > ul > li:has(> a[aria-current])::before {background: var(--pico-primary);}
-    .content-toc nav > ul > li {padding-top: 0; padding-bottom: 0; font-size: 96%;}
+    .content-toc nav > ul > li {padding-top: 0;}
+    .content-toc nav > ul > li > ul > li {padding-left: 36px; padding-bottom: 0; font-size: 92%;}
     .content-toc nav > ul > li > ul > li::before {
       width: 8px; height: 8px; border-radius: 50%;
       border: 2px solid var(--pico-primary-border); top: 10px; left: -8px;
     }
     .content-toc nav > ul > li > ul > li:has(> a[aria-current])::before {border-color: var(--pico-primary);}
-    .content-toc nav > ul > li > ul > li {padding-left: 36px; padding-bottom: 0;}
-    .content-toc nav > ul > li > ul > li > ul > li {padding-left: 28px; font-size: 84%;}
+    .content-toc nav > ul > li > ul > li > ul > li {padding-left: 28px; font-size: 98%;}
     .content-toc a {color: var(--pico-secondary);}
     .content-toc a:hover {color: var(--pico-contrast); text-decoration: none;}
     .content-toc a[aria-current] {color: var(--pico-primary-hover);}
@@ -154,6 +156,8 @@
       body > header nav ul:last-child {width: 100%; justify-content: space-between;}
       /* 記事一覧 */
       .index-cards {grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));}
+      /* リンクカード */
+      .link-card > img {max-width: 120px; max-height: 120px;}
       /* fixed-shelf スライドインモーダル */
       .fixed-shelf {
         position: fixed; top: 0; right: 0;
@@ -194,7 +198,7 @@
             </ul>
             <ul>
               <li>
-                <button class='js-fixed-shelf-toggle' aria-label='モバイル fixed-shelf'>
+                <button aria-label='モバイル fixed-shelf' x-data='{}' x-on:click='$store.shelf.toggle()'>
                   <i class='fas fa-list-ul'/>
                 </button>
               </li>
@@ -202,7 +206,6 @@
                 <ul>
                   <li>
                     <input
-                    expr:class='data:view.isSearch ? &quot;is-open&quot; : &quot;&quot;'
                     expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
                     name='q'
                     type='search'
@@ -216,8 +219,8 @@
                     </button>
                   </li>
                   <li>
-                    <button class='theme-switch' aria-label='テーマ切り替え'>
-                      <i class='fas fa-moon'/>
+                    <button class='theme-switch' aria-label='テーマ切り替え' x-data='themeSwitch' x-on:click='toggle()'>
+                      <i class='fas' x-bind:class="theme === 'light' ? 'fa-sun' : 'fa-moon'"/>
                     </button>
                   </li>
                 </ul>
@@ -298,7 +301,7 @@
                     </div>
                     <hr />
                   </header>
-                  <div class='markdown post-body'>
+                  <div class='markdown post-body' x-on:click="$event.target.tagName === 'IMG' &amp;&amp; $dispatch('open-image', $event.target.src)">
                     <data:post.body/>
                   </div>
                 </article>
@@ -373,7 +376,7 @@
           </b:widget>
         </b:section>
       </div>
-      <div class="fixed-shelf">
+      <div class="fixed-shelf" x-data='{}' x-bind:class="{ 'is-open': $store.shelf.open }" x-on:click="$event.target.closest('a') &amp;&amp; $store.shelf.close()">
         <!-- ラベルリスト(index) / 目次(item) -->
         <b:section id='ラベルリスト/目次'>
           <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
@@ -431,14 +434,83 @@
     </nav>
   </footer>
   <!-- 画像モーダル -->
-  <dialog class='image-modal'>
-    <img alt='' class='modal-image' src=''/>
+  <dialog class='image-modal' x-data='imageModal' x-on:open-image.window='open($event.detail)' x-on:click.self='close()'>
+    <img alt='' class='modal-image' x-bind:src='src'/>
   </dialog>
   <!-- モバイル fixed-shelf オーバーレイ -->
-  <div class='js-fixed-shelf-overlay'/>
+  <div class='js-fixed-shelf-overlay' x-data='{}' x-bind:class="{ 'is-open': $store.shelf.open }" x-on:click='$store.shelf.close()'/>
   <script>
-    // markdown-it レンダリング
-    document.addEventListener('DOMContentLoaded', function () {
+    // ============================================================
+    // Alpine.js 登録: テーマ切替 / 画像モーダル / fixed-shelf ストア
+    // ============================================================
+    document.addEventListener('alpine:init', () =&gt; {
+      const HLJS_BASE = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/';
+      const THEME_KEY = 'theme';
+      const lightMQL = matchMedia('(prefers-color-scheme: light)');
+      const storedTheme = () =&gt; {
+        const v = localStorage.getItem(THEME_KEY);
+        return v === 'light' || v === 'dark' ? v : null;
+      };
+
+      // テーマ切替 (light / dark, 未設定時は OS 設定に追従)
+      Alpine.data('themeSwitch', () =&gt; ({
+        theme: storedTheme() || (lightMQL.matches ? 'light' : 'dark'),
+        init() {
+          this.apply();
+          lightMQL.addEventListener('change', e =&gt; {
+            if (storedTheme()) return;
+            this.theme = e.matches ? 'light' : 'dark';
+            this.apply();
+          });
+        },
+        toggle() {
+          this.theme = this.theme === 'dark' ? 'light' : 'dark';
+          localStorage.setItem(THEME_KEY, this.theme);
+          this.apply();
+        },
+        apply() {
+          document.documentElement.setAttribute('data-theme', this.theme);
+          const hl = document.querySelector('.js-hljs-theme');
+          if (hl) hl.href = HLJS_BASE + (this.theme === 'light' ? 'github.min.css' : 'github-dark.min.css');
+        }
+      }));
+
+      // 画像モーダル (post-body の img クリックで開く)
+      Alpine.data('imageModal', () =&gt; ({
+        src: '',
+        open(src) {
+          this.src = src.replace(/s\d{2,4}(-c)?/, 's1600');
+          this.$el.showModal();
+        },
+        close() { this.$el.close(); }
+      }));
+
+      // モバイル fixed-shelf の開閉ストア (Esc キーで閉じる)
+      Alpine.store('shelf', {
+        open: false,
+        toggle() { this.open = !this.open; },
+        close() { this.open = false; },
+        init() {
+          addEventListener('keydown', e =&gt; {
+            if (e.key === 'Escape') this.close();
+          });
+        }
+      });
+    });
+
+    // ============================================================
+    // 起動: 個別記事ページの後処理
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () =&gt; {
+      renderMarkdown();
+      buildTOC();
+      setupTOCHighlight();
+      loadLinkCards();
+    });
+
+    // 本文を markdown-it でレンダリング
+    // (Blogger は本文を &lt;p&gt; で勝手に包むので除去してから渡す)
+    function renderMarkdown() {
       const el = document.querySelector('.markdown');
       if (!el) return;
       const md = window.markdownit({
@@ -446,205 +518,200 @@
         linkify: true,
         typographer: true,
         langPrefix: 'hljs language-'
-      });
-      md.use(window.markdownitEmoji);
-      const _src = el.innerHTML
+      }).use(window.markdownitEmoji);
+      const src = el.innerHTML
         .replace(/&lt;p[^&gt;]*&gt;\s*/gi, '')
         .replace(/\s*&lt;\/p&gt;/gi, '\n\n');
-      el.innerHTML = md.render(_src);
-      el.querySelectorAll(&#39;pre code&#39;).forEach(function (block) { hljs.highlightElement(block); });
+      el.innerHTML = md.render(src);
+      el.querySelectorAll('pre code').forEach(b =&gt; hljs.highlightElement(b));
       twemoji.parse(el, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' });
-    });
-    // テーマ切り替え (auto / light / dark)
-    // localStorage 未設定時は OS 設定に追従、ボタン押下で light/dark を明示固定
-    document.addEventListener('DOMContentLoaded', function () {
-      const STORAGE_KEY = 'theme';
-      const HLJS_BASE = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/';
-      const btn = document.querySelector('.theme-switch');
-      const icon = btn.querySelector('i');
-      const hlLink = document.querySelector('.js-hljs-theme');
-      const lightMQL = window.matchMedia('(prefers-color-scheme: light)');
+    }
 
-      const stored = () =&gt; {
-        const v = localStorage.getItem(STORAGE_KEY);
-        return v === 'light' || v === 'dark' ? v : null;
-      };
-      const resolved = () =&gt; stored() || (lightMQL.matches ? 'light' : 'dark');
-      const render = () =&gt; {
-        const t = resolved();
-        document.documentElement.setAttribute('data-theme', t);
-        icon.className = 'fas ' + (t === 'light' ? 'fa-sun' : 'fa-moon');
-        if (hlLink) hlLink.href = HLJS_BASE + (t === 'light' ? 'github.min.css' : 'github-dark.min.css');
-      };
+    // 見出しから目次ツリーを生成
+    function buildTOC() {
+      const body = document.querySelector('.post-body');
+      const nav = document.querySelector('.content-toc &gt; nav');
+      if (!body || !nav) return;
+      const headings = body.querySelectorAll('h2, h3, h4');
+      if (!headings.length) return;
 
-      render();
-      lightMQL.addEventListener('change', () =&gt; { if (!stored()) render(); });
-      btn.addEventListener('click', () =&gt; {
-        localStorage.setItem(STORAGE_KEY, resolved() === 'dark' ? 'light' : 'dark');
-        render();
+      const root = document.createElement('ul');
+      const stack = [];
+      headings.forEach((el, i) =&gt; {
+        if (!el.id) el.id = 'toc-' + i;
+        const level = parseInt(el.tagName[1]);
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + el.id;
+        a.textContent = el.textContent.trim();
+        li.appendChild(a);
+
+        while (stack.length &amp;&amp; stack[stack.length - 1].level &gt;= level) stack.pop();
+        if (!stack.length) {
+          root.appendChild(li);
+        } else {
+          const parent = stack[stack.length - 1].li;
+          let sub = parent.querySelector('ul');
+          if (!sub) {
+            sub = document.createElement('ul');
+            parent.appendChild(sub);
+          }
+          sub.appendChild(li);
+        }
+        stack.push({ level, li });
       });
-    });
+      nav.appendChild(root);
+    }
+
+    // スクロール位置に応じて目次の現在地を aria-current でハイライト
+    function setupTOCHighlight() {
+      const nav = document.querySelector('.content-toc &gt; nav');
+      if (!nav) return;
+      const links = nav.querySelectorAll('a');
+      const headings = document.querySelectorAll('.post-body h2, .post-body h3, .post-body h4');
+      if (!headings.length) return;
+
+      let lastActive = null;
+      addEventListener('scroll', () =&gt; {
+        let currentId = null;
+        headings.forEach(h =&gt; {
+          if (scrollY &gt;= h.getBoundingClientRect().top + scrollY - 225) currentId = h.id;
+        });
+        links.forEach(a =&gt; {
+          a.removeAttribute('aria-current');
+          if (currentId &amp;&amp; a.getAttribute('href') === '#' + currentId) {
+            a.setAttribute('aria-current', 'true');
+            if (lastActive !== a) {
+              lastActive = a;
+              nav.scrollTo({ top: a.offsetTop - nav.clientHeight / 2, behavior: 'smooth' });
+            }
+          }
+        });
+      });
+    }
+
     // リンクカード (Microlink + localStorage キャッシュ + IntersectionObserver 遅延ロード)
-    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      var CACHE_PREFIX = &#39;ogp:&#39;;
-      var CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
-      function getCached(url) {
+    function loadLinkCards() {
+      const CACHE_PREFIX = 'ogp:';
+      const CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
+
+      const getCached = url =&gt; {
         try {
-          var raw = localStorage.getItem(CACHE_PREFIX + url);
+          const raw = localStorage.getItem(CACHE_PREFIX + url);
           if (!raw) return null;
-          var obj = JSON.parse(raw);
+          const obj = JSON.parse(raw);
           if (Date.now() - obj.ts &gt; CACHE_TTL) {
             localStorage.removeItem(CACHE_PREFIX + url);
             return null;
           }
           return obj.data;
-        } catch (e) { return null; }
-      }
-      function setCached(url, data) {
-        var payload = JSON.stringify({ ts: Date.now(), data: data });
+        } catch { return null; }
+      };
+
+      const setCached = (url, data) =&gt; {
+        const payload = JSON.stringify({ ts: Date.now(), data });
         try {
           localStorage.setItem(CACHE_PREFIX + url, payload);
-        } catch (e) {
+        } catch {
+          // 容量不足: 既存 OGP キャッシュを掃除して再試行
           try {
-            Object.keys(localStorage).forEach(function (k) {
-              if (k.indexOf(CACHE_PREFIX) === 0) localStorage.removeItem(k);
+            Object.keys(localStorage).forEach(k =&gt; {
+              if (k.startsWith(CACHE_PREFIX)) localStorage.removeItem(k);
             });
             localStorage.setItem(CACHE_PREFIX + url, payload);
-          } catch (e2) {}
+          } catch {}
         }
-      }
-      function buildCard(href, d) {
-        var card = document.createElement(&#39;a&#39;);
-        card.className = &#39;link-card&#39;;
+      };
+
+      const buildCard = (href, d) =&gt; {
+        const card = document.createElement('a');
+        card.className = 'link-card';
         card.href = href;
-        card.target = &#39;_blank&#39;;
-        card.rel = &#39;noopener noreferrer&#39;;
-        var div = document.createElement(&#39;div&#39;);
-        var titleEl = document.createElement(&#39;strong&#39;);
-        titleEl.textContent = d.title || href;
-        div.appendChild(titleEl);
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+
+        const body = document.createElement('div');
+        const title = document.createElement('strong');
+        title.textContent = d.title || href;
+        body.appendChild(title);
+
         if (d.description) {
-          var desc = document.createElement(&#39;small&#39;);
+          const desc = document.createElement('small');
           desc.textContent = d.description;
-          div.appendChild(desc);
+          body.appendChild(desc);
         }
-        var metaEl = document.createElement(&#39;small&#39;);
-        var logoUrl = d.logo &amp;&amp; d.logo.url;
-        if (logoUrl) {
-          var fav = document.createElement(&#39;img&#39;);
-          fav.src = logoUrl;
-          fav.alt = &#39;&#39;;
-          fav.onerror = function () { this.style.display = &#39;none&#39;; };
-          metaEl.appendChild(fav);
+
+        const meta = document.createElement('small');
+        if (d.logo &amp;&amp; d.logo.url) {
+          const fav = document.createElement('img');
+          fav.src = d.logo.url;
+          fav.alt = '';
+          fav.onerror = function () { this.style.display = 'none'; };
+          meta.appendChild(fav);
         }
-        try { metaEl.appendChild(document.createTextNode(new URL(href).hostname)); } catch (e) { metaEl.appendChild(document.createTextNode(href)); }
-        div.appendChild(metaEl);
-        card.appendChild(div);
-        var imageUrl = d.image &amp;&amp; d.image.url;
-        if (imageUrl) {
-          var img = document.createElement(&#39;img&#39;);
-          img.src = imageUrl;
-          img.alt = &#39;&#39;;
-          img.loading = &#39;lazy&#39;;
+        try { meta.appendChild(document.createTextNode(new URL(href).hostname)); }
+        catch { meta.appendChild(document.createTextNode(href)); }
+        body.appendChild(meta);
+        card.appendChild(body);
+
+        if (d.image &amp;&amp; d.image.url) {
+          const img = document.createElement('img');
+          img.src = d.image.url;
+          img.alt = '';
+          img.loading = 'lazy';
           card.appendChild(img);
         }
         return card;
-      }
-      function render(href, p, data) {
-        var card = buildCard(href, data);
-        p.parentNode.insertBefore(card, p.nextSibling);
-      }
-      function load(href, p) {
-        var cached = getCached(href);
-        if (cached) { render(href, p, cached); return; }
-        fetch(&#39;https://api.microlink.io/?url=&#39; + encodeURIComponent(href))
-          .then(function (r) { return r.json(); })
-          .then(function (json) {
-            if (json.status !== &#39;success&#39;) return;
+      };
+
+      const renderCard = (href, p, data) =&gt; {
+        p.parentNode.insertBefore(buildCard(href, data), p.nextSibling);
+      };
+
+      const fetchCard = (href, p) =&gt; {
+        const cached = getCached(href);
+        if (cached) { renderCard(href, p, cached); return; }
+        fetch('https://api.microlink.io/?url=' + encodeURIComponent(href))
+          .then(r =&gt; r.json())
+          .then(json =&gt; {
+            if (json.status !== 'success') return;
             setCached(href, json.data);
-            render(href, p, json.data);
+            renderCard(href, p, json.data);
           })
-          .catch(function () {});
-      }
-      var targets = [];
-      document.querySelectorAll(&#39;.post-body a[href]&#39;).forEach(function (a) {
-        var href = a.getAttribute(&#39;href&#39;);
-        if (!href || !href.startsWith(&#39;http&#39;)) return;
-        var p = a.closest(&#39;p&#39;);
+          .catch(() =&gt; {});
+      };
+
+      // &lt;p&gt; 直下に裸で置かれた http(s) リンクのみカード化
+      const targets = [];
+      document.querySelectorAll('.post-body a[href]').forEach(a =&gt; {
+        const href = a.getAttribute('href');
+        if (!href || !href.startsWith('http')) return;
+        const p = a.closest('p');
         if (!p) return;
-        targets.push({ a: a, href: href, p: p });
+        targets.push({ a, href, p });
       });
-      if (&#39;IntersectionObserver&#39; in window) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
+
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries =&gt; {
+          entries.forEach(entry =&gt; {
             if (!entry.isIntersecting) return;
-            var t = entry.target.__linkCardTarget;
             io.unobserve(entry.target);
-            if (t) load(t.href, t.p);
+            const t = entry.target.__linkCardTarget;
+            if (t) fetchCard(t.href, t.p);
           });
-        }, { rootMargin: &#39;1500px&#39; });
-        targets.forEach(function (t) {
+        }, { rootMargin: '1500px' });
+        targets.forEach(t =&gt; {
           t.a.__linkCardTarget = t;
           io.observe(t.a);
         });
       } else {
-        targets.forEach(function (t) { load(t.href, t.p); });
+        targets.forEach(t =&gt; fetchCard(t.href, t.p));
       }
-    });
-    // 目次生成
-    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const body = document.querySelector(&#39;.post-body&#39;);
-      if (!body) return;
-      const headings = body.querySelectorAll(&#39;h2, h3, h4&#39;);
-      const toc = document.querySelector(&#39;.content-toc &gt; nav&#39;);
-      if (!toc || !headings.length) return;
-      const root = document.createElement(&#39;ul&#39;);
-      const stack = [];
-      headings.forEach(function (el, i) {
-        const id = &#39;toc-&#39; + i;
-        if (!el.id) el.id = id;
-        const level = parseInt(el.tagName[1]);
-        const li = document.createElement(&#39;li&#39;);
-        const a = document.createElement(&#39;a&#39;);
-        a.href = &#39;#&#39; + id;
-        a.textContent = el.textContent.trim();
-        li.appendChild(a);
-        while (stack.length &amp;&amp; stack[stack.length - 1].level &gt;= level) stack.pop();
-        if (!stack.length) {
-          root.appendChild(li);
-        } else {
-          let sub = stack[stack.length - 1].li.querySelector(&#39;ul&#39;);
-          if (!sub) { sub = document.createElement(&#39;ul&#39;); stack[stack.length - 1].li.appendChild(sub); }
-          sub.appendChild(li);
-        }
-        stack.push({ level: level, li: li });
-      });
-      toc.appendChild(root);
-    });
-    // 目次スクロールハイライト
-    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const toc = document.querySelector(&#39;.content-toc &gt; nav&#39;);
-      if (!toc) return;
-      const links = toc.querySelectorAll(&#39;a&#39;);
-      let lastActive = null;
-      window.addEventListener(&#39;scroll&#39;, function () {
-        let currentId = null;
-        document.querySelectorAll(&#39;.post-body h2, .post-body h3, .post-body h4&#39;).forEach(function (h) {
-          if (window.scrollY &gt;= h.getBoundingClientRect().top + window.scrollY - 225) currentId = h.id;
-        });
-        links.forEach(function (a) {
-          a.removeAttribute(&#39;aria-current&#39;);
-          if (currentId &amp;&amp; a.getAttribute(&#39;href&#39;) === &#39;#&#39; + currentId) {
-            a.setAttribute(&#39;aria-current&#39;, &#39;true&#39;);
-            if (lastActive !== a) {
-              lastActive = a;
-              toc.scrollTo({ top: a.offsetTop - toc.clientHeight / 2, behavior: &#39;smooth&#39; });
-            }
-          }
-        });
-      });
-    });
-    // インセンティブ表示
+    }
+
+    // ============================================================
+    // インセンティブ表示 (要URL設定 - 無効化中)
+    // ============================================================
     /* 初期設定を行ってください
     document.addEventListener('DOMContentLoaded', function() {
       var labels = [];
@@ -714,56 +781,6 @@
           });
       });
     });*/
-    // 検索ボックス
-    document.addEventListener('DOMContentLoaded', function () {
-      const searchInput = document.querySelector('header nav input[type="search"]');
-      if (!searchInput) return;
-      searchInput.addEventListener('focus', function () {
-        searchInput.classList.add('is-open');
-      });
-      searchInput.addEventListener('blur', function () {
-        if (!searchInput.value) {
-          searchInput.classList.remove('is-open');
-        }
-      });
-    });
-    // 画像モーダル
-    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const modal = document.querySelector(&#39;.image-modal&#39;);
-      const modalImg = modal.querySelector(&#39;.modal-image&#39;);
-      document.querySelectorAll(&#39;.post-body img&#39;).forEach(function (img) {
-        img.addEventListener(&#39;click&#39;, function () {
-          modalImg.src = img.src.replace(/s\d{2,4}(-c)?/, &#39;s1600&#39;);
-          modal.showModal();
-        });
-      });
-      modal.addEventListener(&#39;click&#39;, function (e) {
-        if (e.target === modal) modal.close();
-      });
-    });
-    // モバイル fixed-shelf トグル
-    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const toggle = document.querySelector(&#39;.js-fixed-shelf-toggle&#39;);
-      const shelf = document.querySelector(&#39;.fixed-shelf&#39;);
-      const overlay = document.querySelector(&#39;.js-fixed-shelf-overlay&#39;);
-      if (!toggle || !shelf || !overlay) return;
-      function open() {
-        shelf.classList.add(&#39;is-open&#39;);
-        overlay.classList.add(&#39;is-open&#39;);
-      }
-      function close() {
-        shelf.classList.remove(&#39;is-open&#39;);
-        overlay.classList.remove(&#39;is-open&#39;);
-      }
-      toggle.addEventListener(&#39;click&#39;, open);
-      overlay.addEventListener(&#39;click&#39;, close);
-      shelf.addEventListener(&#39;click&#39;, function (e) {
-        if (e.target.closest(&#39;a&#39;)) close();
-      });
-      document.addEventListener(&#39;keydown&#39;, function (e) {
-        if (e.key === &#39;Escape&#39;) close();
-      });
-    });
   </script>
 </body>
 </html>
