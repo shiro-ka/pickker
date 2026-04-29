@@ -4,6 +4,7 @@
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <meta content='light dark' name='color-scheme'/>
   <b:if cond='data:blog.pageType == &quot;index&quot;'>
     <title><data:blog.pageTitle/></title>
     <meta content='website' property='og:type'/>
@@ -13,16 +14,27 @@
   </b:if>
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
-  <!-- Pico CSS v2 classless | MIT License | https://picocss.com -->
+  <!-- Pico CSS / FontAwesome / BunnyFonts / Highlight.js / Markdown-it / Twemoji -->
   <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
   <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css' rel='stylesheet'/>
-  <link class='js-hljs-theme' rel='stylesheet'/>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
+  <link class='js-hljs-theme' rel='stylesheet'/>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
+  <!-- ダークテーマの FOUC 対策 -->
+  <script>
+    (function () {
+      var v = localStorage.getItem('theme');
+      var t = (v === 'light' || v === 'dark') ? v
+        : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', t);
+      var hl = document.querySelector('.js-hljs-theme');
+      if (hl) hl.href = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/' + (t === 'light' ? 'github.min.css' : 'github-dark.min.css');
+    })();
+  </script>
   <style>
     /* スムーズスクロール */
     html {scroll-behavior: smooth;}
@@ -31,17 +43,19 @@
     @media (min-width: 1280px) {:host, :root {--pico-font-size: 118.75%;}}
     body {font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 400;}
     /* ヘッダー */
-    header hgroup > :not(:first-child):last-child {font-size: 0.9rem;}
-    header button {background: none; border: none; padding: .3rem .6rem; cursor: pointer; color: var(--pico-muted-color);}
-    header button:hover {background: var(--pico-muted-border-color);}
+    body > header {padding-bottom: 0;}
+    body > header hgroup > :not(:first-child):last-child {font-size: 0.9rem;}
+    body > header button {background: none; border: none; padding: .3rem .6rem; cursor: pointer; color: var(--pico-muted-color);}
+    body > header button:hover {background: var(--pico-muted-border-color);}
+    body > header nav > ul:last-child > li:first-child {display: none;}
     /* 検索ボックス */
-    header nav input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
-    header nav input[type="search"].is-open { width: 14rem; cursor: text; }
+    body > header nav input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
+    body > header nav input[type="search"].is-open { width: 14rem; cursor: text; }
     /* 2カラムレイアウト */
     main {grid-template-columns: 1fr 18rem !important;}
     article > header > time {font-size: 0.8rem; margin-bottom: 0.2rem;}
     /* indexカード */
-    .index-cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing);}
+    .index-cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(246px, 1fr)); gap: var(--pico-spacing);}
     .index-cards article {position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0;}
     .index-cards article > a:first-child {position: absolute; inset: 0; z-index: 1;}
     .index-cards article img {aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block;}
@@ -49,13 +63,13 @@
     .index-cards article > footer {margin-top: auto; padding: 0 1.5rem 1.5rem;}
     .index-cards article > footer a {position: relative; z-index: 2;}
     /* 記事本文 */
-    article h1 {margin-bottom: 1.5rem;}
-    article :is(h2, h3, h4) {margin-left: -.5rem; margin-bottom: 1.7rem;}
-    article h2 {border-left: 6px solid var(--pico-primary); border-bottom: 1px solid var(--pico-primary-focus); padding: 0 0 .4rem .5rem;}
-    article h3 {border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem;}
-    article h4 {border-left: 3px solid var(--pico-primary); padding-left: .7rem;}
-    article b {font-weight: 600;}
-    article :not(.link-card) img:not(.emoji) {margin-bottom: var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius);}
+    .post-body h1 {margin-bottom: 1.5rem;}
+    .post-body :is(h2, h3, h4) {margin-left: -.5rem; margin-bottom: 1.7rem;}
+    .post-body h2 {border-left: 6px solid var(--pico-primary); border-bottom: 1px solid var(--pico-primary-focus); padding: 0 0 .4rem .5rem;}
+    .post-body h3 {border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem;}
+    .post-body h4 {border-left: 3px solid var(--pico-primary); padding-left: .7rem;}
+    .post-body b {font-weight: 600;}
+    .post-body :not(.link-card) img:not(.emoji) {margin-bottom: var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius);}
     /* リンクカード */
     .link-card {display: flex; margin: 1rem 0; max-width: 768px; border: var(--pico-border-width) solid var(--pico-table-border-color); border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); overflow: hidden; transition: background .15s;}
     .link-card:hover {background: color-mix(in srgb, var(--pico-primary) 6%, transparent);}
@@ -67,18 +81,42 @@
     .link-card small img {width: 16px; height: 16px; flex-shrink: 0;}
     .link-card > img {max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block;}
     /* サイドカラム */
-    .sticky-shelf {position: sticky; top: 1rem; height: calc(100dvh - 2rem); overflow-x: hidden; overflow-y: auto;}
+    .fixed-shelf {position: sticky; top: 1rem; height: calc(100dvh - 2rem); overflow-x: hidden; overflow-y: auto;}
+    /* インセンティブリスト */
+    .content-incentive {padding: 8px; font-size: 84%;}
+    .content-incentive :is(ul, li) {list-style: none; padding: 0; margin: 0;}
+    .content-incentive a {display: flex; align-items: center; gap: .75rem; padding: .4rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-h3-color);}
+    .content-incentive a:hover {background: color-mix(in srgb, var(--pico-primary) 10%, transparent);}
+    .content-incentive img {width: 64px; height: 64px; object-fit: cover; border-radius: var(--pico-border-radius); flex-shrink: 0;}
+    .content-incentive span {display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+    .content-incentive .js-popular-item:nth-child(n+2) {display: none;}
     /* 目次 */
-    .toc {margin-left: -1rem;}
-    .toc li {position: relative; padding: 0;}
-    .toc > ul > li {left: 1.5rem;}
-    .toc > ul > li > ul {border-left: 1px solid var(--pico-color); margin-left: 0.2rem;}
-    .toc > ul > li > ul > li {left: 1rem;}
-    .toc > ul > li > ul > li > ul {border-left: 1px dashed var(--pico-color); margin-left: 0.2rem;}
-    .toc > ul > li > ul > li > ul > li {left: 0.5rem;}
-    .toc > ul > li > ul > li > ul > li > a::before {content: "- ";}
-    .toc a {color: var(--pico-secondary);}
-    .toc a:hover {color: var(--pico-contrast); text-decoration: none;}
+    .content-toc nav {position: relative;}
+    .content-toc nav ::before {position: relative;}
+    .content-toc nav > ul::before {
+      position: absolute; content: "";
+      left: 0; top: 22px; bottom: 22px;
+      width: 2px; background: var(--pico-primary-border);
+    }
+    .content-toc nav > ul > li::before {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 4px solid var(--pico-card-background-color); background: var(--pico-primary-border);
+      left: -7px; top: 16px;
+    }
+    .content-toc nav > ul > li:has(> a[aria-current])::before {background: var(--pico-primary);}
+    .content-toc nav > ul > li {padding-top: 0; padding-bottom: 0;}
+    .content-toc nav > ul > li > ul > li::before {
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 2px solid var(--pico-primary-border); top: 10px; left: -8px;
+    }
+    .content-toc nav > ul > li > ul > li:has(> a[aria-current])::before {border-color: var(--pico-primary);}
+    .content-toc nav > ul > li > ul > li {padding-left: 36px; padding-bottom: 0;}
+    .content-toc nav > ul > li > ul > li > ul > li {padding-left: 28px; font-size: 84%;}
+    .content-toc a {color: var(--pico-secondary);}
+    .content-toc a:hover {color: var(--pico-contrast); text-decoration: none;}
+    .content-toc a[aria-current] {color: var(--pico-primary-hover);}
+    /* フッター */
+    footer, footer a {color: var(--pico-muted-color);}
     /* Pico標準無効化 */
     article > header, article > footer {background: none; border: none; padding: var(--pico-spacing);}
 
@@ -93,36 +131,45 @@
     /* ページネーション */
     .pagination { display: flex; justify-content: center; gap: 1rem; }
     .pagination a[aria-disabled] { opacity: .4; pointer-events: none; }
-
-
-
     /* 画像モーダル */
     .image-modal { background: transparent; border: none; padding: 0; max-width: 100dvw; max-height: 100dvh; }
     .image-modal::backdrop { background: rgba(0,0,0,.88); }
     .image-modal img { max-width: 92dvw; max-height: 92dvh; object-fit: contain; display: block; }
     .post-body img { cursor: zoom-in; }
     .markdown img.emoji { width: 1.2em; height: 1.2em; vertical-align: -0.2em; }
-
     
-
-    /* インセンティブリスト */
-    .incentive-list { list-style: none; padding: 0; margin: 0; }
-    .incentive-list a { display: flex; align-items: center; gap: .75rem; padding: .4rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); }
-    .incentive-list a:hover { background: color-mix(in srgb, var(--pico-primary) 10%, transparent); }
-    .incentive-list img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--pico-border-radius); flex-shrink: 0; }
-    .incentive-list .js-popular-item:nth-child(n+2) { display: none; }
-
-
-    /* フッター */
-    footer, footer a { color: var(--pico-muted-color); }
-
-    /* サイドトグル非表示(デスクトップ) */
-    .side-toggle { display: none; }
 
     /* レスポンシブ */
     @media (width &lt; 1024px) {
       /* 1カラムレイアウト */
       main {grid-template-columns: 1fr !important;}
+      /* ヘッダー */
+      body > header {padding-left: 16px !important; padding-right: 16px !important; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border);}
+      body > header {position: sticky; top: -96px; z-index: 1000; background: var(--pico-background-color);}
+      body > header hgroup {margin-bottom: 0;}
+      body > header nav {flex-direction: column;}
+      body > header nav > ul:first-child > li {padding-bottom: 0;}
+      body > header nav > ul:last-child > li {padding: 0;}
+      body > header nav > ul:last-child > li:first-child {display: inline-block;}
+      body > header nav ul:last-child {width: 100%; justify-content: space-between;}
+      /* fixed-shelf スライドインモーダル */
+      .fixed-shelf {
+        position: fixed; top: 0; right: 0;
+        width: min(85vw, 320px); height: 100dvh;
+        background: var(--pico-background-color);
+        box-shadow: -2px 0 8px rgba(0,0,0,.2);
+        padding: 1rem; z-index: 1100;
+        transform: translateX(100%); transition: transform .3s ease;
+        overflow-y: auto;
+      }
+      .fixed-shelf.is-open {transform: translateX(0);}
+      .js-fixed-shelf-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.5); z-index: 1099;
+        opacity: 0; pointer-events: none;
+        transition: opacity .3s ease;
+      }
+      .js-fixed-shelf-overlay.is-open {opacity: 1; pointer-events: auto;}
     }
   </style>
 &lt;/head&gt;&lt;!--</head>--&gt;
@@ -145,24 +192,33 @@
             </ul>
             <ul>
               <li>
-                <input
-                  expr:class='data:view.isSearch ? &quot;is-open&quot; : &quot;&quot;'
-                  expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
-                  name='q'
-                  type='search'
-                  placeholder='検索...'
-                  aria-label='ブログ内を検索'
-                />
-              </li>
-              <li>
-                <button class='tag-list-toggle' aria-label='タグ一覧'>
-                  <i class='fas fa-tag'/>
+                <button class='js-fixed-shelf-toggle' aria-label='モバイル fixed-shelf'>
+                  <i class='fas fa-list-ul'/>
                 </button>
               </li>
               <li>
-                <button class='theme-switch' aria-label='テーマ切り替え'>
-                  <i class='fas fa-moon'/>
-                </button>
+                <ul>
+                  <li>
+                    <input
+                    expr:class='data:view.isSearch ? &quot;is-open&quot; : &quot;&quot;'
+                    expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
+                    name='q'
+                    type='search'
+                    placeholder='検索...'
+                    aria-label='ブログ内を検索'
+                    />
+                  </li>
+                  <li>
+                    <button class='tag-list-toggle' aria-label='タグ一覧'>
+                      <i class='fas fa-tag'/>
+                    </button>
+                  </li>
+                  <li>
+                    <button class='theme-switch' aria-label='テーマ切り替え'>
+                      <i class='fas fa-moon'/>
+                    </button>
+                  </li>
+                </ul>
               </li>
             </ul>
           </nav>
@@ -240,7 +296,7 @@
                     </div>
                     <hr />
                   </header>
-                  <div class='markdown js-post-body'>
+                  <div class='markdown post-body'>
                     <data:post.body/>
                   </div>
                 </article>
@@ -274,35 +330,7 @@
     </section>
     <!-- サイドカラム -->
     <aside>
-      <div class="sticky-shelf">
-        <!-- ラベルリスト(index) / 目次(item) -->
-        <b:section id='ラベルリスト/目次'>
-          <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
-            <b:widget-settings>
-              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
-              <b:widget-setting name='display'>CLOUD</b:widget-setting>
-              <b:widget-setting name='selectedLabelsList'/>
-              <b:widget-setting name='showType'>ALL</b:widget-setting>
-              <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main'>
-              <b:if cond='data:blog.pageType == &quot;index&quot;'>
-                <article>
-                  <div class='labels'>
-                    <b:loop values='data:labels' var='label'>
-                      <a expr:href='data:label.url'><data:label.name/></a>
-                    </b:loop>
-                  </div>
-                </article>
-              </b:if>
-              <b:if cond='data:blog.pageType == &quot;item&quot;'>
-                <article>
-                  <nav class='toc'/>
-                </article>
-              </b:if>
-            </b:includable>
-          </b:widget>
-        </b:section>
+      <div class="relative-shelf">
         <!-- インセンティブ -->
         <b:section id='インセンティブ'>
           <b:widget id='PopularPosts0' locked='false' title='関連記事' type='PopularPosts' version='1'>
@@ -313,9 +341,8 @@
               <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
-              <article>
-                <strong>関連記事</strong>
-                <ul class='incentive-list'>
+              <article class="content-incentive">
+                <ul>
                   <b:if cond='data:blog.pageType == &quot;index&quot;'>
                     <b:loop values='data:posts' var='post'>
                       <li>
@@ -344,6 +371,38 @@
           </b:widget>
         </b:section>
       </div>
+      <div class="fixed-shelf">
+        <!-- ラベルリスト(index) / 目次(item) -->
+        <b:section id='ラベルリスト/目次'>
+          <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+              <b:widget-setting name='display'>CLOUD</b:widget-setting>
+              <b:widget-setting name='selectedLabelsList'/>
+              <b:widget-setting name='showType'>ALL</b:widget-setting>
+              <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <b:if cond='data:blog.pageType == &quot;index&quot;'>
+                <article>
+                  <div class='labels'>
+                    <b:loop values='data:labels' var='label'>
+                      <a expr:href='data:label.url'><data:label.name/></a>
+                    </b:loop>
+                  </div>
+                </article>
+              </b:if>
+              <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                <article class='content-toc'>
+                  <p>目次</p>
+                  <hr/>
+                  <nav/>
+                </article>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+      </div>
     </aside>
   </main>
   <!-- フッター -->
@@ -363,7 +422,7 @@
           <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
           <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
           <a href='https://fontawesome.com'>Font Awesome</a> /
-          <a href='https://linkmeta.dev/'>LinkMeta</a> /
+          <a href='https://microlink.io/'>Microlink</a> /
           <a href='https://highlightjs.org'>Highlight.js</a>
         </small></li>
       </ul>
@@ -373,11 +432,8 @@
   <dialog class='image-modal'>
     <img alt='' class='modal-image' src=''/>
   </dialog>
-  <!-- モバイルサイドバー -->
-  <div class='side-overlay'/>
-  <button class='side-toggle' aria-label='サイドバーを開く'>
-    <i class='fas fa-chevron-left'/>
-  </button>
+  <!-- モバイル fixed-shelf オーバーレイ -->
+  <div class='js-fixed-shelf-overlay'/>
   <script>
     // markdown-it レンダリング
     document.addEventListener('DOMContentLoaded', function () {
@@ -397,80 +453,148 @@
       el.querySelectorAll(&#39;pre code&#39;).forEach(function (block) { hljs.highlightElement(block); });
       twemoji.parse(el, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' });
     });
-    // テーマ切り替え
-    document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const btn = document.querySelector(&#39;.theme-switch&#39;);
-      const icon = btn.querySelector(&#39;i&#39;);
-      let theme = localStorage.getItem(&#39;theme&#39;) ||
-        (window.matchMedia(&#39;(prefers-color-scheme: light)&#39;).matches ? &#39;light&#39; : &#39;dark&#39;);
-      function applyTheme(t) {
-        document.documentElement.setAttribute(&#39;data-theme&#39;, t);
-        localStorage.setItem(&#39;theme&#39;, t);
-        icon.className = &#39;fas &#39; + (t === &#39;light&#39; ? &#39;fa-sun&#39; : &#39;fa-moon&#39;);
-        var hlLink = document.querySelector(&#39;.js-hljs-theme&#39;);
-        if (hlLink) hlLink.href = &#39;https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/&#39; + (t === &#39;light&#39; ? &#39;github.min.css&#39; : &#39;github-dark.min.css&#39;);
-      }
-      applyTheme(theme);
-      btn.addEventListener(&#39;click&#39;, function () {
-        theme = theme === &#39;dark&#39; ? &#39;light&#39; : &#39;dark&#39;;
-        applyTheme(theme);
+    // テーマ切り替え (auto / light / dark)
+    // localStorage 未設定時は OS 設定に追従、ボタン押下で light/dark を明示固定
+    document.addEventListener('DOMContentLoaded', function () {
+      const STORAGE_KEY = 'theme';
+      const HLJS_BASE = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/';
+      const btn = document.querySelector('.theme-switch');
+      const icon = btn.querySelector('i');
+      const hlLink = document.querySelector('.js-hljs-theme');
+      const lightMQL = window.matchMedia('(prefers-color-scheme: light)');
+
+      const stored = () =&gt; {
+        const v = localStorage.getItem(STORAGE_KEY);
+        return v === 'light' || v === 'dark' ? v : null;
+      };
+      const resolved = () =&gt; stored() || (lightMQL.matches ? 'light' : 'dark');
+      const render = () =&gt; {
+        const t = resolved();
+        document.documentElement.setAttribute('data-theme', t);
+        icon.className = 'fas ' + (t === 'light' ? 'fa-sun' : 'fa-moon');
+        if (hlLink) hlLink.href = HLJS_BASE + (t === 'light' ? 'github.min.css' : 'github-dark.min.css');
+      };
+
+      render();
+      lightMQL.addEventListener('change', () =&gt; { if (!stored()) render(); });
+      btn.addEventListener('click', () =&gt; {
+        localStorage.setItem(STORAGE_KEY, resolved() === 'dark' ? 'light' : 'dark');
+        render();
       });
     });
-    // リンクカード (linkmeta)
+    // リンクカード (Microlink + localStorage キャッシュ + IntersectionObserver 遅延ロード)
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      document.querySelectorAll(&#39;.js-post-body a[href]&#39;).forEach(function (a) {
-        var href = a.getAttribute(&#39;href&#39;);
-        if (!href.startsWith(&#39;http&#39;)) return;
-        var p = a.closest(&#39;p&#39;);
-        if (!p) return;
-        fetch(&#39;https://linkmeta.dev/api/v1/extract?url=&#39; + encodeURIComponent(href))
+      var CACHE_PREFIX = &#39;ogp:&#39;;
+      var CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
+      function getCached(url) {
+        try {
+          var raw = localStorage.getItem(CACHE_PREFIX + url);
+          if (!raw) return null;
+          var obj = JSON.parse(raw);
+          if (Date.now() - obj.ts &gt; CACHE_TTL) {
+            localStorage.removeItem(CACHE_PREFIX + url);
+            return null;
+          }
+          return obj.data;
+        } catch (e) { return null; }
+      }
+      function setCached(url, data) {
+        var payload = JSON.stringify({ ts: Date.now(), data: data });
+        try {
+          localStorage.setItem(CACHE_PREFIX + url, payload);
+        } catch (e) {
+          try {
+            Object.keys(localStorage).forEach(function (k) {
+              if (k.indexOf(CACHE_PREFIX) === 0) localStorage.removeItem(k);
+            });
+            localStorage.setItem(CACHE_PREFIX + url, payload);
+          } catch (e2) {}
+        }
+      }
+      function buildCard(href, d) {
+        var card = document.createElement(&#39;a&#39;);
+        card.className = &#39;link-card&#39;;
+        card.href = href;
+        card.target = &#39;_blank&#39;;
+        card.rel = &#39;noopener noreferrer&#39;;
+        var div = document.createElement(&#39;div&#39;);
+        var titleEl = document.createElement(&#39;strong&#39;);
+        titleEl.textContent = d.title || href;
+        div.appendChild(titleEl);
+        if (d.description) {
+          var desc = document.createElement(&#39;small&#39;);
+          desc.textContent = d.description;
+          div.appendChild(desc);
+        }
+        var metaEl = document.createElement(&#39;small&#39;);
+        var logoUrl = d.logo &amp;&amp; d.logo.url;
+        if (logoUrl) {
+          var fav = document.createElement(&#39;img&#39;);
+          fav.src = logoUrl;
+          fav.alt = &#39;&#39;;
+          fav.onerror = function () { this.style.display = &#39;none&#39;; };
+          metaEl.appendChild(fav);
+        }
+        try { metaEl.appendChild(document.createTextNode(new URL(href).hostname)); } catch (e) { metaEl.appendChild(document.createTextNode(href)); }
+        div.appendChild(metaEl);
+        card.appendChild(div);
+        var imageUrl = d.image &amp;&amp; d.image.url;
+        if (imageUrl) {
+          var img = document.createElement(&#39;img&#39;);
+          img.src = imageUrl;
+          img.alt = &#39;&#39;;
+          img.loading = &#39;lazy&#39;;
+          card.appendChild(img);
+        }
+        return card;
+      }
+      function render(href, p, data) {
+        var card = buildCard(href, data);
+        p.parentNode.insertBefore(card, p.nextSibling);
+      }
+      function load(href, p) {
+        var cached = getCached(href);
+        if (cached) { render(href, p, cached); return; }
+        fetch(&#39;https://api.microlink.io/?url=&#39; + encodeURIComponent(href))
           .then(function (r) { return r.json(); })
           .then(function (json) {
             if (json.status !== &#39;success&#39;) return;
-            var d = json.data;
-            var card = document.createElement(&#39;a&#39;);
-            card.className = &#39;link-card&#39;;
-            card.href = href;
-            card.target = &#39;_blank&#39;;
-            card.rel = &#39;noopener noreferrer&#39;;
-            var div = document.createElement(&#39;div&#39;);
-            var titleEl = document.createElement(&#39;strong&#39;);
-            titleEl.textContent = d.title || href;
-            div.appendChild(titleEl);
-            if (d.description) {
-              var desc = document.createElement(&#39;small&#39;);
-              desc.textContent = d.description;
-              div.appendChild(desc);
-            }
-            var metaEl = document.createElement(&#39;small&#39;);
-            if (d.favicon) {
-              var fav = document.createElement(&#39;img&#39;);
-              fav.src = d.favicon;
-              fav.alt = &#39;&#39;;
-              fav.onerror = function () { this.style.display = &#39;none&#39;; };
-              metaEl.appendChild(fav);
-            }
-            try { metaEl.appendChild(document.createTextNode(new URL(href).hostname)); } catch (e) { metaEl.appendChild(document.createTextNode(href)); }
-            div.appendChild(metaEl);
-            card.appendChild(div);
-            if (d.image) {
-              var img = document.createElement(&#39;img&#39;);
-              img.src = d.image;
-              img.alt = &#39;&#39;;
-              img.loading = &#39;lazy&#39;;
-              card.appendChild(img);
-            }
-            p.parentNode.insertBefore(card, p.nextSibling);
+            setCached(href, json.data);
+            render(href, p, json.data);
           })
           .catch(function () {});
+      }
+      var targets = [];
+      document.querySelectorAll(&#39;.post-body a[href]&#39;).forEach(function (a) {
+        var href = a.getAttribute(&#39;href&#39;);
+        if (!href || !href.startsWith(&#39;http&#39;)) return;
+        var p = a.closest(&#39;p&#39;);
+        if (!p) return;
+        targets.push({ a: a, href: href, p: p });
       });
+      if (&#39;IntersectionObserver&#39; in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var t = entry.target.__linkCardTarget;
+            io.unobserve(entry.target);
+            if (t) load(t.href, t.p);
+          });
+        }, { rootMargin: &#39;1500px&#39; });
+        targets.forEach(function (t) {
+          t.a.__linkCardTarget = t;
+          io.observe(t.a);
+        });
+      } else {
+        targets.forEach(function (t) { load(t.href, t.p); });
+      }
     });
     // 目次生成
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const body = document.querySelector(&#39;.js-post-body&#39;);
+      const body = document.querySelector(&#39;.post-body&#39;);
       if (!body) return;
       const headings = body.querySelectorAll(&#39;h2, h3, h4&#39;);
-      const toc = document.querySelector(&#39;.toc&#39;);
+      const toc = document.querySelector(&#39;.content-toc &gt; nav&#39;);
       if (!toc || !headings.length) return;
       const root = document.createElement(&#39;ul&#39;);
       const stack = [];
@@ -497,13 +621,13 @@
     });
     // 目次スクロールハイライト
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const toc = document.querySelector(&#39;.toc&#39;);
+      const toc = document.querySelector(&#39;.content-toc &gt; nav&#39;);
       if (!toc) return;
       const links = toc.querySelectorAll(&#39;a&#39;);
       let lastActive = null;
       window.addEventListener(&#39;scroll&#39;, function () {
         let currentId = null;
-        document.querySelectorAll(&#39;.js-post-body h2, .js-post-body h3, .js-post-body h4&#39;).forEach(function (h) {
+        document.querySelectorAll(&#39;.post-body h2, .post-body h3, .post-body h4&#39;).forEach(function (h) {
           if (window.scrollY &gt;= h.getBoundingClientRect().top + window.scrollY - 225) currentId = h.id;
         });
         links.forEach(function (a) {
@@ -605,7 +729,7 @@
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
       const modal = document.querySelector(&#39;.image-modal&#39;);
       const modalImg = modal.querySelector(&#39;.modal-image&#39;);
-      document.querySelectorAll(&#39;.js-post-body img&#39;).forEach(function (img) {
+      document.querySelectorAll(&#39;.post-body img&#39;).forEach(function (img) {
         img.addEventListener(&#39;click&#39;, function () {
           modalImg.src = img.src.replace(/s\d{2,4}(-c)?/, &#39;s1600&#39;);
           modal.showModal();
@@ -615,29 +739,27 @@
         if (e.target === modal) modal.close();
       });
     });
-    // サイドバー(モバイル)
+    // モバイル fixed-shelf トグル
     document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
-      const toggle = document.querySelector(&#39;.side-toggle&#39;);
-      const aside = document.querySelector(&#39;aside&#39;);
-      const overlay = document.querySelector(&#39;.side-overlay&#39;);
-      if (!toggle || !aside || !overlay) return;
-      const icon = toggle.querySelector(&#39;i&#39;);
+      const toggle = document.querySelector(&#39;.js-fixed-shelf-toggle&#39;);
+      const shelf = document.querySelector(&#39;.fixed-shelf&#39;);
+      const overlay = document.querySelector(&#39;.js-fixed-shelf-overlay&#39;);
+      if (!toggle || !shelf || !overlay) return;
       function open() {
-        aside.classList.add(&#39;is-open&#39;);
+        shelf.classList.add(&#39;is-open&#39;);
         overlay.classList.add(&#39;is-open&#39;);
-        toggle.classList.add(&#39;is-open&#39;);
-        if (icon) icon.className = &#39;fas fa-chevron-right&#39;;
       }
       function close() {
-        aside.classList.remove(&#39;is-open&#39;);
+        shelf.classList.remove(&#39;is-open&#39;);
         overlay.classList.remove(&#39;is-open&#39;);
-        toggle.classList.remove(&#39;is-open&#39;);
-        if (icon) icon.className = &#39;fas fa-chevron-left&#39;;
       }
       toggle.addEventListener(&#39;click&#39;, open);
       overlay.addEventListener(&#39;click&#39;, close);
-      aside.querySelectorAll(&#39;.toc a&#39;).forEach(function (a) {
-        a.addEventListener(&#39;click&#39;, close);
+      shelf.addEventListener(&#39;click&#39;, function (e) {
+        if (e.target.closest(&#39;a&#39;)) close();
+      });
+      document.addEventListener(&#39;keydown&#39;, function (e) {
+        if (e.key === &#39;Escape&#39;) close();
       });
     });
   </script>
