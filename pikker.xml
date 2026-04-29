@@ -55,7 +55,7 @@
     main {grid-template-columns: 1fr 18rem !important;}
     article > header > time {font-size: 0.8rem; margin-bottom: 0.2rem;}
     /* indexカード */
-    .index-cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(246px, 1fr)); gap: var(--pico-spacing);}
+    .index-cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing);}
     .index-cards article {position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0;}
     .index-cards article > a:first-child {position: absolute; inset: 0; z-index: 1;}
     .index-cards article img {aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block;}
@@ -104,7 +104,7 @@
       left: -7px; top: 16px;
     }
     .content-toc nav > ul > li:has(> a[aria-current])::before {background: var(--pico-primary);}
-    .content-toc nav > ul > li {padding-top: 0; padding-bottom: 0;}
+    .content-toc nav > ul > li {padding-top: 0; padding-bottom: 0; font-size: 96%;}
     .content-toc nav > ul > li > ul > li::before {
       width: 8px; height: 8px; border-radius: 50%;
       border: 2px solid var(--pico-primary-border); top: 10px; left: -8px;
@@ -152,6 +152,8 @@
       body > header nav > ul:last-child > li {padding: 0;}
       body > header nav > ul:last-child > li:first-child {display: inline-block;}
       body > header nav ul:last-child {width: 100%; justify-content: space-between;}
+      /* 記事一覧 */
+      .index-cards {grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));}
       /* fixed-shelf スライドインモーダル */
       .fixed-shelf {
         position: fixed; top: 0; right: 0;
