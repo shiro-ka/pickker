@@ -198,7 +198,7 @@
             </ul>
             <ul>
               <li>
-                <button aria-label='モバイル fixed-shelf' x-data='{}' x-on:click='$store.shelf.toggle()'>
+                <button aria-label='モバイル fixed-shelf' x-on:click='$store.shelf.toggle()'>
                   <i class='fas fa-list-ul'/>
                 </button>
               </li>
@@ -438,7 +438,7 @@
     <img alt='' class='modal-image' x-bind:src='src'/>
   </dialog>
   <!-- モバイル fixed-shelf オーバーレイ -->
-  <div class='js-fixed-shelf-overlay' x-data='{}' x-bind:class="{ 'is-open': $store.shelf.open }" x-on:click='$store.shelf.close()'/>
+  <div class='js-fixed-shelf-overlay' x-bind:class="{ 'is-open': $store.shelf.open }" x-on:click='$store.shelf.close()'/>
   <script>
     // ============================================================
     // Alpine.js 登録: テーマ切替 / 画像モーダル / fixed-shelf ストア
