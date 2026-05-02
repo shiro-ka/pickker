@@ -37,7 +37,7 @@
     })();
   </script>
   <style>
-    /* Alpine.js x-cloak */
+    /* Alpine.js */
     [x-cloak] {display: none !important;}
     /* スムーズスクロール */
     html {scroll-behavior: smooth;}
@@ -45,21 +45,21 @@
     :root {--pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%;}
     @media (min-width: 1280px) {:host, :root {--pico-font-size: 118.75%;}}
     body {font-family: "M PLUS Rounded 1c", sans-serif; font-weight: 400;}
+    /* 汎用 */
+    .transp-button {background: none; border: none; padding: .3rem .6rem; color: var(--pico-muted-color);}
+    .transp-button:hover {background: var(--pico-muted-border-color);}
     /* ヘッダー */
-    body > header {padding-bottom: 0;}
-    body > header hgroup > :not(:first-child):last-child {font-size: 0.9rem;}
-    body > header button {background: none; border: none; padding: .3rem .6rem; cursor: pointer; color: var(--pico-muted-color);}
-    body > header button:hover {background: var(--pico-muted-border-color);}
-    body > header nav > ul:last-child > li:first-child {display: none;}
-    /* 検索ボックス */
-    body > header nav input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
-    body > header nav input[type="search"]:focus,
-    body > header nav input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }
-    /* 2カラムレイアウト */
+    body > header hgroup > p {font-size: 86% !important;}
+    body > header form {margin-bottom: 0 !important;}
+    body > header li:has(.fa-list-ul) {display: none;}
+    body > header input[type="search"] {width: 2.5rem; cursor: pointer; transition: width .3s ease;}
+    body > header input[type="search"]:focus,
+    body > header input[type="search"]:not(:placeholder-shown) {width: 14rem; cursor: text;}
+    /* メイン */
     main {grid-template-columns: 1fr 18rem !important;}
-    article > header > time {font-size: 0.8rem; margin-bottom: 0.2rem;}
+    article time {font-size: 0.8rem; margin-bottom: 0.2rem;}
     /* indexカード */
-    .index-cards {display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing);}
+    .index-cards {grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing);}
     .index-cards article {position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0;}
     .index-cards article > a:first-child {position: absolute; inset: 0; z-index: 1;}
     .index-cards article img {aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block;}
@@ -126,14 +126,14 @@
     footer, footer a {color: var(--pico-muted-color);}
     /* Pico標準無効化 */
     article > header, article > footer {background: none; border: none; padding: var(--pico-spacing);}
-
-
     /* ラベル */
     .labels { display: flex; flex-wrap: wrap; gap: .4rem; }
     .labels a { font-size: .8em; padding: .2em .7em; border-radius: 999px; border: 1px solid var(--pico-primary); color: var(--pico-primary); text-decoration: none; }
     .labels a:hover { background: var(--pico-primary); color: var(--pico-primary-inverse); }
     .index-cards article footer .labels,
     article > header .labels { justify-content: flex-end; margin-top: .75rem; }
+    /* 記事ページではサイドバーのタグリストを非表示（ポップオーバーのコピー元としては残す） */
+    .item-view aside .js-label-list { display: none; }
     /* タグ一覧ポップオーバー */
     .tag-list-popover {
       position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem;
@@ -144,8 +144,6 @@
       border-radius: var(--pico-border-radius);
       box-shadow: 0 4px 16px rgba(0,0,0,.18);
     }
-
-
     /* ページネーション */
     .pagination { display: flex; justify-content: center; gap: 1rem; }
     .pagination a[aria-disabled] { opacity: .4; pointer-events: none; }
@@ -155,14 +153,12 @@
     .image-modal img { max-width: 92dvw; max-height: 92dvh; object-fit: contain; display: block; }
     .post-body img { cursor: zoom-in; }
     .markdown img.emoji { width: 1.2em; height: 1.2em; vertical-align: -0.2em; }
-    
-
     /* レスポンシブ */
     @media (width &lt; 1024px) {
       /* 1カラムレイアウト */
       main {grid-template-columns: 1fr !important;}
       /* ヘッダー */
-      body > header {padding-left: 16px !important; padding-right: 16px !important; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border);}
+      body > header {padding-left: 16px !important; padding-bottom: 0; padding-right: 16px !important; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border);}
       body > header {position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--pico-background-color);}
       body > header hgroup {margin-bottom: 0;}
       body > header nav {flex-direction: column;}
@@ -174,6 +170,9 @@
       .index-cards {grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));}
       /* リンクカード */
       .link-card > img {max-width: 120px; max-height: 120px;}
+      /* フッター */
+      body > footer nav {flex-direction: column;}
+      body > footer nav ul {justify-content: center;}
       /* fixed-shelf スライドインモーダル */
       .fixed-shelf {
         position: fixed; top: 0; right: 0;
@@ -196,12 +195,15 @@
   </style>
 &lt;/head&gt;&lt;!--</head>--&gt;
 <body>
+  <b:class cond='data:blog.pageType == &quot;index&quot;' name='index-view'/>
+  <b:class cond='data:blog.pageType == &quot;item&quot;' name='item-view'/>
   <!-- ヘッダー -->
   <header class='container'>
     <b:section id='ヘッダー'>
       <b:widget id='Header0' locked='false' title='Header' type='Header'>
         <b:includable id='main'>
           <nav>
+            <!-- タイトル -->
             <ul>
               <li>
                 <a expr:href='data:blog.homepageUrl'>
@@ -212,9 +214,10 @@
                 </a>
               </li>
             </ul>
+            <!-- ナビゲーション -->
             <ul>
               <li>
-                <button aria-label='モバイル fixed-shelf' x-data='{}' x-on:click='$store.shelf.toggle()'>
+                <button class="transp-button" x-data='{}' x-on:click='$store.shelf.toggle()'>
                   <i class='fas fa-list-ul'/>
                 </button>
               </li>
@@ -224,20 +227,17 @@
                     <form action='/search' method='get' role='search'>
                       <input
                       expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
-                      name='q'
-                      type='search'
-                      placeholder='検索...'
-                      aria-label='ブログ内を検索'
+                      name='q' type='search' placeholder='ブログ内を検索'
                       />
                     </form>
                   </li>
                   <li>
-                    <button class='tag-list-toggle' aria-label='タグ一覧' x-data='{}' x-on:click.stop='$store.tagList.toggle()'>
+                    <button class='transp-button' x-data='{}' x-on:click.stop='$store.tagList.toggle()'>
                       <i class='fas fa-tag'/>
                     </button>
                   </li>
                   <li>
-                    <button class='theme-switch' aria-label='テーマ切り替え' x-data='themeSwitch' x-on:click='toggle()'>
+                    <button class='transp-button' x-data='themeSwitch' x-on:click='toggle()'>
                       <i class='fas' x-bind:class="theme === 'light' ? 'fa-sun' : 'fa-moon'"/>
                     </button>
                   </li>
@@ -271,7 +271,7 @@
           <b:includable id='main'>
             <!-- index(記事リスト) -->
             <b:if cond='data:blog.pageType == &quot;index&quot;'>
-              <div class='index-cards'>
+              <div class='grid index-cards'>
                 <b:loop values='data:posts' var='post'>
                   <article>
                     <a expr:href='data:post.url'/>
