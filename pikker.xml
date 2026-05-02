@@ -549,11 +549,14 @@
     });
 
     function syncHgroupHeight() {
-      const hgroup = document.querySelector('body &gt; header hgroup');
+      const titleRow = document.querySelector('body &gt; header nav &gt; ul:first-child');
       const header = document.querySelector('body &gt; header');
-      if (!hgroup || !header) return;
-      const update = () =&gt; header.style.setProperty('--hgroup-h', hgroup.offsetHeight + 'px');
-      new ResizeObserver(update).observe(hgroup);
+      if (!titleRow || !header) return;
+      const update = () =&gt; {
+        const pt = parseFloat(getComputedStyle(header).paddingTop);
+        header.style.setProperty('--hgroup-h', (titleRow.offsetHeight + pt) + 'px');
+      };
+      new ResizeObserver(update).observe(titleRow);
       update();
     }
 
