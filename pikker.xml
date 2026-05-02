@@ -37,6 +37,8 @@
     })();
   </script>
   <style>
+    /* Alpine.js x-cloak */
+    [x-cloak] {display: none !important;}
     /* スムーズスクロール */
     html {scroll-behavior: smooth;}
     /* webフォント */
@@ -132,6 +134,17 @@
     .labels a:hover { background: var(--pico-primary); color: var(--pico-primary-inverse); }
     .index-cards article footer .labels,
     article > header .labels { justify-content: flex-end; margin-top: .75rem; }
+    /* タグ一覧ポップオーバー */
+    .tag-list-popover {
+      position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem;
+      max-width: min(90vw, 480px); max-height: 60dvh; overflow-y: auto;
+      padding: .9rem 1rem; z-index: 1200;
+      background: var(--pico-card-background-color);
+      border: 1px solid var(--pico-card-border-color);
+      border-radius: var(--pico-border-radius);
+      box-shadow: 0 4px 16px rgba(0,0,0,.18);
+    }
+
 
     /* ページネーション */
     .pagination { display: flex; justify-content: center; gap: 1rem; }
@@ -150,7 +163,7 @@
       main {grid-template-columns: 1fr !important;}
       /* ヘッダー */
       body > header {padding-left: 16px !important; padding-right: 16px !important; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border);}
-      body > header {position: sticky; top: -96px; z-index: 1000; background: var(--pico-background-color);}
+      body > header {position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--pico-background-color);}
       body > header hgroup {margin-bottom: 0;}
       body > header nav {flex-direction: column;}
       body > header nav > ul:first-child > li {padding-bottom: 0;}
@@ -201,23 +214,25 @@
             </ul>
             <ul>
               <li>
-                <button aria-label='モバイル fixed-shelf' x-on:click='$store.shelf.toggle()'>
+                <button aria-label='モバイル fixed-shelf' x-data='{}' x-on:click='$store.shelf.toggle()'>
                   <i class='fas fa-list-ul'/>
                 </button>
               </li>
               <li>
                 <ul>
                   <li>
-                    <input
-                    expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
-                    name='q'
-                    type='search'
-                    placeholder='検索...'
-                    aria-label='ブログ内を検索'
-                    />
+                    <form action='/search' method='get' role='search'>
+                      <input
+                      expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;'
+                      name='q'
+                      type='search'
+                      placeholder='検索...'
+                      aria-label='ブログ内を検索'
+                      />
+                    </form>
                   </li>
                   <li>
-                    <button class='tag-list-toggle' aria-label='タグ一覧'>
+                    <button class='tag-list-toggle' aria-label='タグ一覧' x-data='{}' x-on:click.stop='$store.tagList.toggle()'>
                       <i class='fas fa-tag'/>
                     </button>
                   </li>
@@ -391,15 +406,13 @@
               <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
-              <b:if cond='data:blog.pageType == &quot;index&quot;'>
-                <article>
-                  <div class='labels'>
-                    <b:loop values='data:labels' var='label'>
-                      <a expr:href='data:label.url'><data:label.name/></a>
-                    </b:loop>
-                  </div>
-                </article>
-              </b:if>
+              <article class='js-label-list'>
+                <div class='labels'>
+                  <b:loop values='data:labels' var='label'>
+                    <a expr:href='data:label.url'><data:label.name/></a>
+                  </b:loop>
+                </div>
+              </article>
               <b:if cond='data:blog.pageType == &quot;item&quot;'>
                 <article class='content-toc'>
                   <p>目次</p>
@@ -436,12 +449,19 @@
       </ul>
     </nav>
   </footer>
+  <!-- タグ一覧ポップオーバー -->
+  <div class='tag-list-popover js-tag-list-popover labels'
+    x-data='{}'
+    x-show='$store.tagList.open'
+    x-transition.opacity=''
+    x-on:click.outside='$store.tagList.close()'
+    x-cloak=''/>
   <!-- 画像モーダル -->
   <dialog class='image-modal' x-data='imageModal' x-on:open-image.window='open($event.detail)' x-on:click.self='close()'>
     <img alt='' class='modal-image' x-bind:src='src'/>
   </dialog>
   <!-- モバイル fixed-shelf オーバーレイ -->
-  <div class='js-fixed-shelf-overlay' x-bind:class="{ 'is-open': $store.shelf.open }" x-on:click='$store.shelf.close()'/>
+  <div class='js-fixed-shelf-overlay' x-data='{}' x-bind:class="{ 'is-open': $store.shelf.open }" x-on:click='$store.shelf.close()'/>
   <script>
     // ============================================================
     // Alpine.js 登録: テーマ切替 / 画像モーダル / fixed-shelf ストア
@@ -499,6 +519,22 @@
           });
         }
       });
+
+      // タグ一覧ポップオーバーのストア (サイドバーの .labels を複製して表示)
+      Alpine.store('tagList', {
+        open: false,
+        toggle() {
+          this.open = !this.open;
+          if (this.open) this.populate();
+        },
+        close() { this.open = false; },
+        populate() {
+          const src = document.querySelector('aside .labels');
+          const dst = document.querySelector('.js-tag-list-popover');
+          if (!src || !dst || dst.childElementCount) return;
+          dst.innerHTML = src.innerHTML;
+        }
+      });
     });
 
     // ============================================================
@@ -509,7 +545,17 @@
       buildTOC();
       setupTOCHighlight();
       loadLinkCards();
+      syncHgroupHeight();
     });
+
+    function syncHgroupHeight() {
+      const hgroup = document.querySelector('body &gt; header hgroup');
+      const header = document.querySelector('body &gt; header');
+      if (!hgroup || !header) return;
+      const update = () =&gt; header.style.setProperty('--hgroup-h', hgroup.offsetHeight + 'px');
+      new ResizeObserver(update).observe(hgroup);
+      update();
+    }
 
     // 本文を markdown-it でレンダリング
     // (Blogger は本文を &lt;p&gt; で勝手に包むので除去してから渡す)
