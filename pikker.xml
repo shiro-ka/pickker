@@ -16,7 +16,7 @@
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
   <!-- Pico CSS / FontAwesome / BunnyFonts / Highlight.js / Markdown-it / Twemoji -->
   <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
-  <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7/css/all.min.css' rel='stylesheet'/>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
   <link class='js-hljs-theme' rel='stylesheet'/>
@@ -218,7 +218,7 @@
             <ul>
               <li>
                 <button class="transp-button" x-data='{}' x-on:click='$store.shelf.toggle()'>
-                  <i class='fas fa-list-ul'/>
+                  <i class='fa-solid fa-list-ul'/>
                 </button>
               </li>
               <li>
@@ -233,12 +233,12 @@
                   </li>
                   <li>
                     <button class='transp-button' x-data='{}' x-on:click.stop='$store.tagList.toggle()'>
-                      <i class='fas fa-tag'/>
+                      <i class='fa-solid fa-tag'/>
                     </button>
                   </li>
                   <li>
                     <button class='transp-button' x-data='themeSwitch' x-on:click='toggle()'>
-                      <i class='fas' x-bind:class="theme === 'light' ? 'fa-sun' : 'fa-moon'"/>
+                      <i class='fa-solid' x-bind:class="theme === 'light' ? 'fa-sun' : 'fa-moon'"/>
                     </button>
                   </li>
                 </ul>
