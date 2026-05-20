@@ -73,7 +73,7 @@
     .post-body h3 {border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem;}
     .post-body h4 {border-left: 3px solid var(--pico-primary); padding-left: .7rem;}
     .post-body b {font-weight: 600;}
-    .post-body :not(.link-card) img:not(.emoji) {margin-bottom: var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius);}
+    .post-body :not(.link-card) img:not(.emoji) {display: block; width: fit-content; margin: 0 auto var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius);}
     /* リンクカード */
     .link-card {display: flex; margin: 1rem 0; max-width: 768px; border: var(--pico-border-width) solid var(--pico-table-border-color); border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); overflow: hidden; transition: background .15s;}
     .link-card:hover {background: color-mix(in srgb, var(--pico-primary) 6%, transparent);}
