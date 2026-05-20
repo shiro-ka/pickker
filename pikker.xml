@@ -562,6 +562,14 @@
 
     // 本文を markdown-it でレンダリング
     // (Blogger は本文を &lt;p&gt; で勝手に包むので除去してから渡す)
+    // Blogger の HTML ビューでは &lt; を保存するため、markdown-it に渡す前にデコードする
+    function decodeEntities(str) {
+      return str.replace(/&amp;(?:amp|lt|gt|quot|#39|nbsp);/g, function(m) {
+        var map = {'&amp;amp;': '&amp;', '&amp;lt;': '&lt;', '&amp;gt;': '&gt;', '&amp;quot;': '"', '&amp;#39;': "'", '&amp;nbsp;': ' '};
+        return map[m];
+      });
+    }
+
     function renderMarkdown() {
       const el = document.querySelector('.markdown');
       if (!el) return;
@@ -571,9 +579,9 @@
         typographer: true,
         langPrefix: 'hljs language-'
       }).use(window.markdownitEmoji);
-      const src = el.innerHTML
+      const src = decodeEntities(el.innerHTML
         .replace(/&lt;p[^&gt;]*&gt;\s*/gi, '')
-        .replace(/\s*&lt;\/p&gt;/gi, '\n\n');
+        .replace(/\s*&lt;\/p&gt;/gi, '\n\n'));
       el.innerHTML = md.render(src);
       el.querySelectorAll('pre code').forEach(b =&gt; hljs.highlightElement(b));
       twemoji.parse(el, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' });
