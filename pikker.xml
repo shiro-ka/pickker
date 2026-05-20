@@ -319,7 +319,7 @@
                     </div>
                     <hr />
                   </header>
-                  <div class='markdown post-body' x-on:click="$event.target.tagName === 'IMG' &amp;&amp; $dispatch('open-image', $event.target.src)">
+                  <div class='markdown post-body' x-data='{}' x-on:click="$event.target.tagName === 'IMG' &amp;&amp; $dispatch('open-image', $event.target.src)">
                     <data:post.body/>
                   </div>
                 </article>
