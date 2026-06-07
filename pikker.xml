@@ -22,7 +22,6 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-link-attributes@4/dist/index.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <!-- FOUC: テーマと hljs を即時反映 -->
   <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
@@ -426,8 +425,14 @@
       const el = $('.markdown');
       if (!el || !window.markdownit) return;
       const md = window.markdownit({ html: true, linkify: true, typographer: true, langPrefix: 'hljs language-' })
-        .use(window.markdownitEmoji)
-        .use(window.markdownItLinkAttributes, { matcher: href => href.startsWith('http'), attrs: { target: '_blank', rel: 'noopener noreferrer' } });
+        .use(window.markdownitEmoji);
+      // 外部リンクに target/rel を付与 (旧 markdown-it-link-attributes の内製置換; v4 はブラウザ用UMD非同梱のため)
+      const defaultLinkOpen = md.renderer.rules.link_open || ((t, i, o, e, s) =&gt; s.renderToken(t, i, o));
+      md.renderer.rules.link_open = (tokens, idx, options, env, self) =&gt; {
+        const href = tokens[idx].attrGet('href');
+        if (href &amp;&amp; href.startsWith('http')) { tokens[idx].attrSet('target', '_blank'); tokens[idx].attrSet('rel', 'noopener noreferrer'); }
+        return defaultLinkOpen(tokens, idx, options, env, self);
+      };
       // Blogger は本文を &lt;p&gt; で包むので除去; textarea.innerHTML でエンティティを1段デコード
       const decode = s =&gt; { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
       const src = decode(el.innerHTML.replace(/&lt;p[^&gt;]*&gt;\s*/gi, '').replace(/\s*&lt;\/p&gt;/gi, '\n\n'));
