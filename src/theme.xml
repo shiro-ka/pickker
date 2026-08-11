@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <b:include data='blog' name='all-head-content'/>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <meta content='light dark' name='color-scheme'/>
+  <b:if cond='data:view.isPost or data:view.isPage'>
+    <title><data:blog.pageName/> - <data:blog.title/></title>
+    <meta content='article' property='og:type'/>
+  <b:else/>
+    <title><data:blog.pageTitle/></title>
+    <meta content='website' property='og:type'/>
+  </b:if>
+  <meta expr:content='data:blog.title' property='og:site_name'/>
+  &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
+  <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7/css/all.min.css' rel='stylesheet'/>
+  <link href='https://fonts.bunny.net' rel='preconnect'/>
+  <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
+  <link class='js-hljs-theme' rel='stylesheet'/>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
+  <!-- FOUC: テーマと hljs を即時反映 -->
+  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
+  <style>
+    @@INCLUDE:style.css@@
+  </style>
+&lt;/head&gt;&lt;!--</head>--&gt;
+<body>
+  <header class='container'>
+    <b:section id='ヘッダー'>
+      <b:widget id='Header0' locked='false' title='Header' type='Header'>
+        <b:includable id='main'>
+          <nav>
+            <ul>
+              <li>
+                <a expr:href='data:blog.homepageUrl'>
+                  <hgroup>
+                    <h3><data:blog.title/></h3>
+                    <p><data:description/></p>
+                  </hgroup>
+                </a>
+              </li>
+            </ul>
+            <ul>
+              <li><button class='js-shelf-toggle'><i class='fa-solid fa-list-ul'/></button></li>
+              <li>
+                <ul>
+                  <li>
+                    <form action='/search' method='get' role='search'>
+                      <!-- .escaped は URL エスケープなので検索欄に %20 が出てしまう。expr: は属性値を自動で HTML エスケープするため素の query でよい -->
+                      <input expr:value='data:view.search.query' name='q' type='search' placeholder='ブログ内を検索'/>
+                    </form>
+                  </li>
+                  <li><button class='js-tag-list-toggle'><i class='fa-solid fa-tag'/></button></li>
+                  <li>
+                    <button class='js-theme-toggle'>
+                      <i class='fa-solid fa-sun' data-icon='light'/>
+                      <i class='fa-solid fa-moon' data-icon='dark'/>
+                    </button>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </b:includable>
+      </b:widget>
+    </b:section>
+  </header>
+  <main class='container grid'>
+    <section>
+      <b:section id='メインカラム'>
+        <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+            <b:widget-setting name='showShareButtons'>false</b:widget-setting>
+            <b:widget-setting name='showCommentLink'>false</b:widget-setting>
+            <b:widget-setting name='showAuthor'>true</b:widget-setting>
+            <b:widget-setting name='showAuthorProfile'>false</b:widget-setting>
+            <b:widget-setting name='showLabels'>true</b:widget-setting>
+            <b:widget-setting name='showLocation'>false</b:widget-setting>
+            <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+            <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+            <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+            <b:widget-setting name='showReactions'>false</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <b:if cond='data:view.isError'>
+              <article class='status-page'>
+                <h1>404</h1>
+                <p>お探しのページは見つかりませんでした。</p>
+                <p><a expr:href='data:blog.homepageUrl' role='button'>ホームへ戻る</a></p>
+              </article>
+            <b:elseif cond='data:view.isMultipleItems'/>
+              <!-- ホーム / ラベル / 検索 / アーカイブ。一覧の中身は feed.js が Feed API から描画する -->
+              <hgroup class='js-feed-heading'/>
+              <div class='grid index-cards js-feed-index'/>
+              <nav class='pagination js-feed-pagination' aria-label='ページネーション'/>
+            <b:else/>
+              <!-- 記事 (isPost) と固定ページ (isPage)。固定ページには日付もラベルも無い -->
+              <b:loop values='data:posts' var='post'>
+                <article>
+                  <header>
+                    <b:if cond='data:view.isPost'>
+                      <time><data:post.date/></time>
+                    </b:if>
+                    <h1><data:post.title/></h1>
+                    <b:if cond='data:view.isPost'>
+                      <div class='js-post-labels labels'>
+                        <b:loop values='data:post.labels' var='label'>
+                          <a expr:href='data:label.url'><data:label.name/></a>
+                        </b:loop>
+                      </div>
+                    </b:if>
+                    <hr/>
+                  </header>
+                  <div class='markdown post-body'><data:post.body/></div>
+                </article>
+              </b:loop>
+            </b:if>
+          </b:includable>
+          <b:includable id='backlinkDeleteIcon'/>
+          <b:includable id='backlinks'/>
+          <b:includable id='comment-form'/>
+          <b:includable id='commentDeleteIcon'/>
+          <b:includable id='comment_count_picker'/>
+          <b:includable id='comment_picker'/>
+          <b:includable id='comments'/>
+          <b:includable id='feedLinks'/>
+          <b:includable id='feedLinksBody'/>
+          <b:includable id='iframe_comments'/>
+          <b:includable id='mobile-index-post'/>
+          <b:includable id='mobile-main'/>
+          <b:includable id='mobile-nextprev'/>
+          <b:includable id='mobile-post'/>
+          <b:includable id='nextprev'/>
+          <b:includable id='post'/>
+          <b:includable id='postQuickEdit'/>
+          <b:includable id='shareButtons'/>
+          <b:includable id='status-message'/>
+          <b:includable id='threaded-comment-form'/>
+          <b:includable id='threaded_comment_js'/>
+          <b:includable id='threaded_comments'/>
+        </b:widget>
+      </b:section>
+    </section>
+    <aside>
+      <b:section id='インセンティブ'>
+        <b:widget id='PopularPosts0' locked='false' title='関連記事' type='PopularPosts' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
+            <b:widget-setting name='showThumbnails'>true</b:widget-setting>
+            <b:widget-setting name='showSnippets'>false</b:widget-setting>
+            <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <article class='content-incentive'>
+              <ul>
+                <b:if cond='data:view.isPost'>
+                  <!-- 記事ページだけ人気記事を1件に絞り、同ラベルの最新/ランダムを related.js が足す -->
+                  <b:loop values='data:posts' var='post'>
+                    <li class='js-popular-item'><a expr:href='data:post.href'><img expr:src='data:post.thumbnail' alt=''/><span><data:post.title/></span></a></li>
+                  </b:loop>
+                  <li class='js-latest-post'/>
+                  <li class='js-random-post'/>
+                <b:else/>
+                  <b:loop values='data:posts' var='post'>
+                    <li><a expr:href='data:post.href'><img expr:src='data:post.thumbnail' alt=''/><span><data:post.title/></span></a></li>
+                  </b:loop>
+                </b:if>
+              </ul>
+            </article>
+          </b:includable>
+        </b:widget>
+      </b:section>
+      <div class='fixed-shelf'>
+        <b:section id='ラベルリスト/目次'>
+          <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+              <b:widget-setting name='display'>CLOUD</b:widget-setting>
+              <b:widget-setting name='selectedLabelsList'/>
+              <b:widget-setting name='showType'>ALL</b:widget-setting>
+              <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <article class='js-label-list'>
+                <div class='labels'>
+                  <b:loop values='data:labels' var='label'>
+                    <a expr:href='data:label.url'><data:label.name/></a>
+                  </b:loop>
+                </div>
+              </article>
+              <b:if cond='data:view.isPost or data:view.isPage'>
+                <article class='content-toc'>
+                  <p>目次</p>
+                  <hr/>
+                  <nav/>
+                </article>
+              </b:if>
+            </b:includable>
+          </b:widget>
+        </b:section>
+      </div>
+    </aside>
+  </main>
+  <footer class='container'>
+    <nav>
+      <ul>
+        <li>
+          <svg role='img' viewBox='0 0 24 24' width='18' height='18' fill='currentColor' aria-hidden='true' style='vertical-align:middle; margin-right:.3em;' xmlns='http://www.w3.org/2000/svg'><path d='M21.976 24H2.026C.9 24 0 23.1 0 21.976V2.026C0 .9.9 0 2.025 0H22.05C23.1 0 24 .9 24 2.025v19.95C24 23.1 23.1 24 21.976 24zM12 3.975H9c-2.775 0-5.025 2.25-5.025 5.025v6c0 2.774 2.25 5.024 5.025 5.024h6c2.774 0 5.024-2.25 5.024-5.024v-3.975c0-.6-.45-1.05-1.05-1.05H18c-.524 0-.976-.45-.976-.976 0-2.776-2.25-5.026-5.024-5.026zm3.074 12H9c-.525 0-.975-.45-.975-.975s.45-.976.975-.976h6.074c.526 0 .977.45.977.976s-.45.976-.975.976zm-2.55-7.95c.527 0 .976.45.976.975s-.45.975-.975.975h-3.6c-.525 0-.976-.45-.976-.975s.45-.975.975-.975h3.6z'/></svg>
+          Powered by <a href='https://www.blogger.com'>Blogger</a>
+        </li>
+        <li>Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></li>
+      </ul>
+      <ul>
+        <li><small>
+          <a href='https://picocss.com'>Pico CSS</a> /
+          <a href='https://markdown-it.github.io'>markdown-it</a> /
+          <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
+          <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
+          <a href='https://fontawesome.com'>Font Awesome</a> /
+          <a href='https://microlink.io/'>Microlink</a> /
+          <a href='https://highlightjs.org'>Highlight.js</a>
+        </small></li>
+      </ul>
+    </nav>
+  </footer>
+  <div class='tag-list-popover js-tag-list-popover labels'/>
+  <dialog class='image-modal js-image-modal'><img alt=''/></dialog>
+  <div class='js-fixed-shelf-overlay'/>
+
+  <script>
+  //&lt;![CDATA[
+  @@INCLUDE:app.js@@
+  //]]&gt;
+  </script>
+
+  <b:if cond='data:view.isMultipleItems'>
+  <script>
+  //&lt;![CDATA[
+  @@INCLUDE:feed.js@@
+  //]]&gt;
+  </script>
+  </b:if>
+
+  <b:if cond='data:view.isPost'>
+  <script>
+  //&lt;![CDATA[
+  @@INCLUDE:related.js@@
+  //]]&gt;
+  </script>
+  </b:if>
+</body>
+</html>
