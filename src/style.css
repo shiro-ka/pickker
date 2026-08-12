@@ -1,4 +1,9 @@
 html { scroll-behavior: smooth; }
+/* OS が「視差効果を減らす」設定ならアニメーションを止める */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
 :root { --pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%; }
 @media (min-width: 1280px) { :root { --pico-font-size: 118.75%; } }
 body { font-family: "M PLUS Rounded 1c", sans-serif; }
@@ -7,7 +12,8 @@ body > header hgroup > p { font-size: 86% !important; }
 body > header form { margin-bottom: 0 !important; }
 body > header button { background: none; border: none; padding: .3rem .6rem; color: var(--pico-muted-color); }
 body > header button:hover { background: var(--pico-muted-border-color); }
-body > header li:has(.fa-list-ul) { display: none; }
+body > header li:has(.js-shelf-toggle) { display: none; }
+body > header button :is(svg, [data-icon]) { display: block; }
 body > header input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
 body > header input[type="search"]:focus,
 body > header input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }

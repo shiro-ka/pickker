@@ -3,6 +3,8 @@
   const $$ = (s, c = document) => c.querySelectorAll(s);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
   const HLJS = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/';
+  // OS が「視差効果を減らす」設定ならスムーススクロールを切る
+  const motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
   // テーマ切替
   const getTheme = () => {
@@ -26,15 +28,24 @@
   // モバイル shelf
   const shelf = $('.fixed-shelf');
   const overlay = $('.js-fixed-shelf-overlay');
-  const setShelf = open => { shelf?.classList.toggle('is-open', open); overlay?.classList.toggle('is-open', open); };
-  $('.js-shelf-toggle')?.addEventListener('click', () => setShelf(!shelf.classList.contains('is-open')));
+  const shelfBtn = $('.js-shelf-toggle');
+  const setShelf = open => {
+    shelf?.classList.toggle('is-open', open);
+    overlay?.classList.toggle('is-open', open);
+    shelfBtn?.setAttribute('aria-expanded', String(open));
+  };
+  shelfBtn?.addEventListener('click', () => setShelf(!shelf.classList.contains('is-open')));
   overlay?.addEventListener('click', () => setShelf(false));
   shelf?.addEventListener('click', e => { if (e.target.closest('a')) setShelf(false); });
 
   // タグ一覧ポップオーバー: 初回開時にサイドの .labels を複製
   const popover = $('.js-tag-list-popover');
-  const setPopover = open => popover?.classList.toggle('is-open', open);
-  $('.js-tag-list-toggle')?.addEventListener('click', e => {
+  const tagBtn = $('.js-tag-list-toggle');
+  const setPopover = open => {
+    popover?.classList.toggle('is-open', open);
+    tagBtn?.setAttribute('aria-expanded', String(open));
+  };
+  tagBtn?.addEventListener('click', e => {
     e.stopPropagation();
     const open = !popover.classList.contains('is-open');
     if (open && !popover.childElementCount) {
@@ -49,12 +60,20 @@
   addEventListener('keydown', e => { if (e.key === 'Escape') { setShelf(false); setPopover(false); } });
 
   // 画像モーダル (本文の img クリックで拡大)
+  // Blogger の画像 URL からサイズ指定を探して原寸寄りに差し替える。指定の形は2系統ある:
+  //   .../s320/name.png や .../w1200-h630-p-k-no-nu/name.png  (パスの後ろから2番目)
+  //   ...=s320 や ...=w640-h480-p-k-no-nu                      (末尾のサフィックス)
+  // 区切りまで含めて判定しないと、サイズ指定の無い URL でファイル名の中の "s123" を
+  // 拾ってしまい (例: screenshots1234.png → screenshots1600.png) 404 になる。
+  const bigImage = url => url
+    .replace(/\/(?:s\d+|w\d+-h\d+)[-\w]*\/([^/]+)$/, '/s1600/$1')
+    .replace(/=(?:s\d+|w\d+-h\d+)[-\w]*$/, '=s1600');
   const modal = $('.js-image-modal');
   if (modal) {
     document.addEventListener('click', e => {
       const t = e.target;
       if (t.tagName === 'IMG' && t.closest('.post-body')) {
-        modal.querySelector('img').src = t.src.replace(/s\d{2,4}(-c)?/, 's1600');
+        modal.querySelector('img').src = bigImage(t.src);
         modal.showModal();
       }
     });
@@ -62,10 +81,12 @@
   }
 
   // ヘッダー高さを CSS 変数に同期 (mobile sticky オフセット用)
+  // 変数は html に立てる。header に立てると、兄弟である .tag-list-popover へ継承されず
+  // フォールバック値 (96px) のままになる。
   const titleRow = $('body > header nav > ul:first-child');
   const header = $('body > header');
   if (titleRow && header) {
-    const update = () => header.style.setProperty('--hgroup-h', (titleRow.offsetHeight + parseFloat(getComputedStyle(header).paddingTop)) + 'px');
+    const update = () => document.documentElement.style.setProperty('--hgroup-h', (titleRow.offsetHeight + parseFloat(getComputedStyle(header).paddingTop)) + 'px');
     new ResizeObserver(update).observe(titleRow);
     update();
   }
@@ -131,27 +152,39 @@
   }
 
   // スクロール位置で目次の現在地を aria-current でハイライト
+  //
+  // 旧実装は scroll のたびに全見出しへ getBoundingClientRect していたので、
+  // スクロール中ずっと強制レイアウトが走っていた。IntersectionObserver に置き換えて
+  // 「画面上端から LINE px のラインを見出しが越えたか」だけを持つ形にしてある。
+  // 判定条件 (rect.top <= LINE) は旧実装と同じなので見た目の挙動は変わらない。
   function setupTOCHighlight() {
     const nav = $('.content-toc > nav');
     if (!nav) return;
-    const links = nav.querySelectorAll('a');
-    const headings = $$('.post-body :is(h2, h3, h4)');
+    const links = [...nav.querySelectorAll('a')];
+    const headings = [...$$('.post-body :is(h2, h3, h4)')];
     if (!headings.length) return;
+    const LINE = 225;
+    const passed = new Map();
     let lastActive = null;
-    addEventListener('scroll', () => {
-      let currentId = null;
-      headings.forEach(h => {
-        if (scrollY >= h.getBoundingClientRect().top + scrollY - 225) currentId = h.id;
-      });
+
+    const update = () => {
+      let current = null;
+      headings.forEach(h => { if (passed.get(h)) current = h; });
       links.forEach(a => {
-        const on = currentId && a.getAttribute('href') === '#' + currentId;
+        const on = !!current && a.getAttribute('href') === '#' + current.id;
         a.toggleAttribute('aria-current', on);
         if (on && lastActive !== a) {
           lastActive = a;
-          nav.scrollTo({ top: a.offsetTop - nav.clientHeight / 2, behavior: 'smooth' });
+          nav.scrollTo({ top: a.offsetTop - nav.clientHeight / 2, behavior: motion });
         }
       });
-    });
+    };
+    // rootMargin で上端を LINE px 下げた枠を作る。枠から出た = ラインを越えた。
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => passed.set(e.target, e.boundingClientRect.top <= LINE));
+      update();
+    }, { rootMargin: `-${LINE}px 0px 0px 0px` });
+    headings.forEach(h => io.observe(h));
   }
 
   // リンクカード (Microlink + localStorage キャッシュ + IO 遅延ロード)
@@ -204,7 +237,12 @@
       const href = a.getAttribute('href');
       if (!href?.startsWith('http')) return;
       const p = a.closest('p');
-      if (p) targets.push({ a, href, p });
+      // 段落がそのリンク単体で出来ているときだけカード化する。
+      // 文中に貼ったリンクにまでカードが生えると読めたものではないし、
+      // Microlink の無料枠 (公開エンドポイントで 1日50リクエスト) も一瞬で枯れる。
+      if (p && p.children.length === 1 && p.firstElementChild === a && p.textContent.trim() === a.textContent.trim()) {
+        targets.push({ a, href, p });
+      }
     });
     const io = new IntersectionObserver((entries, ob) => {
       entries.forEach(e => {

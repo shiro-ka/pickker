@@ -15,7 +15,6 @@
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
   <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
-  <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7/css/all.min.css' rel='stylesheet'/>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
   <link class='js-hljs-theme' rel='stylesheet'/>
@@ -27,6 +26,11 @@
   <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
   <style>
     html { scroll-behavior: smooth; }
+    /* OS が「視差効果を減らす」設定ならアニメーションを止める */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
     :root { --pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%; }
     @media (min-width: 1280px) { :root { --pico-font-size: 118.75%; } }
     body { font-family: "M PLUS Rounded 1c", sans-serif; }
@@ -35,7 +39,8 @@
     body &gt; header form { margin-bottom: 0 !important; }
     body &gt; header button { background: none; border: none; padding: .3rem .6rem; color: var(--pico-muted-color); }
     body &gt; header button:hover { background: var(--pico-muted-border-color); }
-    body &gt; header li:has(.fa-list-ul) { display: none; }
+    body &gt; header li:has(.js-shelf-toggle) { display: none; }
+    body &gt; header button :is(svg, [data-icon]) { display: block; }
     body &gt; header input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
     body &gt; header input[type="search"]:focus,
     body &gt; header input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }
@@ -172,20 +177,20 @@
               </li>
             </ul>
             <ul>
-              <li><button class='js-shelf-toggle'><i class='fa-solid fa-list-ul'/></button></li>
+              <li><button class='js-shelf-toggle' type='button' aria-label='メニュー' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button></li>
               <li>
                 <ul>
                   <li>
                     <form action='/search' method='get' role='search'>
                       <!-- .escaped は URL エスケープなので検索欄に %20 が出てしまう。expr: は属性値を自動で HTML エスケープするため素の query でよい -->
-                      <input expr:value='data:view.search.query' name='q' type='search' placeholder='ブログ内を検索'/>
+                      <input expr:value='data:view.search.query' name='q' type='search' aria-label='ブログ内を検索' placeholder='ブログ内を検索'/>
                     </form>
                   </li>
-                  <li><button class='js-tag-list-toggle'><i class='fa-solid fa-tag'/></button></li>
+                  <li><button class='js-tag-list-toggle' type='button' aria-label='タグ一覧' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M32.5 96l0 149.5c0 17 6.7 33.3 18.7 45.3l192 192c25 25 65.5 25 90.5 0L483.2 333.3c25-25 25-65.5 0-90.5l-192-192C279.2 38.7 263 32 246 32L96.5 32c-35.3 0-64 28.7-64 64zm112 16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/></svg></button></li>
                   <li>
-                    <button class='js-theme-toggle'>
-                      <i class='fa-solid fa-sun' data-icon='light'/>
-                      <i class='fa-solid fa-moon' data-icon='dark'/>
+                    <button class='js-theme-toggle' type='button' aria-label='ライト/ダーク切替'>
+                      <span data-icon='light'><svg viewBox='0 -32 576 576' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M288-32c8.4 0 16.3 4.4 20.6 11.7L364.1 72.3 468.9 46c8.2-2 16.9 .4 22.8 6.3S500 67 498 75.1l-26.3 104.7 92.7 55.5c7.2 4.3 11.7 12.2 11.7 20.6s-4.4 16.3-11.7 20.6L471.7 332.1 498 436.8c2 8.2-.4 16.9-6.3 22.8S477 468 468.9 466l-104.7-26.3-55.5 92.7c-4.3 7.2-12.2 11.7-20.6 11.7s-16.3-4.4-20.6-11.7L211.9 439.7 107.2 466c-8.2 2-16.8-.4-22.8-6.3S76 445 78 436.8l26.2-104.7-92.6-55.5C4.4 272.2 0 264.4 0 256s4.4-16.3 11.7-20.6L104.3 179.9 78 75.1c-2-8.2 .3-16.8 6.3-22.8S99 44 107.2 46l104.7 26.2 55.5-92.6 1.8-2.6c4.5-5.7 11.4-9.1 18.8-9.1zm0 144a144 144 0 1 0 0 288 144 144 0 1 0 0-288zm0 240a96 96 0 1 1 0-192 96 96 0 1 1 0 192z'/></svg></span>
+                      <span data-icon='dark'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M256 0C114.6 0 0 114.6 0 256S114.6 512 256 512c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9 .4-9.8 .6-14.8 .6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4S322.6 8.5 312.7 6.3C294.4 2.2 275.4 0 256 0z'/></svg></span>
                     </button>
                   </li>
                 </ul>
@@ -348,7 +353,6 @@
           <a href='https://markdown-it.github.io'>markdown-it</a> /
           <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
           <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
-          <a href='https://fontawesome.com'>Font Awesome</a> /
           <a href='https://microlink.io/'>Microlink</a> /
           <a href='https://highlightjs.org'>Highlight.js</a>
         </small></li>
@@ -366,6 +370,8 @@
     const $$ = (s, c = document) =&gt; c.querySelectorAll(s);
     const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'})[c]);
     const HLJS = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/';
+    // OS が「視差効果を減らす」設定ならスムーススクロールを切る
+    const motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
     // テーマ切替
     const getTheme = () =&gt; {
@@ -389,15 +395,24 @@
     // モバイル shelf
     const shelf = $('.fixed-shelf');
     const overlay = $('.js-fixed-shelf-overlay');
-    const setShelf = open =&gt; { shelf?.classList.toggle('is-open', open); overlay?.classList.toggle('is-open', open); };
-    $('.js-shelf-toggle')?.addEventListener('click', () =&gt; setShelf(!shelf.classList.contains('is-open')));
+    const shelfBtn = $('.js-shelf-toggle');
+    const setShelf = open =&gt; {
+      shelf?.classList.toggle('is-open', open);
+      overlay?.classList.toggle('is-open', open);
+      shelfBtn?.setAttribute('aria-expanded', String(open));
+    };
+    shelfBtn?.addEventListener('click', () =&gt; setShelf(!shelf.classList.contains('is-open')));
     overlay?.addEventListener('click', () =&gt; setShelf(false));
     shelf?.addEventListener('click', e =&gt; { if (e.target.closest('a')) setShelf(false); });
 
     // タグ一覧ポップオーバー: 初回開時にサイドの .labels を複製
     const popover = $('.js-tag-list-popover');
-    const setPopover = open =&gt; popover?.classList.toggle('is-open', open);
-    $('.js-tag-list-toggle')?.addEventListener('click', e =&gt; {
+    const tagBtn = $('.js-tag-list-toggle');
+    const setPopover = open =&gt; {
+      popover?.classList.toggle('is-open', open);
+      tagBtn?.setAttribute('aria-expanded', String(open));
+    };
+    tagBtn?.addEventListener('click', e =&gt; {
       e.stopPropagation();
       const open = !popover.classList.contains('is-open');
       if (open &amp;&amp; !popover.childElementCount) {
@@ -412,12 +427,20 @@
     addEventListener('keydown', e =&gt; { if (e.key === 'Escape') { setShelf(false); setPopover(false); } });
 
     // 画像モーダル (本文の img クリックで拡大)
+    // Blogger の画像 URL からサイズ指定を探して原寸寄りに差し替える。指定の形は2系統ある:
+    //   .../s320/name.png や .../w1200-h630-p-k-no-nu/name.png  (パスの後ろから2番目)
+    //   ...=s320 や ...=w640-h480-p-k-no-nu                      (末尾のサフィックス)
+    // 区切りまで含めて判定しないと、サイズ指定の無い URL でファイル名の中の "s123" を
+    // 拾ってしまい (例: screenshots1234.png → screenshots1600.png) 404 になる。
+    const bigImage = url =&gt; url
+      .replace(/\/(?:s\d+|w\d+-h\d+)[-\w]*\/([^/]+)$/, '/s1600/$1')
+      .replace(/=(?:s\d+|w\d+-h\d+)[-\w]*$/, '=s1600');
     const modal = $('.js-image-modal');
     if (modal) {
       document.addEventListener('click', e =&gt; {
         const t = e.target;
         if (t.tagName === 'IMG' &amp;&amp; t.closest('.post-body')) {
-          modal.querySelector('img').src = t.src.replace(/s\d{2,4}(-c)?/, 's1600');
+          modal.querySelector('img').src = bigImage(t.src);
           modal.showModal();
         }
       });
@@ -425,10 +448,12 @@
     }
 
     // ヘッダー高さを CSS 変数に同期 (mobile sticky オフセット用)
+    // 変数は html に立てる。header に立てると、兄弟である .tag-list-popover へ継承されず
+    // フォールバック値 (96px) のままになる。
     const titleRow = $('body &gt; header nav &gt; ul:first-child');
     const header = $('body &gt; header');
     if (titleRow &amp;&amp; header) {
-      const update = () =&gt; header.style.setProperty('--hgroup-h', (titleRow.offsetHeight + parseFloat(getComputedStyle(header).paddingTop)) + 'px');
+      const update = () =&gt; document.documentElement.style.setProperty('--hgroup-h', (titleRow.offsetHeight + parseFloat(getComputedStyle(header).paddingTop)) + 'px');
       new ResizeObserver(update).observe(titleRow);
       update();
     }
@@ -494,27 +519,39 @@
     }
 
     // スクロール位置で目次の現在地を aria-current でハイライト
+    //
+    // 旧実装は scroll のたびに全見出しへ getBoundingClientRect していたので、
+    // スクロール中ずっと強制レイアウトが走っていた。IntersectionObserver に置き換えて
+    // 「画面上端から LINE px のラインを見出しが越えたか」だけを持つ形にしてある。
+    // 判定条件 (rect.top &lt;= LINE) は旧実装と同じなので見た目の挙動は変わらない。
     function setupTOCHighlight() {
       const nav = $('.content-toc &gt; nav');
       if (!nav) return;
-      const links = nav.querySelectorAll('a');
-      const headings = $$('.post-body :is(h2, h3, h4)');
+      const links = [...nav.querySelectorAll('a')];
+      const headings = [...$$('.post-body :is(h2, h3, h4)')];
       if (!headings.length) return;
+      const LINE = 225;
+      const passed = new Map();
       let lastActive = null;
-      addEventListener('scroll', () =&gt; {
-        let currentId = null;
-        headings.forEach(h =&gt; {
-          if (scrollY &gt;= h.getBoundingClientRect().top + scrollY - 225) currentId = h.id;
-        });
+
+      const update = () =&gt; {
+        let current = null;
+        headings.forEach(h =&gt; { if (passed.get(h)) current = h; });
         links.forEach(a =&gt; {
-          const on = currentId &amp;&amp; a.getAttribute('href') === '#' + currentId;
+          const on = !!current &amp;&amp; a.getAttribute('href') === '#' + current.id;
           a.toggleAttribute('aria-current', on);
           if (on &amp;&amp; lastActive !== a) {
             lastActive = a;
-            nav.scrollTo({ top: a.offsetTop - nav.clientHeight / 2, behavior: 'smooth' });
+            nav.scrollTo({ top: a.offsetTop - nav.clientHeight / 2, behavior: motion });
           }
         });
-      });
+      };
+      // rootMargin で上端を LINE px 下げた枠を作る。枠から出た = ラインを越えた。
+      const io = new IntersectionObserver(entries =&gt; {
+        entries.forEach(e =&gt; passed.set(e.target, e.boundingClientRect.top &lt;= LINE));
+        update();
+      }, { rootMargin: `-${LINE}px 0px 0px 0px` });
+      headings.forEach(h =&gt; io.observe(h));
     }
 
     // リンクカード (Microlink + localStorage キャッシュ + IO 遅延ロード)
@@ -567,7 +604,12 @@
         const href = a.getAttribute('href');
         if (!href?.startsWith('http')) return;
         const p = a.closest('p');
-        if (p) targets.push({ a, href, p });
+        // 段落がそのリンク単体で出来ているときだけカード化する。
+        // 文中に貼ったリンクにまでカードが生えると読めたものではないし、
+        // Microlink の無料枠 (公開エンドポイントで 1日50リクエスト) も一瞬で枯れる。
+        if (p &amp;&amp; p.children.length === 1 &amp;&amp; p.firstElementChild === a &amp;&amp; p.textContent.trim() === a.textContent.trim()) {
+          targets.push({ a, href, p });
+        }
       });
       const io = new IntersectionObserver((entries, ob) =&gt; {
         entries.forEach(e =&gt; {
