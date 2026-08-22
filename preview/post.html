@@ -3,35 +3,35 @@
      src/style.css と src/app.js を実物のまま読む。
      markdown の描画・目次・テーマ切替・画像モーダルまで本物が動く。
      使い方: cd preview && python3 -m http.server 8080 → /post.html -->
-<html lang="ja" data-page="item" data-theme="dark">
+<html lang="ja" data-page="item" data-theme="dark" data-suisou-theme="hadal" data-suisou-accent="jelly">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <meta content="light dark" name="color-scheme"/>
   <title>プレビュー: 記事 - pickker</title>
-  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet"/>
+  <link href="https://shiro-ka.github.io/Suisou/v1/suisou.css" rel="stylesheet"/>
   <link href="https://fonts.bunny.net" rel="preconnect"/>
   <link href="https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&display=swap" rel="stylesheet"/>
   <link class="js-hljs-theme" rel="stylesheet"/>
   <script defer src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js"></script>
-  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
+  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:'dark';var d=document.documentElement;d.dataset.theme=t;d.dataset.suisouTheme=(t==='light'?'shoal':'hadal');var h=document.querySelector('.js-hljs-theme');if(h)h.href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
   <link rel="stylesheet" href="../src/style.css"/>
 </head>
-<body>
+<body data-suisou-root>
   <header class="container">
     <nav>
       <ul>
         <li><a href="./index.html"><hgroup><h3>くらげのブログ</h3><p>プレビュー用のサンプル</p></hgroup></a></li>
       </ul>
       <ul>
-        <li><button class="js-shelf-toggle" type="button" aria-label="メニュー" aria-expanded="false">☰</button></li>
+        <li><button class="js-shelf-toggle" data-suisou-button="icon" type="button" aria-label="メニュー" aria-expanded="false">☰</button></li>
         <li>
           <ul>
-            <li><form action="/search" method="get" role="search"><input name="q" type="search" aria-label="ブログ内を検索" placeholder="ブログ内を検索"/></form></li>
-            <li><button class="js-tag-list-toggle" type="button" aria-label="タグ一覧" aria-expanded="false">🏷</button></li>
-            <li><button class="js-theme-toggle" type="button" aria-label="ライト/ダーク切替"><span data-icon="light">☀</span><span data-icon="dark">🌙</span></button></li>
+            <li><form action="/search" method="get" role="search"><input data-suisou-field name="q" type="search" aria-label="ブログ内を検索" placeholder="ブログ内を検索"/></form></li>
+            <li><button class="js-tag-list-toggle" data-suisou-button="icon" type="button" aria-label="タグ一覧" aria-expanded="false">🏷</button></li>
+            <li><button class="js-theme-toggle" data-suisou-button="icon" type="button" aria-label="ライト/ダーク切替"><span data-icon="light">☀</span><span data-icon="dark">🌙</span></button></li>
           </ul>
         </li>
       </ul>
@@ -48,7 +48,7 @@
           </div>
           <hr/>
         </header>
-        <div class="markdown post-body">## 見出し2
+        <div class="markdown post-body" data-suisou-prose>## 見出し2
 
 本文の段落。**強調** と `行内コード` と [外部リンク](https://example.com) を含む。
 単一改行はそのまま改行になる。
@@ -87,7 +87,7 @@ https://github.com/shiro-ka/Suisou
       </article>
     </section>
     <aside>
-      <article class="content-incentive">
+      <article class="content-incentive" data-suisou-surface="panel tight">
         <ul>
           <li class="js-popular-item"><a href="#"><img src="https://placehold.jp/16/333344/ffffff/64x64.png" alt=""/><span>人気の記事タイトル</span></a></li>
           <li class="js-latest-post"><a href="#"><img src="https://placehold.jp/16/334433/ffffff/64x64.png" alt=""/><span>最新の記事タイトル</span></a></li>
@@ -95,8 +95,8 @@ https://github.com/shiro-ka/Suisou
         </ul>
       </article>
       <div class="fixed-shelf">
-        <article class="js-label-list"><div class="labels"><a href="#">日記</a><a href="#">開発</a><a href="#">WIXOSS</a></div></article>
-        <article class="content-toc"><p>目次</p><hr/><nav></nav></article>
+        <article class="js-label-list" data-suisou-surface="panel tight"><div class="labels"><a data-suisou-tag="accent" href="#">日記</a><a data-suisou-tag="accent" href="#">開発</a><a data-suisou-tag="accent" href="#">WIXOSS</a></div></article>
+        <article class="content-toc" data-suisou-surface="panel tight"><p data-suisou-text="s14 w700">目次</p><hr/><nav></nav></article>
       </div>
     </aside>
   </main>
@@ -105,7 +105,7 @@ https://github.com/shiro-ka/Suisou
       <ul><li>Powered by <a href="https://www.blogger.com">Blogger</a></li><li>Theme : <a href="https://github.com/shiro-ka/pickker">pickker</a></li></ul>
     </nav>
   </footer>
-  <div class="tag-list-popover js-tag-list-popover labels"></div>
+  <div class="tag-list-popover js-tag-list-popover labels" data-suisou-surface="overlay"></div>
   <dialog class="image-modal js-image-modal"><img alt=""/></dialog>
   <div class="js-fixed-shelf-overlay"></div>
   <script defer src="../src/app.js"></script>
