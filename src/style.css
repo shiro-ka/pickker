@@ -1,133 +1,167 @@
+/* pickker — Suisou の上の現場実装（2026-08-22 に Pico CSS から乗り替え）
+ *
+ * 役割分担:
+ *   Suisou (v1)  色・型・面・罫・部品 (prose / tag / field / button / surface / spinner)
+ *   ここ         ページの骨格 (container / 2カラム / ヘッダー / シェルフ) と
+ *                pickker 固有の造作 (リンクカード / 目次の丸 / 一覧カード)
+ *
+ * 色と余白は必ず var(--suisou-*) を通す。素の色コードはこのファイルに書かない。
+ * テーマは html の data-suisou-theme を app.js が切り替える (light=shoal / dark=hadal)。 */
+
 html { scroll-behavior: smooth; }
-/* OS が「視差効果を減らす」設定ならアニメーションを止める */
+/* OS が「視差効果を減らす」設定ならアニメーションを止める。
+   ★Suisou の部品 (spinner など) は自前の reduced-motion 対応を持つので除外する */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  *:not([data-suisou-spinner])::before, *:not([data-suisou-spinner])::after,
+  *:not([data-suisou-spinner]) { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
-:root { --pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%; }
-@media (min-width: 1280px) { :root { --pico-font-size: 118.75%; } }
-body { font-family: "M PLUS Rounded 1c", sans-serif; }
-/* ヘッダー */
-body > header hgroup > p { font-size: 86% !important; }
-body > header form { margin-bottom: 0 !important; }
-body > header button { background: none; border: none; padding: .3rem .6rem; color: var(--pico-muted-color); }
-body > header button:hover { background: var(--pico-muted-border-color); }
+
+/* 書体はブログの顔なので pickker が持つ (Suisou の既定は Zen Maru Gothic) */
+body { font-family: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; }
+
+/* ── ページの骨格 (Pico の container / grid の後継) ────────── */
+.container { width: 100%; max-width: var(--suisou-measure); margin-inline: auto; padding-inline: var(--suisou-space-3); }
+body > header { padding-block: var(--suisou-space-2); }
+main.grid { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: var(--suisou-space-4); align-items: start; }
+body > footer { margin-top: var(--suisou-space-4); padding-block: var(--suisou-space-3); border-top: 1px solid var(--suisou-line-weak); color: var(--suisou-text-sub); font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); }
+body > footer nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--suisou-space-2); }
+body > footer ul { display: flex; gap: var(--suisou-space-2); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+body > footer a { text-decoration: underline; text-underline-offset: .2em; }
+
+/* ── ヘッダー ───────────────────────────── */
+body > header nav { display: flex; justify-content: space-between; align-items: center; gap: var(--suisou-space-2); }
+body > header ul { display: flex; align-items: center; gap: var(--suisou-space-1); list-style: none; margin: 0; padding: 0; }
+body > header hgroup { margin: 0; }
+body > header hgroup h3 { margin: 0; font-size: var(--suisou-size-20); line-height: var(--suisou-lh-20); font-weight: 700; }
+body > header hgroup > p { margin: 0; font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); color: var(--suisou-text-sub); }
+body > header form { margin: 0; }
 body > header li:has(.js-shelf-toggle) { display: none; }
 body > header button :is(svg, [data-icon]) { display: block; }
+/* 検索欄: 畳んでおいて、触れたら伸びる (中身は Suisou の field) */
 body > header input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
 body > header input[type="search"]:focus,
 body > header input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }
 [data-theme="dark"] .js-theme-toggle [data-icon="light"],
 [data-theme="light"] .js-theme-toggle [data-icon="dark"] { display: none; }
-/* メイン */
-main { grid-template-columns: 1fr 18rem !important; }
-article time { font-size: 0.8rem; margin-bottom: 0.2rem; }
-article > header, article > footer { background: none; border: none; padding: var(--pico-spacing); }
-/* 一覧の見出し (ラベル / 検索 / アーカイブのときだけ出る) */
+
+/* ── 記事 ───────────────────────────────── */
+article > header time { display: block; color: var(--suisou-text-sub); margin-bottom: var(--suisou-space-1); }
+article > header h1 { margin: 0 0 var(--suisou-space-2); }
+article > header hr { border: 0; border-top: 1px solid var(--suisou-line-weak); margin: var(--suisou-space-3) 0; }
+/* 本文の画像: 中央寄せ + クリックで拡大 (モーダルは app.js) */
+.post-body :not(.link-card) img:not(.emoji) { display: block; width: fit-content; max-width: 100%; margin: 0 auto; border-radius: var(--suisou-radius); cursor: zoom-in; }
+.markdown img.emoji { width: 1rem; height: 1rem; }
+/* hljs はトークンの色だけ借りる。箱 (下地・罫) は Suisou の code が持つ */
+.post-body pre code.hljs { background: transparent; padding: 0; }
+
+/* ── 一覧の見出し (ラベル / 検索 / アーカイブのときだけ出る) ── */
 .js-feed-heading:empty { display: none; }
-.js-feed-heading p { color: var(--pico-muted-color); font-size: .85em; }
-.feed-empty { color: var(--pico-muted-color); text-align: center; padding: 3rem 0; }
-/* 404 */
-.status-page { text-align: center; padding: 4rem var(--pico-spacing); }
-.status-page h1 { font-size: 4rem; margin-bottom: .5rem; color: var(--pico-muted-border-color); }
-/* indexカード */
-.index-cards { margin-bottom: 2rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing); }
-.index-cards article { position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0; }
+.js-feed-heading h2 { margin: 0; font-size: var(--suisou-size-24); line-height: var(--suisou-lh-24); font-weight: 700; }
+.js-feed-heading p { margin: 0; color: var(--suisou-text-sub); font-size: var(--suisou-size-12); }
+.feed-empty { color: var(--suisou-text-sub); text-align: center; padding: var(--suisou-space-4) 0; }
+
+/* ── 404 ────────────────────────────────── */
+.status-page { text-align: center; padding: var(--suisou-space-4) var(--suisou-space-3); }
+.status-page h1 { color: var(--suisou-text-disabled); font-size: 4rem; }
+
+/* ── index カード (面と罫は Suisou の panel。feed.js が属性を付ける) ── */
+.index-cards { display: grid; margin-bottom: var(--suisou-space-4); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--suisou-space-3); }
+.index-cards article { position: relative; display: flex; flex-direction: column; overflow: hidden; margin: 0; transition: border-color var(--suisou-motion-fast) var(--suisou-ease); }
+.index-cards article:hover { border-color: var(--suisou-line-strong); }
 .index-cards article > a:first-child { position: absolute; inset: 0; z-index: 1; }
+.index-cards article figure { margin: 0; }
 .index-cards article img { aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block; }
-.index-cards article > header { padding: .2rem .5rem 0 !important; margin: 0; }
-.index-cards article > footer { margin-top: auto; padding: 0 1.5rem 1.5rem; }
+.index-cards article > header { padding: var(--suisou-space-1) var(--suisou-space-2) 0; margin: 0; }
+.index-cards article > header time { font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); color: var(--suisou-text-sub); }
+.index-cards article > header p { margin: 0; font-weight: 500; }
+.index-cards article > footer { margin-top: auto; padding: 0 var(--suisou-space-2) var(--suisou-space-2); }
 .index-cards article > footer a { position: relative; z-index: 2; }
-/* 記事本文 */
-.post-body h1 { margin-bottom: 1.5rem; }
-.post-body :is(h2, h3, h4) { margin-left: -.5rem;}
-.post-body h2 { border-left: 6px solid var(--pico-primary); border-bottom: 1px solid var(--pico-primary-focus); padding: 0 0 .4rem .5rem; }
-.post-body h3 { border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem; }
-.post-body h4 { border-left: 3px solid var(--pico-primary); padding-left: .7rem; }
-.post-body b { font-weight: 600; }
-.post-body :not(.link-card) img:not(.emoji) { display: block; width: fit-content; margin: 0 auto var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius); cursor: zoom-in; }
-.markdown img.emoji { width: 1rem; height: 1rem;  }
-/* リンクカード */
-.link-card { display: flex; margin: var(--pico-spacing) 0; max-width: 768px; border: var(--pico-border-width) solid var(--pico-table-border-color); border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); overflow: hidden; transition: background .15s; }
-.link-card:hover { background: color-mix(in srgb, var(--pico-primary) 6%, transparent); }
-.link-card > div { flex: 1; padding: .75rem 1rem; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
-.link-card strong { font-size: .95rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.link-card > div > small:first-of-type { color: var(--pico-muted-color); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.link-card > div > small:last-of-type { display: flex; align-items: center; gap: .4rem; margin-top: auto; color: var(--pico-muted-color); }
+
+/* ── リンクカード (本文中の URL 単体段落から生成) ───────── */
+.link-card { display: flex; margin: var(--suisou-space-3) 0; max-width: 768px; border: 1px solid var(--suisou-line-weak); border-radius: var(--suisou-radius); text-decoration: none; color: var(--suisou-text-main); overflow: hidden; transition: background-color var(--suisou-motion-fast) var(--suisou-ease); }
+.link-card:hover { background: var(--suisou-hover-surface); color: var(--suisou-text-main); }
+.link-card > div { flex: 1; padding: var(--suisou-space-2) var(--suisou-space-3); min-width: 0; display: flex; flex-direction: column; gap: var(--suisou-space-1); }
+.link-card strong { font-size: var(--suisou-size-14); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.link-card small { font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); }
+.link-card > div > small:first-of-type { color: var(--suisou-text-sub); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.link-card > div > small:last-of-type { display: flex; align-items: center; gap: var(--suisou-space-1); margin-top: auto; color: var(--suisou-text-sub); }
 .link-card img { margin: 0 !important; }
 .link-card small img { width: 16px; height: 16px; flex-shrink: 0; }
-.link-card > img { max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block; }
-/* サイドカラム */
-aside { margin-bottom: calc(var(--pico-block-spacing-vertical) * 2); }
-.fixed-shelf { position: sticky; top: 1rem; }
-/* インセンティブ */
-.content-incentive { padding: 8px; font-size: 84%; }
+.link-card > img { max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block; border-radius: 0; cursor: pointer; }
+
+/* ── サイドカラム ───────────────────────── */
+aside { display: flex; flex-direction: column; gap: var(--suisou-space-2); }
+.fixed-shelf { position: sticky; top: var(--suisou-space-2); display: flex; flex-direction: column; gap: var(--suisou-space-2); }
+/* インセンティブ (人気/最新/ランダム記事) */
 .content-incentive :is(ul, li) { list-style: none; padding: 0; margin: 0; }
-.content-incentive a { display: flex; align-items: center; gap: .75rem; padding: .4rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-h3-color); }
-.content-incentive a:hover { background: color-mix(in srgb, var(--pico-primary) 10%, transparent); }
-.content-incentive img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--pico-border-radius); flex-shrink: 0; }
+.content-incentive a { display: flex; align-items: center; gap: var(--suisou-space-2); padding: var(--suisou-space-1); border-radius: var(--suisou-radius); text-decoration: none; color: var(--suisou-text-sub); font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); transition: background-color var(--suisou-motion-fast) var(--suisou-ease); }
+.content-incentive a:hover { background: var(--suisou-hover-surface); color: var(--suisou-text-main); }
+.content-incentive img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--suisou-radius); flex-shrink: 0; }
 .content-incentive span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .content-incentive .js-popular-item:nth-child(n+2) { display: none; }
-/* 目次 */
+
+/* ── 目次 (丸つきのツリー。pickker の造作) ──────────── */
 .content-toc { display: flex; flex-direction: column; max-height: calc(100dvh - 2rem); }
+.content-toc > p { margin: 0; }
+.content-toc hr { border: 0; border-top: 1px solid var(--suisou-line-weak); margin: var(--suisou-space-1) 0; }
 .content-toc nav { overflow-x: hidden; overflow-y: auto; min-height: 0; }
-.content-toc nav ::before { position: relative; }
-.content-toc nav > ul { position: relative; }
-.content-toc nav > ul::before { position: absolute; content: ""; left: 13px; top: 22px; bottom: 22px; width: 2px; background: var(--pico-primary-border); }
-.content-toc nav > ul > li { padding-top: 0; }
-.content-toc nav > ul > li::before { width: 16px; height: 16px; border-radius: 50%; border: 4px solid var(--pico-card-background-color); background: var(--pico-primary-border); left: -4px; top: 16px; }
-.content-toc nav > ul > li:has(> a[aria-current])::before { background: var(--pico-primary); }
-.content-toc nav > ul > li > ul > li { padding-left: 36px; padding-bottom: 0; font-size: 92%; }
-.content-toc nav > ul > li > ul > li::before { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--pico-primary-border); top: 10px; left: -8px; }
-.content-toc nav > ul > li > ul > li:has(> a[aria-current])::before { border-color: var(--pico-primary); }
-.content-toc nav > ul > li > ul > li > ul > li { padding-left: 28px; font-size: 98%; }
-.content-toc a { color: var(--pico-secondary); }
-.content-toc a:hover { color: var(--pico-contrast); text-decoration: none; }
-.content-toc a[aria-current] { color: var(--pico-primary-hover); }
-/* ラベル */
-.labels { display: flex; flex-wrap: wrap; gap: .4rem; }
-.labels a { font-size: .8em; padding: .2em .7em; border-radius: 999px; border: 1px solid var(--pico-primary); color: var(--pico-primary); text-decoration: none; }
-.labels a:hover { background: var(--pico-primary); color: var(--pico-primary-inverse); }
+.content-toc :is(ul, li) { list-style: none; margin: 0; }
+.content-toc nav > ul { position: relative; padding: 0; }
+.content-toc nav li { position: relative; padding-left: 28px; padding-block: 2px; }
+.content-toc nav li::before { content: ""; position: absolute; }
+.content-toc nav > ul::before { position: absolute; content: ""; left: 13px; top: 22px; bottom: 22px; width: 2px; background: var(--suisou-line-weak); }
+.content-toc nav > ul > li::before { width: 16px; height: 16px; border-radius: 50%; border: 4px solid var(--suisou-panel); background: var(--suisou-line-weak); left: 6px; top: 8px; }
+.content-toc nav > ul > li:has(> a[aria-current])::before { background: var(--suisou-accent); }
+.content-toc nav > ul > li > ul > li { font-size: var(--suisou-size-12); }
+.content-toc nav > ul > li > ul > li::before { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--suisou-line-weak); background: transparent; left: 10px; top: 9px; }
+.content-toc nav > ul > li > ul > li:has(> a[aria-current])::before { border-color: var(--suisou-accent); }
+.content-toc a { color: var(--suisou-text-sub); text-decoration: none; }
+.content-toc a:hover { color: var(--suisou-text-main); }
+.content-toc a[aria-current] { color: var(--suisou-accent); }
+
+/* ── ラベル (見た目は Suisou の Tag。並べ方だけここ) ────── */
+.labels { display: flex; flex-wrap: wrap; gap: var(--suisou-space-1); }
 .index-cards article footer .labels,
-article > header .labels { justify-content: flex-end; margin-top: .75rem; }
-/* 記事/固定ページではサイドのラベル雲を隠す (目次に場所を譲る。ラベルはヘッダーのタグボタンから) */
+article > header .labels { justify-content: flex-end; margin-top: var(--suisou-space-2); }
+/* 記事/固定ページではサイドのラベル雲を隠す (目次に場所を譲る) */
 :is([data-page="item"], [data-page="static_page"]) aside .js-label-list { display: none; }
-/* タグ一覧ポップオーバー (.is-open で表示) */
-.tag-list-popover { display: none; position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem; max-width: min(90vw, 480px); max-height: 60dvh; overflow-y: auto; padding: .9rem 1rem; z-index: 1200; background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: var(--pico-border-radius); box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+
+/* ── タグ一覧ポップオーバー (.is-open で表示。面は Suisou の overlay) ── */
+.tag-list-popover { display: none; position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem; max-width: min(90vw, 480px); max-height: 60dvh; overflow-y: auto; z-index: 1200; }
 .tag-list-popover.is-open { display: flex; }
-/* スケルトン */
+
+/* ── スケルトン (読み込み中の升。輪は Suisou の spinner) ──── */
 .js-skeleton-card { pointer-events: none; }
-.js-skeleton-card figure { aspect-ratio: 4/3; width: 100%; margin: 0; background: var(--pico-muted-border-color); display: flex; align-items: center; justify-content: center; }
-.js-skeleton-card figure::after { content: ''; width: 2rem; height: 2rem; border: 3px solid color-mix(in srgb, var(--pico-muted-color) 20%, transparent); border-top-color: var(--pico-muted-color); border-radius: 50%; animation: sk-spin .8s linear infinite; }
-@keyframes sk-spin { to { transform: rotate(360deg); } }
+.js-skeleton-card figure { aspect-ratio: 4/3; width: 100%; margin: 0; background: var(--suisou-item); display: flex; align-items: center; justify-content: center; }
 .js-skeleton-card header time,
-.js-skeleton-card header p { display: block; background: var(--pico-muted-border-color); border-radius: var(--pico-border-radius); color: transparent; }
+.js-skeleton-card header p { display: inline-block; background: var(--suisou-item); border-radius: var(--suisou-radius-small); color: transparent; }
 .js-skeleton-card header p { width: 75%; }
-/* ページネーション */
+
+/* ── ページネーション ───────────────────── */
 .pagination { display: flex; justify-content: center; }
-.pagination li > span { padding: 0 .25rem; color: var(--pico-muted-color); }
-/* 画像モーダル */
+.pagination ul { display: flex; align-items: center; gap: var(--suisou-space-1); list-style: none; margin: 0; padding: 0; }
+.pagination li > span { padding: 0 var(--suisou-space-1); color: var(--suisou-text-sub); }
+.pagination a[aria-current] { background: var(--suisou-selected-surface); color: var(--suisou-text-main); }
+
+/* ── 画像モーダル (全画面。膜は Suisou の scrim より濃く ―― 写真を見る場) ── */
 .image-modal { background: transparent; border: none; padding: 0; max-width: 100dvw; max-height: 100dvh; }
-.image-modal::backdrop { background: rgba(0,0,0,.88); }
+.image-modal::backdrop { background: var(--suisou-scrim); }
 .image-modal img { max-width: 92dvw; max-height: 92dvh; object-fit: contain; display: block; }
-/* フッター */
-footer, footer a { color: var(--pico-muted-color); }
-/* レスポンシブ (1カラム + サイドバーをドロワー化) */
+
+/* ── レスポンシブ (1カラム + サイドバーをドロワー化) ────── */
 @media (width < 1024px) {
-  main { grid-template-columns: 1fr !important; }
-  body > header { padding-left: 16px !important; padding-right: 16px !important; padding-bottom: 0; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border); position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--pico-background-color); }
-  body > header hgroup { margin-bottom: 0; }
-  body > header nav { flex-direction: column; }
-  body > header nav > ul:first-child > li { padding-bottom: 0; }
-  body > header nav > ul:last-child > li { padding: 0; }
-  body > header nav > ul:last-child > li:first-child { display: inline-block; }
+  main.grid { grid-template-columns: 1fr; }
+  body > header { padding-inline: var(--suisou-space-3); padding-bottom: 0; max-width: unset; border-bottom: 1px solid var(--suisou-line-weak); position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--suisou-bg); }
+  body > header nav { flex-direction: column; align-items: stretch; }
   body > header nav ul:last-child { width: 100%; justify-content: space-between; }
+  body > header li:has(.js-shelf-toggle) { display: block; }
   .index-cards { grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); }
   .link-card > img { max-width: 120px; max-height: 120px; }
-  body > footer nav { flex-direction: column; }
-  body > footer nav ul { justify-content: center; }
-  .fixed-shelf { position: fixed; top: 0; right: 0; width: min(85vw, 320px); height: 100dvh; background: var(--pico-background-color); box-shadow: -2px 0 8px rgba(0,0,0,.2); padding: 1rem; z-index: 1100; transform: translateX(100%); transition: transform .3s ease; overflow-y: auto; }
+  body > footer nav { flex-direction: column; align-items: center; }
+  /* シェルフ: 右から出るドロワー。開閉は app.js の .is-open (popover 化は今後の宿題) */
+  .fixed-shelf { position: fixed; top: 0; right: 0; width: min(85vw, 320px); height: 100dvh; background: var(--suisou-overlay); border-left: 1px solid var(--suisou-line-strong); padding: var(--suisou-space-3); z-index: 1100; transform: translateX(100%); transition: transform var(--suisou-motion) var(--suisou-ease); overflow-y: auto; }
   .fixed-shelf.is-open { transform: translateX(0); }
-  .js-fixed-shelf-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1099; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .js-fixed-shelf-overlay { position: fixed; inset: 0; background: var(--suisou-scrim); z-index: 1099; opacity: 0; pointer-events: none; transition: opacity var(--suisou-motion-fast) var(--suisou-ease); }
   .js-fixed-shelf-overlay.is-open { opacity: 1; pointer-events: auto; }
 }

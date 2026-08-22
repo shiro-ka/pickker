@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:js='false' b:responsive='true' b:version='3' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' data-suisou-theme='hadal' data-suisou-accent='jelly' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
@@ -14,7 +14,8 @@
   </b:if>
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
-  <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
+  <!-- Suisou（デザインシステム）。固定 URL の v1 チャンネル -->
+  <link href='https://shiro-ka.github.io/Suisou/v1/suisou.css' rel='stylesheet'/>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
   <link class='js-hljs-theme' rel='stylesheet'/>
@@ -23,144 +24,178 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <!-- FOUC: テーマと hljs を即時反映 -->
-  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
+  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');var d=document.documentElement;d.dataset.theme=t;d.dataset.suisouTheme=(t==='light'?'shoal':'hadal');document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
   <style>
+    /* pickker — Suisou の上の現場実装（2026-08-22 に Pico CSS から乗り替え）
+     *
+     * 役割分担:
+     *   Suisou (v1)  色・型・面・罫・部品 (prose / tag / field / button / surface / spinner)
+     *   ここ         ページの骨格 (container / 2カラム / ヘッダー / シェルフ) と
+     *                pickker 固有の造作 (リンクカード / 目次の丸 / 一覧カード)
+     *
+     * 色と余白は必ず var(--suisou-*) を通す。素の色コードはこのファイルに書かない。
+     * テーマは html の data-suisou-theme を app.js が切り替える (light=shoal / dark=hadal)。 */
+
     html { scroll-behavior: smooth; }
-    /* OS が「視差効果を減らす」設定ならアニメーションを止める */
+    /* OS が「視差効果を減らす」設定ならアニメーションを止める。
+       ★Suisou の部品 (spinner など) は自前の reduced-motion 対応を持つので除外する */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      *:not([data-suisou-spinner])::before, *:not([data-suisou-spinner])::after,
+      *:not([data-suisou-spinner]) { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
-    :root { --pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%; }
-    @media (min-width: 1280px) { :root { --pico-font-size: 118.75%; } }
-    body { font-family: "M PLUS Rounded 1c", sans-serif; }
-    /* ヘッダー */
-    body &gt; header hgroup &gt; p { font-size: 86% !important; }
-    body &gt; header form { margin-bottom: 0 !important; }
-    body &gt; header button { background: none; border: none; padding: .3rem .6rem; color: var(--pico-muted-color); }
-    body &gt; header button:hover { background: var(--pico-muted-border-color); }
+
+    /* 書体はブログの顔なので pickker が持つ (Suisou の既定は Zen Maru Gothic) */
+    body { font-family: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; }
+
+    /* ── ページの骨格 (Pico の container / grid の後継) ────────── */
+    .container { width: 100%; max-width: var(--suisou-measure); margin-inline: auto; padding-inline: var(--suisou-space-3); }
+    body &gt; header { padding-block: var(--suisou-space-2); }
+    main.grid { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: var(--suisou-space-4); align-items: start; }
+    body &gt; footer { margin-top: var(--suisou-space-4); padding-block: var(--suisou-space-3); border-top: 1px solid var(--suisou-line-weak); color: var(--suisou-text-sub); font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); }
+    body &gt; footer nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--suisou-space-2); }
+    body &gt; footer ul { display: flex; gap: var(--suisou-space-2); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+    body &gt; footer a { text-decoration: underline; text-underline-offset: .2em; }
+
+    /* ── ヘッダー ───────────────────────────── */
+    body &gt; header nav { display: flex; justify-content: space-between; align-items: center; gap: var(--suisou-space-2); }
+    body &gt; header ul { display: flex; align-items: center; gap: var(--suisou-space-1); list-style: none; margin: 0; padding: 0; }
+    body &gt; header hgroup { margin: 0; }
+    body &gt; header hgroup h3 { margin: 0; font-size: var(--suisou-size-20); line-height: var(--suisou-lh-20); font-weight: 700; }
+    body &gt; header hgroup &gt; p { margin: 0; font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); color: var(--suisou-text-sub); }
+    body &gt; header form { margin: 0; }
     body &gt; header li:has(.js-shelf-toggle) { display: none; }
     body &gt; header button :is(svg, [data-icon]) { display: block; }
+    /* 検索欄: 畳んでおいて、触れたら伸びる (中身は Suisou の field) */
     body &gt; header input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
     body &gt; header input[type="search"]:focus,
     body &gt; header input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }
     [data-theme="dark"] .js-theme-toggle [data-icon="light"],
     [data-theme="light"] .js-theme-toggle [data-icon="dark"] { display: none; }
-    /* メイン */
-    main { grid-template-columns: 1fr 18rem !important; }
-    article time { font-size: 0.8rem; margin-bottom: 0.2rem; }
-    article &gt; header, article &gt; footer { background: none; border: none; padding: var(--pico-spacing); }
-    /* 一覧の見出し (ラベル / 検索 / アーカイブのときだけ出る) */
+
+    /* ── 記事 ───────────────────────────────── */
+    article &gt; header time { display: block; color: var(--suisou-text-sub); margin-bottom: var(--suisou-space-1); }
+    article &gt; header h1 { margin: 0 0 var(--suisou-space-2); }
+    article &gt; header hr { border: 0; border-top: 1px solid var(--suisou-line-weak); margin: var(--suisou-space-3) 0; }
+    /* 本文の画像: 中央寄せ + クリックで拡大 (モーダルは app.js) */
+    .post-body :not(.link-card) img:not(.emoji) { display: block; width: fit-content; max-width: 100%; margin: 0 auto; border-radius: var(--suisou-radius); cursor: zoom-in; }
+    .markdown img.emoji { width: 1rem; height: 1rem; }
+    /* hljs はトークンの色だけ借りる。箱 (下地・罫) は Suisou の code が持つ */
+    .post-body pre code.hljs { background: transparent; padding: 0; }
+
+    /* ── 一覧の見出し (ラベル / 検索 / アーカイブのときだけ出る) ── */
     .js-feed-heading:empty { display: none; }
-    .js-feed-heading p { color: var(--pico-muted-color); font-size: .85em; }
-    .feed-empty { color: var(--pico-muted-color); text-align: center; padding: 3rem 0; }
-    /* 404 */
-    .status-page { text-align: center; padding: 4rem var(--pico-spacing); }
-    .status-page h1 { font-size: 4rem; margin-bottom: .5rem; color: var(--pico-muted-border-color); }
-    /* indexカード */
-    .index-cards { margin-bottom: 2rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing); }
-    .index-cards article { position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0; }
+    .js-feed-heading h2 { margin: 0; font-size: var(--suisou-size-24); line-height: var(--suisou-lh-24); font-weight: 700; }
+    .js-feed-heading p { margin: 0; color: var(--suisou-text-sub); font-size: var(--suisou-size-12); }
+    .feed-empty { color: var(--suisou-text-sub); text-align: center; padding: var(--suisou-space-4) 0; }
+
+    /* ── 404 ────────────────────────────────── */
+    .status-page { text-align: center; padding: var(--suisou-space-4) var(--suisou-space-3); }
+    .status-page h1 { color: var(--suisou-text-disabled); font-size: 4rem; }
+
+    /* ── index カード (面と罫は Suisou の panel。feed.js が属性を付ける) ── */
+    .index-cards { display: grid; margin-bottom: var(--suisou-space-4); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--suisou-space-3); }
+    .index-cards article { position: relative; display: flex; flex-direction: column; overflow: hidden; margin: 0; transition: border-color var(--suisou-motion-fast) var(--suisou-ease); }
+    .index-cards article:hover { border-color: var(--suisou-line-strong); }
     .index-cards article &gt; a:first-child { position: absolute; inset: 0; z-index: 1; }
+    .index-cards article figure { margin: 0; }
     .index-cards article img { aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block; }
-    .index-cards article &gt; header { padding: .2rem .5rem 0 !important; margin: 0; }
-    .index-cards article &gt; footer { margin-top: auto; padding: 0 1.5rem 1.5rem; }
+    .index-cards article &gt; header { padding: var(--suisou-space-1) var(--suisou-space-2) 0; margin: 0; }
+    .index-cards article &gt; header time { font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); color: var(--suisou-text-sub); }
+    .index-cards article &gt; header p { margin: 0; font-weight: 500; }
+    .index-cards article &gt; footer { margin-top: auto; padding: 0 var(--suisou-space-2) var(--suisou-space-2); }
     .index-cards article &gt; footer a { position: relative; z-index: 2; }
-    /* 記事本文 */
-    .post-body h1 { margin-bottom: 1.5rem; }
-    .post-body :is(h2, h3, h4) { margin-left: -.5rem;}
-    .post-body h2 { border-left: 6px solid var(--pico-primary); border-bottom: 1px solid var(--pico-primary-focus); padding: 0 0 .4rem .5rem; }
-    .post-body h3 { border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem; }
-    .post-body h4 { border-left: 3px solid var(--pico-primary); padding-left: .7rem; }
-    .post-body b { font-weight: 600; }
-    .post-body :not(.link-card) img:not(.emoji) { display: block; width: fit-content; margin: 0 auto var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius); cursor: zoom-in; }
-    .markdown img.emoji { width: 1rem; height: 1rem;  }
-    /* リンクカード */
-    .link-card { display: flex; margin: var(--pico-spacing) 0; max-width: 768px; border: var(--pico-border-width) solid var(--pico-table-border-color); border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); overflow: hidden; transition: background .15s; }
-    .link-card:hover { background: color-mix(in srgb, var(--pico-primary) 6%, transparent); }
-    .link-card &gt; div { flex: 1; padding: .75rem 1rem; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
-    .link-card strong { font-size: .95rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .link-card &gt; div &gt; small:first-of-type { color: var(--pico-muted-color); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-    .link-card &gt; div &gt; small:last-of-type { display: flex; align-items: center; gap: .4rem; margin-top: auto; color: var(--pico-muted-color); }
+
+    /* ── リンクカード (本文中の URL 単体段落から生成) ───────── */
+    .link-card { display: flex; margin: var(--suisou-space-3) 0; max-width: 768px; border: 1px solid var(--suisou-line-weak); border-radius: var(--suisou-radius); text-decoration: none; color: var(--suisou-text-main); overflow: hidden; transition: background-color var(--suisou-motion-fast) var(--suisou-ease); }
+    .link-card:hover { background: var(--suisou-hover-surface); color: var(--suisou-text-main); }
+    .link-card &gt; div { flex: 1; padding: var(--suisou-space-2) var(--suisou-space-3); min-width: 0; display: flex; flex-direction: column; gap: var(--suisou-space-1); }
+    .link-card strong { font-size: var(--suisou-size-14); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .link-card small { font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); }
+    .link-card &gt; div &gt; small:first-of-type { color: var(--suisou-text-sub); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .link-card &gt; div &gt; small:last-of-type { display: flex; align-items: center; gap: var(--suisou-space-1); margin-top: auto; color: var(--suisou-text-sub); }
     .link-card img { margin: 0 !important; }
     .link-card small img { width: 16px; height: 16px; flex-shrink: 0; }
-    .link-card &gt; img { max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block; }
-    /* サイドカラム */
-    aside { margin-bottom: calc(var(--pico-block-spacing-vertical) * 2); }
-    .fixed-shelf { position: sticky; top: 1rem; }
-    /* インセンティブ */
-    .content-incentive { padding: 8px; font-size: 84%; }
+    .link-card &gt; img { max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block; border-radius: 0; cursor: pointer; }
+
+    /* ── サイドカラム ───────────────────────── */
+    aside { display: flex; flex-direction: column; gap: var(--suisou-space-2); }
+    .fixed-shelf { position: sticky; top: var(--suisou-space-2); display: flex; flex-direction: column; gap: var(--suisou-space-2); }
+    /* インセンティブ (人気/最新/ランダム記事) */
     .content-incentive :is(ul, li) { list-style: none; padding: 0; margin: 0; }
-    .content-incentive a { display: flex; align-items: center; gap: .75rem; padding: .4rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-h3-color); }
-    .content-incentive a:hover { background: color-mix(in srgb, var(--pico-primary) 10%, transparent); }
-    .content-incentive img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--pico-border-radius); flex-shrink: 0; }
+    .content-incentive a { display: flex; align-items: center; gap: var(--suisou-space-2); padding: var(--suisou-space-1); border-radius: var(--suisou-radius); text-decoration: none; color: var(--suisou-text-sub); font-size: var(--suisou-size-12); line-height: var(--suisou-lh-12); transition: background-color var(--suisou-motion-fast) var(--suisou-ease); }
+    .content-incentive a:hover { background: var(--suisou-hover-surface); color: var(--suisou-text-main); }
+    .content-incentive img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--suisou-radius); flex-shrink: 0; }
     .content-incentive span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .content-incentive .js-popular-item:nth-child(n+2) { display: none; }
-    /* 目次 */
+
+    /* ── 目次 (丸つきのツリー。pickker の造作) ──────────── */
     .content-toc { display: flex; flex-direction: column; max-height: calc(100dvh - 2rem); }
+    .content-toc &gt; p { margin: 0; }
+    .content-toc hr { border: 0; border-top: 1px solid var(--suisou-line-weak); margin: var(--suisou-space-1) 0; }
     .content-toc nav { overflow-x: hidden; overflow-y: auto; min-height: 0; }
-    .content-toc nav ::before { position: relative; }
-    .content-toc nav &gt; ul { position: relative; }
-    .content-toc nav &gt; ul::before { position: absolute; content: ""; left: 13px; top: 22px; bottom: 22px; width: 2px; background: var(--pico-primary-border); }
-    .content-toc nav &gt; ul &gt; li { padding-top: 0; }
-    .content-toc nav &gt; ul &gt; li::before { width: 16px; height: 16px; border-radius: 50%; border: 4px solid var(--pico-card-background-color); background: var(--pico-primary-border); left: -4px; top: 16px; }
-    .content-toc nav &gt; ul &gt; li:has(&gt; a[aria-current])::before { background: var(--pico-primary); }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li { padding-left: 36px; padding-bottom: 0; font-size: 92%; }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li::before { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--pico-primary-border); top: 10px; left: -8px; }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li:has(&gt; a[aria-current])::before { border-color: var(--pico-primary); }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li &gt; ul &gt; li { padding-left: 28px; font-size: 98%; }
-    .content-toc a { color: var(--pico-secondary); }
-    .content-toc a:hover { color: var(--pico-contrast); text-decoration: none; }
-    .content-toc a[aria-current] { color: var(--pico-primary-hover); }
-    /* ラベル */
-    .labels { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .labels a { font-size: .8em; padding: .2em .7em; border-radius: 999px; border: 1px solid var(--pico-primary); color: var(--pico-primary); text-decoration: none; }
-    .labels a:hover { background: var(--pico-primary); color: var(--pico-primary-inverse); }
+    .content-toc :is(ul, li) { list-style: none; margin: 0; }
+    .content-toc nav &gt; ul { position: relative; padding: 0; }
+    .content-toc nav li { position: relative; padding-left: 28px; padding-block: 2px; }
+    .content-toc nav li::before { content: ""; position: absolute; }
+    .content-toc nav &gt; ul::before { position: absolute; content: ""; left: 13px; top: 22px; bottom: 22px; width: 2px; background: var(--suisou-line-weak); }
+    .content-toc nav &gt; ul &gt; li::before { width: 16px; height: 16px; border-radius: 50%; border: 4px solid var(--suisou-panel); background: var(--suisou-line-weak); left: 6px; top: 8px; }
+    .content-toc nav &gt; ul &gt; li:has(&gt; a[aria-current])::before { background: var(--suisou-accent); }
+    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li { font-size: var(--suisou-size-12); }
+    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li::before { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--suisou-line-weak); background: transparent; left: 10px; top: 9px; }
+    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li:has(&gt; a[aria-current])::before { border-color: var(--suisou-accent); }
+    .content-toc a { color: var(--suisou-text-sub); text-decoration: none; }
+    .content-toc a:hover { color: var(--suisou-text-main); }
+    .content-toc a[aria-current] { color: var(--suisou-accent); }
+
+    /* ── ラベル (見た目は Suisou の Tag。並べ方だけここ) ────── */
+    .labels { display: flex; flex-wrap: wrap; gap: var(--suisou-space-1); }
     .index-cards article footer .labels,
-    article &gt; header .labels { justify-content: flex-end; margin-top: .75rem; }
-    /* 記事/固定ページではサイドのラベル雲を隠す (目次に場所を譲る。ラベルはヘッダーのタグボタンから) */
+    article &gt; header .labels { justify-content: flex-end; margin-top: var(--suisou-space-2); }
+    /* 記事/固定ページではサイドのラベル雲を隠す (目次に場所を譲る) */
     :is([data-page="item"], [data-page="static_page"]) aside .js-label-list { display: none; }
-    /* タグ一覧ポップオーバー (.is-open で表示) */
-    .tag-list-popover { display: none; position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem; max-width: min(90vw, 480px); max-height: 60dvh; overflow-y: auto; padding: .9rem 1rem; z-index: 1200; background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: var(--pico-border-radius); box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+
+    /* ── タグ一覧ポップオーバー (.is-open で表示。面は Suisou の overlay) ── */
+    .tag-list-popover { display: none; position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem; max-width: min(90vw, 480px); max-height: 60dvh; overflow-y: auto; z-index: 1200; }
     .tag-list-popover.is-open { display: flex; }
-    /* スケルトン */
+
+    /* ── スケルトン (読み込み中の升。輪は Suisou の spinner) ──── */
     .js-skeleton-card { pointer-events: none; }
-    .js-skeleton-card figure { aspect-ratio: 4/3; width: 100%; margin: 0; background: var(--pico-muted-border-color); display: flex; align-items: center; justify-content: center; }
-    .js-skeleton-card figure::after { content: ''; width: 2rem; height: 2rem; border: 3px solid color-mix(in srgb, var(--pico-muted-color) 20%, transparent); border-top-color: var(--pico-muted-color); border-radius: 50%; animation: sk-spin .8s linear infinite; }
-    @keyframes sk-spin { to { transform: rotate(360deg); } }
+    .js-skeleton-card figure { aspect-ratio: 4/3; width: 100%; margin: 0; background: var(--suisou-item); display: flex; align-items: center; justify-content: center; }
     .js-skeleton-card header time,
-    .js-skeleton-card header p { display: block; background: var(--pico-muted-border-color); border-radius: var(--pico-border-radius); color: transparent; }
+    .js-skeleton-card header p { display: inline-block; background: var(--suisou-item); border-radius: var(--suisou-radius-small); color: transparent; }
     .js-skeleton-card header p { width: 75%; }
-    /* ページネーション */
+
+    /* ── ページネーション ───────────────────── */
     .pagination { display: flex; justify-content: center; }
-    .pagination li &gt; span { padding: 0 .25rem; color: var(--pico-muted-color); }
-    /* 画像モーダル */
+    .pagination ul { display: flex; align-items: center; gap: var(--suisou-space-1); list-style: none; margin: 0; padding: 0; }
+    .pagination li &gt; span { padding: 0 var(--suisou-space-1); color: var(--suisou-text-sub); }
+    .pagination a[aria-current] { background: var(--suisou-selected-surface); color: var(--suisou-text-main); }
+
+    /* ── 画像モーダル (全画面。膜は Suisou の scrim より濃く ―― 写真を見る場) ── */
     .image-modal { background: transparent; border: none; padding: 0; max-width: 100dvw; max-height: 100dvh; }
-    .image-modal::backdrop { background: rgba(0,0,0,.88); }
+    .image-modal::backdrop { background: var(--suisou-scrim); }
     .image-modal img { max-width: 92dvw; max-height: 92dvh; object-fit: contain; display: block; }
-    /* フッター */
-    footer, footer a { color: var(--pico-muted-color); }
-    /* レスポンシブ (1カラム + サイドバーをドロワー化) */
+
+    /* ── レスポンシブ (1カラム + サイドバーをドロワー化) ────── */
     @media (width &lt; 1024px) {
-      main { grid-template-columns: 1fr !important; }
-      body &gt; header { padding-left: 16px !important; padding-right: 16px !important; padding-bottom: 0; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border); position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--pico-background-color); }
-      body &gt; header hgroup { margin-bottom: 0; }
-      body &gt; header nav { flex-direction: column; }
-      body &gt; header nav &gt; ul:first-child &gt; li { padding-bottom: 0; }
-      body &gt; header nav &gt; ul:last-child &gt; li { padding: 0; }
-      body &gt; header nav &gt; ul:last-child &gt; li:first-child { display: inline-block; }
+      main.grid { grid-template-columns: 1fr; }
+      body &gt; header { padding-inline: var(--suisou-space-3); padding-bottom: 0; max-width: unset; border-bottom: 1px solid var(--suisou-line-weak); position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--suisou-bg); }
+      body &gt; header nav { flex-direction: column; align-items: stretch; }
       body &gt; header nav ul:last-child { width: 100%; justify-content: space-between; }
+      body &gt; header li:has(.js-shelf-toggle) { display: block; }
       .index-cards { grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); }
       .link-card &gt; img { max-width: 120px; max-height: 120px; }
-      body &gt; footer nav { flex-direction: column; }
-      body &gt; footer nav ul { justify-content: center; }
-      .fixed-shelf { position: fixed; top: 0; right: 0; width: min(85vw, 320px); height: 100dvh; background: var(--pico-background-color); box-shadow: -2px 0 8px rgba(0,0,0,.2); padding: 1rem; z-index: 1100; transform: translateX(100%); transition: transform .3s ease; overflow-y: auto; }
+      body &gt; footer nav { flex-direction: column; align-items: center; }
+      /* シェルフ: 右から出るドロワー。開閉は app.js の .is-open (popover 化は今後の宿題) */
+      .fixed-shelf { position: fixed; top: 0; right: 0; width: min(85vw, 320px); height: 100dvh; background: var(--suisou-overlay); border-left: 1px solid var(--suisou-line-strong); padding: var(--suisou-space-3); z-index: 1100; transform: translateX(100%); transition: transform var(--suisou-motion) var(--suisou-ease); overflow-y: auto; }
       .fixed-shelf.is-open { transform: translateX(0); }
-      .js-fixed-shelf-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1099; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+      .js-fixed-shelf-overlay { position: fixed; inset: 0; background: var(--suisou-scrim); z-index: 1099; opacity: 0; pointer-events: none; transition: opacity var(--suisou-motion-fast) var(--suisou-ease); }
       .js-fixed-shelf-overlay.is-open { opacity: 1; pointer-events: auto; }
     }
   </style>
 &lt;/head&gt;&lt;!--</head>--&gt;
-<body>
+<body data-suisou-root=''>
   <header class='container'>
     <b:section id='ヘッダー'>
       <b:widget id='Header0' locked='false' title='Header' type='Header'>
@@ -177,18 +212,18 @@
               </li>
             </ul>
             <ul>
-              <li><button class='js-shelf-toggle' type='button' aria-label='メニュー' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button></li>
+              <li><button class='js-shelf-toggle' data-suisou-button='icon' type='button' aria-label='メニュー' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button></li>
               <li>
                 <ul>
                   <li>
                     <form action='/search' method='get' role='search'>
                       <!-- .escaped は URL エスケープなので検索欄に %20 が出てしまう。expr: は属性値を自動で HTML エスケープするため素の query でよい -->
-                      <input expr:value='data:view.search.query' name='q' type='search' aria-label='ブログ内を検索' placeholder='ブログ内を検索'/>
+                      <input data-suisou-field='' expr:value='data:view.search.query' name='q' type='search' aria-label='ブログ内を検索' placeholder='ブログ内を検索'/>
                     </form>
                   </li>
-                  <li><button class='js-tag-list-toggle' type='button' aria-label='タグ一覧' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M32.5 96l0 149.5c0 17 6.7 33.3 18.7 45.3l192 192c25 25 65.5 25 90.5 0L483.2 333.3c25-25 25-65.5 0-90.5l-192-192C279.2 38.7 263 32 246 32L96.5 32c-35.3 0-64 28.7-64 64zm112 16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/></svg></button></li>
+                  <li><button class='js-tag-list-toggle' data-suisou-button='icon' type='button' aria-label='タグ一覧' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M32.5 96l0 149.5c0 17 6.7 33.3 18.7 45.3l192 192c25 25 65.5 25 90.5 0L483.2 333.3c25-25 25-65.5 0-90.5l-192-192C279.2 38.7 263 32 246 32L96.5 32c-35.3 0-64 28.7-64 64zm112 16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/></svg></button></li>
                   <li>
-                    <button class='js-theme-toggle' type='button' aria-label='ライト/ダーク切替'>
+                    <button class='js-theme-toggle' data-suisou-button='icon' type='button' aria-label='ライト/ダーク切替'>
                       <span data-icon='light'><svg viewBox='0 -32 576 576' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M288-32c8.4 0 16.3 4.4 20.6 11.7L364.1 72.3 468.9 46c8.2-2 16.9 .4 22.8 6.3S500 67 498 75.1l-26.3 104.7 92.7 55.5c7.2 4.3 11.7 12.2 11.7 20.6s-4.4 16.3-11.7 20.6L471.7 332.1 498 436.8c2 8.2-.4 16.9-6.3 22.8S477 468 468.9 466l-104.7-26.3-55.5 92.7c-4.3 7.2-12.2 11.7-20.6 11.7s-16.3-4.4-20.6-11.7L211.9 439.7 107.2 466c-8.2 2-16.8-.4-22.8-6.3S76 445 78 436.8l26.2-104.7-92.6-55.5C4.4 272.2 0 264.4 0 256s4.4-16.3 11.7-20.6L104.3 179.9 78 75.1c-2-8.2 .3-16.8 6.3-22.8S99 44 107.2 46l104.7 26.2 55.5-92.6 1.8-2.6c4.5-5.7 11.4-9.1 18.8-9.1zm0 144a144 144 0 1 0 0 288 144 144 0 1 0 0-288zm0 240a96 96 0 1 1 0-192 96 96 0 1 1 0 192z'/></svg></span>
                       <span data-icon='dark'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M256 0C114.6 0 0 114.6 0 256S114.6 512 256 512c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9 .4-9.8 .6-14.8 .6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4S322.6 8.5 312.7 6.3C294.4 2.2 275.4 0 256 0z'/></svg></span>
                     </button>
@@ -221,9 +256,9 @@
           <b:includable id='main'>
             <b:if cond='data:view.isError'>
               <article class='status-page'>
-                <h1>404</h1>
+                <h1 data-suisou-text='s32 w700'>404</h1>
                 <p>お探しのページは見つかりませんでした。</p>
-                <p><a expr:href='data:blog.homepageUrl' role='button'>ホームへ戻る</a></p>
+                <p><a data-suisou-button='outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
               </article>
             <b:elseif cond='data:view.isMultipleItems'/>
               <!-- ホーム / ラベル / 検索 / アーカイブ。一覧の中身は feed.js が Feed API から描画する -->
@@ -236,19 +271,21 @@
                 <article>
                   <header>
                     <b:if cond='data:view.isPost'>
-                      <time><data:post.date/></time>
+                      <time data-suisou-text='s12'><data:post.date/></time>
                     </b:if>
-                    <h1><data:post.title/></h1>
+                    <h1 data-suisou-text='s28 w700'><data:post.title/></h1>
                     <b:if cond='data:view.isPost'>
                       <div class='js-post-labels labels'>
                         <b:loop values='data:post.labels' var='label'>
-                          <a expr:href='data:label.url'><data:label.name/></a>
+                          <a data-suisou-tag='accent' expr:href='data:label.url'><data:label.name/></a>
                         </b:loop>
                       </div>
                     </b:if>
                     <hr/>
                   </header>
-                  <div class='markdown post-body'><data:post.body/></div>
+                  <!-- 長文は Suisou の prose。見出しの左バー・リスト・表・コード・引用は
+                       markdown が吐く素の要素に prose が当てる -->
+                  <div class='markdown post-body' data-suisou-prose=''><data:post.body/></div>
                 </article>
               </b:loop>
             </b:if>
@@ -288,7 +325,7 @@
             <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
           </b:widget-settings>
           <b:includable id='main'>
-            <article class='content-incentive'>
+            <article class='content-incentive' data-suisou-surface='panel tight'>
               <ul>
                 <b:if cond='data:view.isPost'>
                   <!-- 記事ページだけ人気記事を1件に絞り、同ラベルの最新/ランダムを related.js が足す -->
@@ -318,16 +355,16 @@
               <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
-              <article class='js-label-list'>
+              <article class='js-label-list' data-suisou-surface='panel tight'>
                 <div class='labels'>
                   <b:loop values='data:labels' var='label'>
-                    <a expr:href='data:label.url'><data:label.name/></a>
+                    <a data-suisou-tag='accent' expr:href='data:label.url'><data:label.name/></a>
                   </b:loop>
                 </div>
               </article>
               <b:if cond='data:view.isPost or data:view.isPage'>
-                <article class='content-toc'>
-                  <p>目次</p>
+                <article class='content-toc' data-suisou-surface='panel tight'>
+                  <p data-suisou-text='s14 w700'>目次</p>
                   <hr/>
                   <nav/>
                 </article>
@@ -349,7 +386,7 @@
       </ul>
       <ul>
         <li><small>
-          <a href='https://picocss.com'>Pico CSS</a> /
+          <a href='https://github.com/shiro-ka/Suisou'>Suisou</a> /
           <a href='https://markdown-it.github.io'>markdown-it</a> /
           <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
           <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
@@ -359,7 +396,7 @@
       </ul>
     </nav>
   </footer>
-  <div class='tag-list-popover js-tag-list-popover labels'/>
+  <div class='tag-list-popover js-tag-list-popover labels' data-suisou-surface='overlay'/>
   <dialog class='image-modal js-image-modal'><img alt=''/></dialog>
   <div class='js-fixed-shelf-overlay'/>
 
@@ -379,7 +416,11 @@
       return v === 'light' || v === 'dark' ? v : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     };
     const applyTheme = t =&gt; {
-      document.documentElement.dataset.theme = t;
+      const d = document.documentElement;
+      d.dataset.theme = t;
+      // Suisou のテーマ。light はライトモードではなく shoal (明るめの階段)。
+      // Suisou はダーク専用で、極性は反転しない ―― 明るさの好みには段で応える
+      d.dataset.suisouTheme = t === 'light' ? 'shoal' : 'hadal';
       const hl = $('.js-hljs-theme');
       if (hl) hl.href = HLJS + (t === 'light' ? 'github.min.css' : 'github-dark.min.css');
     };
@@ -698,10 +739,11 @@
       const url = p.link.find(l =&gt; l.rel === 'alternate').href;
       const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
       const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
-      const labels = (p.category || []).map(c =&gt; `&lt;a href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
-      return `&lt;article&gt;&lt;a href='${esc(url)}'&gt;&lt;/a&gt;${thumb ? `&lt;figure&gt;&lt;img src='${esc(thumb)}' loading='lazy' alt=''/&gt;&lt;/figure&gt;` : ''}&lt;header&gt;&lt;time&gt;${date}&lt;/time&gt;&lt;p&gt;${esc(p.title.$t)}&lt;/p&gt;&lt;/header&gt;&lt;footer&gt;&lt;div class='labels'&gt;${labels}&lt;/div&gt;&lt;/footer&gt;&lt;/article&gt;`;
+      const labels = (p.category || []).map(c =&gt; `&lt;a data-suisou-tag='accent' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
+      // 面と罫は Suisou の panel (bleed: 余白は中身が持つ)。preview/index.html にも同じ構造の写しがある
+      return `&lt;article data-suisou-surface='panel bleed'&gt;&lt;a href='${esc(url)}'&gt;&lt;/a&gt;${thumb ? `&lt;figure&gt;&lt;img src='${esc(thumb)}' loading='lazy' alt=''/&gt;&lt;/figure&gt;` : ''}&lt;header&gt;&lt;time&gt;${date}&lt;/time&gt;&lt;p&gt;${esc(p.title.$t)}&lt;/p&gt;&lt;/header&gt;&lt;footer&gt;&lt;div class='labels'&gt;${labels}&lt;/div&gt;&lt;/footer&gt;&lt;/article&gt;`;
     };
-    const skeletonHTML = `&lt;article class='js-skeleton-card'&gt;&lt;figure&gt;&lt;/figure&gt;&lt;header&gt;&lt;time&gt;0000/00/00&lt;/time&gt;&lt;p&gt;　&lt;/p&gt;&lt;/header&gt;&lt;footer&gt;&lt;/footer&gt;&lt;/article&gt;`;
+    const skeletonHTML = `&lt;article class='js-skeleton-card' data-suisou-surface='panel bleed'&gt;&lt;figure&gt;&lt;span data-suisou-spinner='' role='status' aria-label='読み込み中'&gt;&lt;/span&gt;&lt;/figure&gt;&lt;header&gt;&lt;time&gt;0000/00/00&lt;/time&gt;&lt;p&gt;　&lt;/p&gt;&lt;/header&gt;&lt;footer&gt;&lt;/footer&gt;&lt;/article&gt;`;
     const emptyHTML = `&lt;p class='feed-empty'&gt;記事が見つかりませんでした。&lt;/p&gt;`;
 
     // --- ページネーション ---
@@ -722,8 +764,8 @@
       pages.push(total);
       return '&lt;ul&gt;' + pages.map(p =&gt;
         p === null ? `&lt;li&gt;&lt;span aria-hidden='true'&gt;…&lt;/span&gt;&lt;/li&gt;`
-        : p === n  ? `&lt;li&gt;&lt;a href='${pageURL(p)}' aria-current='page'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
-        :            `&lt;li&gt;&lt;a class='js-pg' data-page='${p}' href='${pageURL(p)}'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
+        : p === n  ? `&lt;li&gt;&lt;a data-suisou-button='' href='${pageURL(p)}' aria-current='page'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
+        :            `&lt;li&gt;&lt;a data-suisou-button='' class='js-pg' data-page='${p}' href='${pageURL(p)}'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
       ).join('') + '&lt;/ul&gt;';
     };
 

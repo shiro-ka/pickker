@@ -12,7 +12,11 @@
     return v === 'light' || v === 'dark' ? v : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   };
   const applyTheme = t => {
-    document.documentElement.dataset.theme = t;
+    const d = document.documentElement;
+    d.dataset.theme = t;
+    // Suisou のテーマ。light はライトモードではなく shoal (明るめの階段)。
+    // Suisou はダーク専用で、極性は反転しない ―― 明るさの好みには段で応える
+    d.dataset.suisouTheme = t === 'light' ? 'shoal' : 'hadal';
     const hl = $('.js-hljs-theme');
     if (hl) hl.href = HLJS + (t === 'light' ? 'github.min.css' : 'github-dark.min.css');
   };
