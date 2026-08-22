@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- 一覧ページのプレビュー。feed.js は Feed API が要るので、
+     cardHTML と同じマークアップを静的に置いてある（構造を変えたら追従させる） -->
+<html lang="ja" data-page="index" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="light dark" name="color-scheme"/>
+  <title>プレビュー: 一覧 - pickker</title>
+  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" rel="stylesheet"/>
+  <link href="https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&display=swap" rel="stylesheet"/>
+  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:'dark';document.documentElement.dataset.theme=t;})();</script>
+  <link rel="stylesheet" href="../src/style.css"/>
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul><li><a href="./index.html"><hgroup><h3>くらげのブログ</h3><p>プレビュー用のサンプル</p></hgroup></a></li></ul>
+      <ul>
+        <li><button class="js-shelf-toggle" type="button" aria-label="メニュー" aria-expanded="false">☰</button></li>
+        <li><ul>
+          <li><form action="/search" method="get" role="search"><input name="q" type="search" aria-label="ブログ内を検索" placeholder="ブログ内を検索"/></form></li>
+          <li><button class="js-theme-toggle" type="button" aria-label="ライト/ダーク切替"><span data-icon="light">☀</span><span data-icon="dark">🌙</span></button></li>
+        </ul></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container grid">
+    <section>
+      <hgroup class="js-feed-heading"><h2>開発</h2><p>4 件</p></hgroup>
+      <div class="grid index-cards js-feed-index">
+        <article><a href="./post.html"></a><figure><img src="https://placehold.jp/24/3d4070/ffffff/640x480.png?text=thumb" loading="lazy" alt=""/></figure><header><time>2026/08/22</time><p>記事のタイトルがここに入る</p></header><footer><div class="labels"><a href="#">開発</a></div></footer></article>
+        <article><a href="./post.html"></a><figure><img src="https://placehold.jp/24/405040/ffffff/640x480.png?text=thumb" loading="lazy" alt=""/></figure><header><time>2026/08/20</time><p>長いタイトルの記事は二行に折り返されて表示される、そういうサンプル</p></header><footer><div class="labels"><a href="#">開発</a><a href="#">日記</a></div></footer></article>
+        <article><a href="./post.html"></a><header><time>2026/08/18</time><p>サムネイル無しの記事</p></header><footer><div class="labels"></div></footer></article>
+        <article class="js-skeleton-card"><figure></figure><header><time>0000/00/00</time><p>　</p></header><footer></footer></article>
+      </div>
+      <nav class="pagination js-feed-pagination" aria-label="ページネーション"><ul><li><a href="#" aria-current="page">1</a></li><li><a class="js-pg" href="#">2</a></li><li><span aria-hidden="true">…</span></li><li><a class="js-pg" href="#">9</a></li></ul></nav>
+    </section>
+    <aside>
+      <article class="content-incentive"><ul>
+        <li><a href="#"><img src="https://placehold.jp/16/333344/ffffff/64x64.png" alt=""/><span>人気の記事1</span></a></li>
+        <li><a href="#"><img src="https://placehold.jp/16/334433/ffffff/64x64.png" alt=""/><span>人気の記事2</span></a></li>
+        <li><a href="#"><img src="https://placehold.jp/16/443333/ffffff/64x64.png" alt=""/><span>人気の記事3</span></a></li>
+      </ul></article>
+      <div class="fixed-shelf"><article class="js-label-list"><div class="labels"><a href="#">日記</a><a href="#">開発</a><a href="#">WIXOSS</a></div></article></div>
+    </aside>
+  </main>
+  <footer class="container"><nav><ul><li>Powered by Blogger</li></ul></nav></footer>
+  <div class="js-fixed-shelf-overlay"></div>
+  <script defer src="../src/app.js"></script>
+</body>
+</html>

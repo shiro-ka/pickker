@@ -35,6 +35,12 @@ if (process.argv.includes('--check')) {
   console.log(`✓ pickker.xml を生成 (${xml.split('\n').length} 行)`);
 }
 
-// Blogger は不正な XML を問答無用で弾くので、貼り付けてから気づく前にここで落とす
-execFileSync('xmllint', ['--noout', at('pickker.xml')], { stdio: 'inherit' });
+// Blogger は不正な XML を問答無用で弾くので、貼り付けてから気づく前にここで落とす。
+// xmllint が無い環境では python3 の minidom で同じ検査をする (どちらも無ければ落とす)
+try {
+  execFileSync('xmllint', ['--noout', at('pickker.xml')], { stdio: 'inherit' });
+} catch (e) {
+  if (e.code !== 'ENOENT') throw e;
+  execFileSync('python3', ['-c', 'import sys,xml.dom.minidom; xml.dom.minidom.parse(sys.argv[1])', at('pickker.xml')], { stdio: 'inherit' });
+}
 console.log('✓ XML well-formed');
