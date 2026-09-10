@@ -15,7 +15,7 @@
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
   <!-- Suisou（デザインシステム）。固定 URL の v1 チャンネル -->
-  <link href='https://suisou.pages.dev/v1/suisou.css' rel='stylesheet'/>
+  <link href='https://suisou.pages.dev/v2/suisou.css' rel='stylesheet'/>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
   <link class='js-hljs-theme' rel='stylesheet'/>
