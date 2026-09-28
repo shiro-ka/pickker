@@ -1,0 +1,7 @@
+// オンライン版の CSS / JS を配る Worker (静的アセットのみ、スクリプト無し)。
+// dist/ は node build.mjs が作る。デプロイは npx wrangler deploy
+{
+  "name": "pickker",
+  "compatibility_date": "2026-09-28",
+  "assets": { "directory": "./dist" }
+}
