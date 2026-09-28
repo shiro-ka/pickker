@@ -4,7 +4,7 @@
 
 ---
 
-[Suisou](https://github.com/shiro-ka/Suisou) をベースとした Blogger テーマ
+[Pico CSS](https://picocss.com) をベースとした Blogger テーマ
 
 <br>
 
@@ -54,22 +54,12 @@ node build.mjs           # src/ から pickker.xml を生成 (+ XML 検査)
 node build.mjs --check   # pickker.xml が src と一致するか確認
 ```
 
-### Suisou との役割分担
-
-色・型・面・罫・部品 (prose / tag / field / button / surface / spinner) は Suisou が持つ。
-`src/theme.xml` が `https://shiro-ka.github.io/Suisou/v1/suisou.css` を `<link>` で読むので、
-テーマ側に CSS を同梱する必要はない。
-
-`src/style.css` が持つのはページの骨格 (container / 2カラム / ヘッダー / シェルフ) と
-pickker 固有の造作 (リンクカード / 目次の丸 / 一覧カード)、そして**書体**。
-色と余白は必ず `var(--suisou-*)` を通し、素の色コードは書かない。
-
-ダーク・ライトは `app.js` が `html` の `data-suisou-theme` を切り替える (dark=`hadal` / light=`shoal`)。
-
 Blogger はテーマを XML としてパースするので `<style>` `<script>` の中身は
 `&` `<` `>` をエンティティに直す必要がある。build.mjs がそれをやるため、
 `src/` 側は素の CSS / JS のまま書ける。`src/theme.xml` の `@@INCLUDE:foo@@`
 がその差し込み位置（入れ子は非対応）。
+
+`legacy/suisou-v2/` は [Suisou](https://github.com/shiro-ka/Suisou) v2 をベースにした旧版（更新停止）。
 
 <br>
 

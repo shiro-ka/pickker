@@ -68,11 +68,10 @@
     const url = p.link.find(l => l.rel === 'alternate').href;
     const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
     const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
-    const labels = (p.category || []).map(c => `<a data-suisou-tag='accent' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
-    // 面と罫は Suisou の panel (bleed: 余白は中身が持つ)。preview/index.html にも同じ構造の写しがある
-    return `<article data-suisou-surface='panel bleed'><a href='${esc(url)}'></a>${thumb ? `<figure><img src='${esc(thumb)}' loading='lazy' alt=''/></figure>` : ''}<header><time>${date}</time><p>${esc(p.title.$t)}</p></header><footer><div class='labels'>${labels}</div></footer></article>`;
+    const labels = (p.category || []).map(c => `<a href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
+    return `<article><a href='${esc(url)}'></a>${thumb ? `<figure><img src='${esc(thumb)}' loading='lazy' alt=''/></figure>` : ''}<header><time>${date}</time><p>${esc(p.title.$t)}</p></header><footer><div class='labels'>${labels}</div></footer></article>`;
   };
-  const skeletonHTML = `<article class='js-skeleton-card' data-suisou-surface='panel bleed'><figure><span data-suisou-spinner='' role='status' aria-label='読み込み中'></span></figure><header><time>0000/00/00</time><p>　</p></header><footer></footer></article>`;
+  const skeletonHTML = `<article class='js-skeleton-card'><figure></figure><header><time>0000/00/00</time><p>　</p></header><footer></footer></article>`;
   const emptyHTML = `<p class='feed-empty'>記事が見つかりませんでした。</p>`;
 
   // --- ページネーション ---
@@ -93,8 +92,8 @@
     pages.push(total);
     return '<ul>' + pages.map(p =>
       p === null ? `<li><span aria-hidden='true'>…</span></li>`
-      : p === n  ? `<li><a data-suisou-button='' href='${pageURL(p)}' aria-current='page'>${p}</a></li>`
-      :            `<li><a data-suisou-button='' class='js-pg' data-page='${p}' href='${pageURL(p)}'>${p}</a></li>`
+      : p === n  ? `<li><a href='${pageURL(p)}' aria-current='page'>${p}</a></li>`
+      :            `<li><a class='js-pg' data-page='${p}' href='${pageURL(p)}'>${p}</a></li>`
     ).join('') + '</ul>';
   };
 
