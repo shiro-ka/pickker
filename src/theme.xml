@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:js='false' b:responsive='true' b:version='3' data-suisou-theme='hadal' data-suisou-accent='jelly' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
@@ -14,8 +14,7 @@
   </b:if>
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
-  <!-- Suisou（デザインシステム）。固定 URL の v1 チャンネル -->
-  <link href='https://suisou.pages.dev/v2/suisou.css' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
   <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
   <link class='js-hljs-theme' rel='stylesheet'/>
@@ -24,12 +23,12 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <!-- FOUC: テーマと hljs を即時反映 -->
-  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');var d=document.documentElement;d.dataset.theme=t;d.dataset.suisouTheme=(t==='light'?'shoal':'hadal');document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
+  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
   <style>
     @@INCLUDE:style.css@@
   </style>
 &lt;/head&gt;&lt;!--</head>--&gt;
-<body data-suisou-root=''>
+<body>
   <header class='container'>
     <b:section id='ヘッダー'>
       <b:widget id='Header0' locked='false' title='Header' type='Header'>
@@ -46,18 +45,18 @@
               </li>
             </ul>
             <ul>
-              <li><button class='js-shelf-toggle' data-suisou-button='icon' type='button' aria-label='メニュー' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button></li>
+              <li><button class='js-shelf-toggle' type='button' aria-label='メニュー' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button></li>
               <li>
                 <ul>
                   <li>
                     <form action='/search' method='get' role='search'>
                       <!-- .escaped は URL エスケープなので検索欄に %20 が出てしまう。expr: は属性値を自動で HTML エスケープするため素の query でよい -->
-                      <input data-suisou-field='' expr:value='data:view.search.query' name='q' type='search' aria-label='ブログ内を検索' placeholder='ブログ内を検索'/>
+                      <input expr:value='data:view.search.query' name='q' type='search' aria-label='ブログ内を検索' placeholder='ブログ内を検索'/>
                     </form>
                   </li>
-                  <li><button class='js-tag-list-toggle' data-suisou-button='icon' type='button' aria-label='タグ一覧' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M32.5 96l0 149.5c0 17 6.7 33.3 18.7 45.3l192 192c25 25 65.5 25 90.5 0L483.2 333.3c25-25 25-65.5 0-90.5l-192-192C279.2 38.7 263 32 246 32L96.5 32c-35.3 0-64 28.7-64 64zm112 16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/></svg></button></li>
+                  <li><button class='js-tag-list-toggle' type='button' aria-label='タグ一覧' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M32.5 96l0 149.5c0 17 6.7 33.3 18.7 45.3l192 192c25 25 65.5 25 90.5 0L483.2 333.3c25-25 25-65.5 0-90.5l-192-192C279.2 38.7 263 32 246 32L96.5 32c-35.3 0-64 28.7-64 64zm112 16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/></svg></button></li>
                   <li>
-                    <button class='js-theme-toggle' data-suisou-button='icon' type='button' aria-label='ライト/ダーク切替'>
+                    <button class='js-theme-toggle' type='button' aria-label='ライト/ダーク切替'>
                       <span data-icon='light'><svg viewBox='0 -32 576 576' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M288-32c8.4 0 16.3 4.4 20.6 11.7L364.1 72.3 468.9 46c8.2-2 16.9 .4 22.8 6.3S500 67 498 75.1l-26.3 104.7 92.7 55.5c7.2 4.3 11.7 12.2 11.7 20.6s-4.4 16.3-11.7 20.6L471.7 332.1 498 436.8c2 8.2-.4 16.9-6.3 22.8S477 468 468.9 466l-104.7-26.3-55.5 92.7c-4.3 7.2-12.2 11.7-20.6 11.7s-16.3-4.4-20.6-11.7L211.9 439.7 107.2 466c-8.2 2-16.8-.4-22.8-6.3S76 445 78 436.8l26.2-104.7-92.6-55.5C4.4 272.2 0 264.4 0 256s4.4-16.3 11.7-20.6L104.3 179.9 78 75.1c-2-8.2 .3-16.8 6.3-22.8S99 44 107.2 46l104.7 26.2 55.5-92.6 1.8-2.6c4.5-5.7 11.4-9.1 18.8-9.1zm0 144a144 144 0 1 0 0 288 144 144 0 1 0 0-288zm0 240a96 96 0 1 1 0-192 96 96 0 1 1 0 192z'/></svg></span>
                       <span data-icon='dark'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M256 0C114.6 0 0 114.6 0 256S114.6 512 256 512c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9 .4-9.8 .6-14.8 .6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4S322.6 8.5 312.7 6.3C294.4 2.2 275.4 0 256 0z'/></svg></span>
                     </button>
@@ -90,9 +89,9 @@
           <b:includable id='main'>
             <b:if cond='data:view.isError'>
               <article class='status-page'>
-                <h1 data-suisou-text='s32 w700'>404</h1>
+                <h1>404</h1>
                 <p>お探しのページは見つかりませんでした。</p>
-                <p><a data-suisou-button='outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
+                <p><a expr:href='data:blog.homepageUrl' role='button'>ホームへ戻る</a></p>
               </article>
             <b:elseif cond='data:view.isMultipleItems'/>
               <!-- ホーム / ラベル / 検索 / アーカイブ。一覧の中身は feed.js が Feed API から描画する -->
@@ -105,21 +104,19 @@
                 <article>
                   <header>
                     <b:if cond='data:view.isPost'>
-                      <time data-suisou-text='s12'><data:post.date/></time>
+                      <time><data:post.date/></time>
                     </b:if>
-                    <h1 data-suisou-text='s28 w700'><data:post.title/></h1>
+                    <h1><data:post.title/></h1>
                     <b:if cond='data:view.isPost'>
                       <div class='js-post-labels labels'>
                         <b:loop values='data:post.labels' var='label'>
-                          <a data-suisou-tag='accent' expr:href='data:label.url'><data:label.name/></a>
+                          <a expr:href='data:label.url'><data:label.name/></a>
                         </b:loop>
                       </div>
                     </b:if>
                     <hr/>
                   </header>
-                  <!-- 長文は Suisou の prose。見出しの左バー・リスト・表・コード・引用は
-                       markdown が吐く素の要素に prose が当てる -->
-                  <div class='markdown post-body' data-suisou-prose=''><data:post.body/></div>
+                  <div class='markdown post-body'><data:post.body/></div>
                 </article>
               </b:loop>
             </b:if>
@@ -159,7 +156,7 @@
             <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
           </b:widget-settings>
           <b:includable id='main'>
-            <article class='content-incentive' data-suisou-surface='panel tight'>
+            <article class='content-incentive'>
               <ul>
                 <b:if cond='data:view.isPost'>
                   <!-- 記事ページだけ人気記事を1件に絞り、同ラベルの最新/ランダムを related.js が足す -->
@@ -189,16 +186,16 @@
               <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
-              <article class='js-label-list' data-suisou-surface='panel tight'>
+              <article class='js-label-list'>
                 <div class='labels'>
                   <b:loop values='data:labels' var='label'>
-                    <a data-suisou-tag='accent' expr:href='data:label.url'><data:label.name/></a>
+                    <a expr:href='data:label.url'><data:label.name/></a>
                   </b:loop>
                 </div>
               </article>
               <b:if cond='data:view.isPost or data:view.isPage'>
-                <article class='content-toc' data-suisou-surface='panel tight'>
-                  <p data-suisou-text='s14 w700'>目次</p>
+                <article class='content-toc'>
+                  <p>目次</p>
                   <hr/>
                   <nav/>
                 </article>
@@ -220,7 +217,7 @@
       </ul>
       <ul>
         <li><small>
-          <a href='https://github.com/shiro-ka/Suisou'>Suisou</a> /
+          <a href='https://picocss.com'>Pico CSS</a> /
           <a href='https://markdown-it.github.io'>markdown-it</a> /
           <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
           <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
@@ -230,7 +227,7 @@
       </ul>
     </nav>
   </footer>
-  <div class='tag-list-popover js-tag-list-popover labels' data-suisou-surface='overlay'/>
+  <div class='tag-list-popover js-tag-list-popover labels'/>
   <dialog class='image-modal js-image-modal'><img alt=''/></dialog>
   <div class='js-fixed-shelf-overlay'/>
 
