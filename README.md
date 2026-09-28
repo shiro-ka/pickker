@@ -21,6 +21,11 @@
 
 [oqlbodlpo.blogspot.com/2026/04/bloggerpickker](https://oqlbodlpo.blogspot.com/2026/04/bloggerpickker.html)
 
+| ファイル | 中身 |
+|---|---|
+| `pickker.xml` | 通常版。CSS / JS をすべてテーマに含む。カスタムするならこちら |
+| `pickker-online.xml` | オンライン版。CSS / JS は `pickker.shiro-ka.workers.dev` から読むので、更新が自動で反映される。予告なく変わるので、壊れても構わない人向け |
+
 <br>
 
 ## notes
@@ -50,14 +55,16 @@ src/related.js  記事ページの関連記事
 ```
 
 ```sh
-node build.mjs           # src/ から pickker.xml を生成 (+ XML 検査)
-node build.mjs --check   # pickker.xml が src と一致するか確認
+node build.mjs           # src/ から pickker.xml / pickker-online.xml / dist/ を生成 (+ XML 検査)
+node build.mjs --check   # 2つの xml が src と一致するか確認
+npx wrangler deploy      # dist/ をオンライン版の配信先 (Cloudflare Workers) へ
 ```
 
 Blogger はテーマを XML としてパースするので `<style>` `<script>` の中身は
 `&` `<` `>` をエンティティに直す必要がある。build.mjs がそれをやるため、
-`src/` 側は素の CSS / JS のまま書ける。`src/theme.xml` の `@@INCLUDE:foo@@`
-がその差し込み位置（入れ子は非対応）。
+`src/` 側は素の CSS / JS のまま書ける。`src/theme.xml` の `@@STYLE:foo.css@@` / `@@SCRIPT:foo.js@@`
+がその差し込み位置で、オンライン版では
+`<link>` / `<script src>` に置き換わる。
 
 `legacy/suisou-v2/` は [Suisou](https://github.com/shiro-ka/Suisou) v2 をベースにした旧版（更新停止）。
 

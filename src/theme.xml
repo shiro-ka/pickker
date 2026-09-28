@@ -24,9 +24,7 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <!-- FOUC: テーマと hljs を即時反映 -->
   <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
-  <style>
-    @@INCLUDE:style.css@@
-  </style>
+  @@STYLE:style.css@@
 &lt;/head&gt;&lt;!--</head>--&gt;
 <body>
   <header class='container'>
@@ -231,26 +229,14 @@
   <dialog class='image-modal js-image-modal'><img alt=''/></dialog>
   <div class='js-fixed-shelf-overlay'/>
 
-  <script>
-  //&lt;![CDATA[
-  @@INCLUDE:app.js@@
-  //]]&gt;
-  </script>
+  @@SCRIPT:app.js@@
 
   <b:if cond='data:view.isMultipleItems'>
-  <script>
-  //&lt;![CDATA[
-  @@INCLUDE:feed.js@@
-  //]]&gt;
-  </script>
+  @@SCRIPT:feed.js@@
   </b:if>
 
   <b:if cond='data:view.isPost'>
-  <script>
-  //&lt;![CDATA[
-  @@INCLUDE:related.js@@
-  //]]&gt;
-  </script>
+  @@SCRIPT:related.js@@
   </b:if>
 </body>
 </html>

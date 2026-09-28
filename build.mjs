@@ -1,46 +1,84 @@
 #!/usr/bin/env node
-// src/ を結合して配布用の pickker.xml を生成する。
+// src/ から配布用のテーマを生成する。
 //
-// Blogger はテーマを XML としてパースするため、<style> / <script> の中身も
+//   pickker.xml         通常版。CSS / JS をテーマの中に全部埋め込む
+//   pickker-online.xml  オンライン版。CSS / JS は ONLINE_BASE から読む
+//   dist/               オンライン版が読む CSS / JS (Cloudflare Workers へデプロイする中身)
+//
+// Blogger はテーマを XML としてパースするため、埋め込む <style> / <script> の中身も
 // & < > をエンティティに直す必要がある。その変換をここが持つことで、
 // src 側は素の CSS / JS のまま書ける (エディタの補完もリンタも効く)。
 //
+// src/theme.xml の差し込み位置 (1行に単独で書く):
+//   @@STYLE:foo.css@@   通常版は <style>、オンライン版は <link>
+//   @@SCRIPT:foo.js@@   通常版は <script>、オンライン版は <script src>
+//
 // 使い方: node build.mjs [--check]
-//   --check … 生成せず、pickker.xml が src と一致するかだけ見る
+//   --check … 生成せず、pickker.xml / pickker-online.xml が src と一致するかだけ見る
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
+const ONLINE_BASE = 'https://pickker.shiro-ka.workers.dev';
+
 const at = p => fileURLToPath(new URL(p, import.meta.url));
+const src = name => readFileSync(at('src/' + name), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const indented = (s, indent) => esc(s.replace(/\n+$/, '')).split('\n').map(l => l ? indent + l : '').join('\n');
 
-const xml = readFileSync(at('src/theme.xml'), 'utf8').replace(
-  /^([ \t]*)@@INCLUDE:([\w./-]+)@@[ \t]*$/gm,
-  (_, indent, name) => esc(readFileSync(at('src/' + name), 'utf8').replace(/\n+$/, ''))
-    .split('\n').map(l => l ? indent + l : '').join('\n')
-);
+const MARKER = /^([ \t]*)@@(STYLE|SCRIPT):([\w./-]+)@@[ \t]*$/gm;
+const assets = [...src('theme.xml').matchAll(MARKER)].map(m => m[3]);
 
-// インクルード先の @@INCLUDE@@ は展開しない。書いても素通りするだけなので検出する。
-if (xml.includes('@@INCLUDE:')) throw new Error('展開されなかった @@INCLUDE@@ がある (入れ子は非対応)');
+const render = {
+  inline: {
+    STYLE: (i, name) => `${i}<style>\n${indented(src(name), i + '  ')}\n${i}</style>`,
+    SCRIPT: (i, name) => `${i}<script>\n${i}//&lt;![CDATA[\n${indented(src(name), i)}\n${i}//]]&gt;\n${i}</script>`,
+  },
+  online: {
+    STYLE: (i, name) => `${i}<link href='${ONLINE_BASE}/${name}' rel='stylesheet'/>`,
+    SCRIPT: (i, name) => `${i}<script src='${ONLINE_BASE}/${name}'></script>`,
+  },
+};
+
+const build = mode => {
+  const xml = src('theme.xml').replace(MARKER, (_, indent, kind, name) => render[mode][kind](indent, name));
+  // 行の途中に書いた @@…@@ は置換されずに素通りするので検出する
+  if (/@@[A-Z]+:/.test(xml)) throw new Error('展開されなかった @@…@@ がある (1行に単独で書くこと)');
+  return xml;
+};
+
+const outputs = { 'pickker.xml': build('inline'), 'pickker-online.xml': build('online') };
 
 if (process.argv.includes('--check')) {
-  if (readFileSync(at('pickker.xml'), 'utf8') !== xml) {
-    console.error('✗ pickker.xml が src と一致しない。node build.mjs で作り直すこと。');
-    process.exit(1);
+  let ok = true;
+  for (const [file, xml] of Object.entries(outputs)) {
+    if (readFileSync(at(file), 'utf8') !== xml) {
+      console.error(`✗ ${file} が src と一致しない。node build.mjs で作り直すこと。`);
+      ok = false;
+    }
   }
-  console.log('✓ pickker.xml は src と一致している');
+  if (!ok) process.exit(1);
+  console.log('✓ pickker.xml / pickker-online.xml は src と一致している');
 } else {
-  writeFileSync(at('pickker.xml'), xml);
-  console.log(`✓ pickker.xml を生成 (${xml.split('\n').length} 行)`);
+  for (const [file, xml] of Object.entries(outputs)) {
+    writeFileSync(at(file), xml);
+    console.log(`✓ ${file} を生成 (${xml.split('\n').length} 行)`);
+  }
+  rmSync(at('dist'), { recursive: true, force: true });
+  mkdirSync(at('dist'));
+  for (const name of assets) writeFileSync(at('dist/' + name), src(name));
+  console.log(`✓ dist/ に ${assets.join(' / ')}`);
 }
 
 // Blogger は不正な XML を問答無用で弾くので、貼り付けてから気づく前にここで落とす。
 // xmllint が無い環境では python3 の minidom で同じ検査をする (どちらも無ければ落とす)
-try {
-  execFileSync('xmllint', ['--noout', at('pickker.xml')], { stdio: 'inherit' });
-} catch (e) {
-  if (e.code !== 'ENOENT') throw e;
-  execFileSync('python3', ['-c', 'import sys,xml.dom.minidom; xml.dom.minidom.parse(sys.argv[1])', at('pickker.xml')], { stdio: 'inherit' });
+for (const file of Object.keys(outputs)) {
+  try {
+    execFileSync('xmllint', ['--noout', at(file)], { stdio: 'inherit' });
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e;
+    execFileSync('python3', ['-c', 'import sys,xml.dom.minidom; xml.dom.minidom.parse(sys.argv[1])', at(file)], { stdio: 'inherit' });
+  }
 }
 console.log('✓ XML well-formed');
