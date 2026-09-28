@@ -55,13 +55,13 @@ src/related.js  記事ページの関連記事
 ```
 
 ```sh
-node build.mjs           # src/ から pickker.xml / pickker-online.xml / dist/ を生成 (+ XML 検査)
-node build.mjs --check   # 2つの xml が src と一致するか確認
-npx wrangler deploy      # dist/ をオンライン版の配信先 (Cloudflare Workers) へ
+node tools/build.mjs          # src/ から pickker.xml / pickker-online.xml / dist/ を生成 (+ XML 検査)
+node tools/build.mjs --check  # 2つの xml が src と一致するか確認
+npx wrangler deploy           # dist/ をオンライン版の配信先 (Cloudflare Workers) へ
 ```
 
 Blogger はテーマを XML としてパースするので `<style>` `<script>` の中身は
-`&` `<` `>` をエンティティに直す必要がある。build.mjs がそれをやるため、
+`&` `<` `>` をエンティティに直す必要がある。tools/build.mjs がそれをやるため、
 `src/` 側は素の CSS / JS のまま書ける。`src/theme.xml` の `@@STYLE:foo.css@@` / `@@SCRIPT:foo.js@@`
 がその差し込み位置で、オンライン版では
 `<link>` / `<script src>` に置き換わる。
