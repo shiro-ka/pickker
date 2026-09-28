@@ -13,7 +13,7 @@
 //   @@STYLE:foo.css@@   通常版は <style>、オンライン版は <link>
 //   @@SCRIPT:foo.js@@   通常版は <script>、オンライン版は <script src>
 //
-// 使い方: node build.mjs [--check]
+// 使い方: node tools/build.mjs [--check]
 //   --check … 生成せず、pickker.xml / pickker-online.xml が src と一致するかだけ見る
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
@@ -22,7 +22,7 @@ import { execFileSync } from 'node:child_process';
 
 const ONLINE_BASE = 'https://pickker.shiro-ka.workers.dev';
 
-const at = p => fileURLToPath(new URL(p, import.meta.url));
+const at = p => fileURLToPath(new URL('../' + p, import.meta.url));
 const src = name => readFileSync(at('src/' + name), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const indented = (s, indent) => esc(s.replace(/\n+$/, '')).split('\n').map(l => l ? indent + l : '').join('\n');
@@ -54,7 +54,7 @@ if (process.argv.includes('--check')) {
   let ok = true;
   for (const [file, xml] of Object.entries(outputs)) {
     if (readFileSync(at(file), 'utf8') !== xml) {
-      console.error(`✗ ${file} が src と一致しない。node build.mjs で作り直すこと。`);
+      console.error(`✗ ${file} が src と一致しない。node tools/build.mjs で作り直すこと。`);
       ok = false;
     }
   }
