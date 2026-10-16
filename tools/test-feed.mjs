@@ -32,7 +32,7 @@ function run(label, url) {
   const el = () => {
     const n = {
       dataset: {}, innerHTML: '', kids: [], _text: '',
-      addEventListener() {}, append(...c) { n.kids.push(...c); },
+      addEventListener() {}, append(...c) { n.kids.push(...c); }, remove() { n.removed = true; }, setAttribute() {}, removeAttribute() {},
     };
     Object.defineProperty(n, 'textContent', {
       get: () => n._text,
