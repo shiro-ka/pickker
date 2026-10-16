@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:js='false' b:responsive='true' b:version='3' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' data-suisou-theme='hadal jelly' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
-  <meta content='light dark' name='color-scheme'/>
+  <meta content='dark' name='color-scheme'/>
   <b:if cond='data:view.isPost or data:view.isPage'>
     <title><data:blog.pageName/> - <data:blog.title/></title>
     <meta content='article' property='og:type'/>
@@ -14,195 +14,353 @@
   </b:if>
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
-  <link href='https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css' rel='stylesheet'/>
+  <link as='style' href='https://suisou.pages.dev/v3/suisou.css' rel='preload'/>
   <link href='https://fonts.bunny.net' rel='preconnect'/>
-  <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400&amp;display=swap' rel='stylesheet'/>
-  <link class='js-hljs-theme' rel='stylesheet'/>
+  <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400,700&amp;display=swap' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/github-dark.min.css' rel='stylesheet'/>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
-  <!-- FOUC: テーマと hljs を即時反映 -->
-  <script>(function(){var v=localStorage.theme,t=(v==='light'||v==='dark')?v:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t;document.querySelector('.js-hljs-theme').href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/'+(t==='light'?'github.min.css':'github-dark.min.css');})();</script>
   <style>
-    html { scroll-behavior: smooth; }
-    /* OS が「視差効果を減らす」設定ならアニメーションを止める */
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    @import url("https://suisou.pages.dev/v3/suisou.css") layer(suisou);
+
+    :root {
+      --suisou-font: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      --pickker-width: 72rem;
+      --pickker-side: 18rem;
+      scroll-behavior: smooth;
     }
-    :root { --pico-font-family: "M PLUS Rounded 1c", sans-serif; --pico-font-size: 90%; }
-    @media (min-width: 1280px) { :root { --pico-font-size: 118.75%; } }
-    body { font-family: "M PLUS Rounded 1c", sans-serif; }
-    /* ヘッダー */
-    body &gt; header hgroup &gt; p { font-size: 86% !important; }
-    body &gt; header form { margin-bottom: 0 !important; }
-    body &gt; header button { background: none; border: none; padding: .3rem .6rem; color: var(--pico-muted-color); }
-    body &gt; header button:hover { background: var(--pico-muted-border-color); }
-    body &gt; header li:has(.js-shelf-toggle) { display: none; }
-    body &gt; header button :is(svg, [data-icon]) { display: block; }
-    body &gt; header input[type="search"] { width: 2.5rem; cursor: pointer; transition: width .3s ease; }
-    body &gt; header input[type="search"]:focus,
-    body &gt; header input[type="search"]:not(:placeholder-shown) { width: 14rem; cursor: text; }
-    [data-theme="dark"] .js-theme-toggle [data-icon="light"],
-    [data-theme="light"] .js-theme-toggle [data-icon="dark"] { display: none; }
-    /* メイン */
-    main { grid-template-columns: 1fr 18rem !important; }
-    article time { font-size: 0.8rem; margin-bottom: 0.2rem; }
-    article &gt; header, article &gt; footer { background: none; border: none; padding: var(--pico-spacing); }
-    /* 一覧の見出し (ラベル / 検索 / アーカイブのときだけ出る) */
-    .js-feed-heading:empty { display: none; }
-    .js-feed-heading p { color: var(--pico-muted-color); font-size: .85em; }
-    .feed-empty { color: var(--pico-muted-color); text-align: center; padding: 3rem 0; }
-    /* 404 */
-    .status-page { text-align: center; padding: 4rem var(--pico-spacing); }
-    .status-page h1 { font-size: 4rem; margin-bottom: .5rem; color: var(--pico-muted-border-color); }
-    /* indexカード */
-    .index-cards { margin-bottom: 2rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--pico-spacing); }
-    .index-cards article { position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; margin: 0; }
-    .index-cards article &gt; a:first-child { position: absolute; inset: 0; z-index: 1; }
-    .index-cards article img { aspect-ratio: 4/3; object-fit: cover; width: 100%; display: block; }
-    .index-cards article &gt; header { padding: .2rem .5rem 0 !important; margin: 0; }
-    .index-cards article &gt; footer { margin-top: auto; padding: 0 1.5rem 1.5rem; }
-    .index-cards article &gt; footer a { position: relative; z-index: 2; }
-    /* 記事本文 */
-    .post-body h1 { margin-bottom: 1.5rem; }
-    .post-body :is(h2, h3, h4) { margin-left: -.5rem;}
-    .post-body h2 { border-left: 6px solid var(--pico-primary); border-bottom: 1px solid var(--pico-primary-focus); padding: 0 0 .4rem .5rem; }
-    .post-body h3 { border-bottom: 1px solid var(--pico-secondary-border); padding-left: .7rem; padding-bottom: .4rem; margin-right: 8rem; }
-    .post-body h4 { border-left: 3px solid var(--pico-primary); padding-left: .7rem; }
-    .post-body b { font-weight: 600; }
-    .post-body :not(.link-card) img:not(.emoji) { display: block; width: fit-content; margin: 0 auto var(--pico-typography-spacing-vertical); border-radius: var(--pico-border-radius); cursor: zoom-in; }
-    .markdown img.emoji { width: 1rem; height: 1rem;  }
-    /* リンクカード */
-    .link-card { display: flex; margin: var(--pico-spacing) 0; max-width: 768px; border: var(--pico-border-width) solid var(--pico-table-border-color); border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color); overflow: hidden; transition: background .15s; }
-    .link-card:hover { background: color-mix(in srgb, var(--pico-primary) 6%, transparent); }
-    .link-card &gt; div { flex: 1; padding: .75rem 1rem; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
-    .link-card strong { font-size: .95rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .link-card &gt; div &gt; small:first-of-type { color: var(--pico-muted-color); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-    .link-card &gt; div &gt; small:last-of-type { display: flex; align-items: center; gap: .4rem; margin-top: auto; color: var(--pico-muted-color); }
-    .link-card img { margin: 0 !important; }
-    .link-card small img { width: 16px; height: 16px; flex-shrink: 0; }
-    .link-card &gt; img { max-width: 320px; max-height: 160px; flex-shrink: 0; object-fit: cover; align-self: stretch; display: block; }
-    /* サイドカラム */
-    aside { margin-bottom: calc(var(--pico-block-spacing-vertical) * 2); }
-    .fixed-shelf { position: sticky; top: 1rem; }
-    /* インセンティブ */
-    .content-incentive { padding: 8px; font-size: 84%; }
-    .content-incentive :is(ul, li) { list-style: none; padding: 0; margin: 0; }
-    .content-incentive a { display: flex; align-items: center; gap: .75rem; padding: .4rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-h3-color); }
-    .content-incentive a:hover { background: color-mix(in srgb, var(--pico-primary) 10%, transparent); }
-    .content-incentive img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--pico-border-radius); flex-shrink: 0; }
-    .content-incentive span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .content-incentive .js-popular-item:nth-child(n+2) { display: none; }
-    /* 目次 */
-    .content-toc { display: flex; flex-direction: column; max-height: calc(100dvh - 2rem); }
-    .content-toc nav { overflow-x: hidden; overflow-y: auto; min-height: 0; }
-    .content-toc nav ::before { position: relative; }
-    .content-toc nav &gt; ul { position: relative; }
-    .content-toc nav &gt; ul::before { position: absolute; content: ""; left: 13px; top: 22px; bottom: 22px; width: 2px; background: var(--pico-primary-border); }
-    .content-toc nav &gt; ul &gt; li { padding-top: 0; }
-    .content-toc nav &gt; ul &gt; li::before { width: 16px; height: 16px; border-radius: 50%; border: 4px solid var(--pico-card-background-color); background: var(--pico-primary-border); left: -4px; top: 16px; }
-    .content-toc nav &gt; ul &gt; li:has(&gt; a[aria-current])::before { background: var(--pico-primary); }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li { padding-left: 36px; padding-bottom: 0; font-size: 92%; }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li::before { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--pico-primary-border); top: 10px; left: -8px; }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li:has(&gt; a[aria-current])::before { border-color: var(--pico-primary); }
-    .content-toc nav &gt; ul &gt; li &gt; ul &gt; li &gt; ul &gt; li { padding-left: 28px; font-size: 98%; }
-    .content-toc a { color: var(--pico-secondary); }
-    .content-toc a:hover { color: var(--pico-contrast); text-decoration: none; }
-    .content-toc a[aria-current] { color: var(--pico-primary-hover); }
-    /* ラベル */
-    .labels { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .labels a { font-size: .8em; padding: .2em .7em; border-radius: 999px; border: 1px solid var(--pico-primary); color: var(--pico-primary); text-decoration: none; }
-    .labels a:hover { background: var(--pico-primary); color: var(--pico-primary-inverse); }
-    .index-cards article footer .labels,
-    article &gt; header .labels { justify-content: flex-end; margin-top: .75rem; }
-    /* 記事/固定ページではサイドのラベル雲を隠す (目次に場所を譲る。ラベルはヘッダーのタグボタンから) */
-    :is([data-page="item"], [data-page="static_page"]) aside .js-label-list { display: none; }
-    /* タグ一覧ポップオーバー (.is-open で表示) */
-    .tag-list-popover { display: none; position: fixed; top: calc(var(--hgroup-h, 96px) + 3rem); right: 1rem; max-width: min(90vw, 480px); max-height: 60dvh; overflow-y: auto; padding: .9rem 1rem; z-index: 1200; background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: var(--pico-border-radius); box-shadow: 0 4px 16px rgba(0,0,0,.18); }
-    .tag-list-popover.is-open { display: flex; }
-    /* スケルトン */
-    .js-skeleton-card { pointer-events: none; }
-    .js-skeleton-card figure { aspect-ratio: 4/3; width: 100%; margin: 0; background: var(--pico-muted-border-color); display: flex; align-items: center; justify-content: center; }
-    .js-skeleton-card figure::after { content: ''; width: 2rem; height: 2rem; border: 3px solid color-mix(in srgb, var(--pico-muted-color) 20%, transparent); border-top-color: var(--pico-muted-color); border-radius: 50%; animation: sk-spin .8s linear infinite; }
-    @keyframes sk-spin { to { transform: rotate(360deg); } }
-    .js-skeleton-card header time,
-    .js-skeleton-card header p { display: block; background: var(--pico-muted-border-color); border-radius: var(--pico-border-radius); color: transparent; }
-    .js-skeleton-card header p { width: 75%; }
-    /* ページネーション */
-    .pagination { display: flex; justify-content: center; }
-    .pagination li &gt; span { padding: 0 .25rem; color: var(--pico-muted-color); }
-    /* 画像モーダル */
-    .image-modal { background: transparent; border: none; padding: 0; max-width: 100dvw; max-height: 100dvh; }
-    .image-modal::backdrop { background: rgba(0,0,0,.88); }
-    .image-modal img { max-width: 92dvw; max-height: 92dvh; object-fit: contain; display: block; }
-    /* フッター */
-    footer, footer a { color: var(--pico-muted-color); }
-    /* レスポンシブ (1カラム + サイドバーをドロワー化) */
+    @media (prefers-reduced-motion: reduce) {
+      :root { scroll-behavior: auto; }
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--suisou-color-line-weak);
+      background: var(--suisou-color-bg);
+    }
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--suisou-space-3);
+      max-width: var(--pickker-width);
+      margin-inline: auto;
+      padding: var(--suisou-space-3);
+    }
+    .site-title {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-inline-end: auto;
+    }
+    .site-name {
+      font-size: var(--suisou-fs-20);
+      line-height: var(--suisou-lh-20);
+      font-weight: 700;
+    }
+    .site-description {
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+      color: var(--suisou-color-text-sub);
+    }
+    .site-search { width: min(16rem, 40vw); }
+
+    .site-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--suisou-space-4);
+      width: 100%;
+      max-width: var(--pickker-width);
+      margin-inline: auto;
+      padding: var(--suisou-space-4) var(--suisou-space-3);
+    }
+
+    .site-side {
+      display: flex;
+      flex-direction: column;
+      gap: var(--suisou-space-3);
+    }
+    .side-heading {
+      margin-block-end: var(--suisou-space-2);
+      font-size: var(--suisou-fs-14);
+      line-height: var(--suisou-lh-14);
+      font-weight: 700;
+      color: var(--suisou-color-text-sub);
+    }
+    .side-toc + .side-labels { margin-block-start: var(--suisou-space-3); }
+    .side-label-list,
+    .post-labels,
+    .feed-card-labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--suisou-space-1);
+    }
+
+    .side-posts {
+      display: flex;
+      flex-direction: column;
+      gap: var(--suisou-space-1);
+      list-style: none;
+    }
+    .side-posts &gt; li:empty,
+    .side-posts &gt; .js-popular-item:nth-child(n + 2) { display: none; }
+    .side-post {
+      align-items: center;
+      padding: var(--suisou-space-1);
+      border-radius: var(--suisou-radius);
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+    }
+    .side-post:hover { background: var(--suisou-color-hover); }
+    .side-post &gt; [data-suisou-item~="media-content"] {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    @media (width &gt;= 1024px) {
+      .site-body { grid-template-columns: minmax(0, 1fr) var(--pickker-side); }
+      .site-menu { display: none; }
+      .side-nav[popover]:not(:popover-open) {
+        display: block;
+        position: sticky;
+        top: var(--suisou-space-3);
+        inset: auto;
+        width: auto;
+        height: auto;
+        max-height: calc(100dvh - var(--suisou-space-3) * 2);
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+        border: 0;
+        background: none;
+        color: inherit;
+        translate: none;
+        transition: none;
+      }
+    }
     @media (width &lt; 1024px) {
-      main { grid-template-columns: 1fr !important; }
-      body &gt; header { padding-left: 16px !important; padding-right: 16px !important; padding-bottom: 0; max-width: unset !important; border-bottom: 1px solid var(--pico-secondary-border); position: sticky; top: calc(-1 * var(--hgroup-h, 96px)); z-index: 1000; background: var(--pico-background-color); }
-      body &gt; header hgroup { margin-bottom: 0; }
-      body &gt; header nav { flex-direction: column; }
-      body &gt; header nav &gt; ul:first-child &gt; li { padding-bottom: 0; }
-      body &gt; header nav &gt; ul:last-child &gt; li { padding: 0; }
-      body &gt; header nav &gt; ul:last-child &gt; li:first-child { display: inline-block; }
-      body &gt; header nav ul:last-child { width: 100%; justify-content: space-between; }
-      .index-cards { grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); }
-      .link-card &gt; img { max-width: 120px; max-height: 120px; }
-      body &gt; footer nav { flex-direction: column; }
-      body &gt; footer nav ul { justify-content: center; }
-      .fixed-shelf { position: fixed; top: 0; right: 0; width: min(85vw, 320px); height: 100dvh; background: var(--pico-background-color); box-shadow: -2px 0 8px rgba(0,0,0,.2); padding: 1rem; z-index: 1100; transform: translateX(100%); transition: transform .3s ease; overflow-y: auto; }
-      .fixed-shelf.is-open { transform: translateX(0); }
-      .js-fixed-shelf-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1099; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
-      .js-fixed-shelf-overlay.is-open { opacity: 1; pointer-events: auto; }
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+      .post-body :is(h2, h3, h4) { scroll-margin-top: 5rem; }
+    }
+
+    .post-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--suisou-space-1);
+      margin-block-end: var(--suisou-space-4);
+      padding-block-end: var(--suisou-space-3);
+      border-bottom: 1px solid var(--suisou-color-line-weak);
+    }
+    .post-date {
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+      color: var(--suisou-color-text-sub);
+    }
+    .post-title {
+      font-size: var(--suisou-fs-28);
+      line-height: var(--suisou-lh-28);
+      font-weight: 700;
+    }
+    .post-body img { cursor: zoom-in; }
+    .post-body a img { cursor: pointer; }
+    .post-body pre code.hljs {
+      padding: 0;
+      background: transparent;
+    }
+
+    .link-card-link {
+      padding: var(--suisou-space-2);
+      border: 1px solid var(--suisou-color-line-weak);
+      border-radius: var(--suisou-radius);
+      background: var(--suisou-color-panel);
+      color: inherit;
+      text-decoration: none;
+    }
+    .link-card-link:hover { background: var(--suisou-color-hover); }
+    .link-card-title,
+    .link-card-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .link-card-title { font-weight: 700; }
+    .link-card-description,
+    .link-card-host {
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+      color: var(--suisou-color-text-sub);
+    }
+    .link-card-host {
+      display: flex;
+      align-items: center;
+      gap: var(--suisou-space-1);
+    }
+    .link-card-host img {
+      width: 1rem;
+      height: 1rem;
+      margin: 0;
+      border-radius: 0;
+    }
+    .link-card-image {
+      width: 7.5rem;
+      height: 5rem;
+      max-height: none;
+      margin: 0;
+      object-fit: cover;
+      border-radius: var(--suisou-radius-small);
+    }
+
+    .feed-heading { margin-block-end: var(--suisou-space-4); }
+    .feed-heading h1 {
+      font-size: var(--suisou-fs-24);
+      line-height: var(--suisou-lh-24);
+      font-weight: 700;
+    }
+    .feed-heading p {
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+      color: var(--suisou-color-text-sub);
+    }
+    .feed-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      gap: var(--suisou-space-3);
+    }
+    .feed-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: var(--suisou-space-1);
+      padding: 0 0 var(--suisou-space-2);
+      overflow: hidden;
+    }
+    .feed-card:has(.feed-card-link:hover) { border-color: var(--suisou-color-accent); }
+    .feed-card &gt; :not(.feed-card-image) { margin-inline: var(--suisou-space-2); }
+    .feed-card-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    .feed-card-date {
+      margin-block-start: var(--suisou-space-2);
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+      color: var(--suisou-color-text-sub);
+    }
+    .feed-card-title {
+      font-size: var(--suisou-fs-16);
+      line-height: var(--suisou-lh-16);
+      font-weight: 500;
+    }
+    .feed-card-link { color: inherit; }
+    .feed-card-link::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+    .feed-card-labels {
+      position: relative;
+      z-index: 1;
+    }
+    .feed-loading {
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-block: var(--suisou-space-5);
+    }
+    .feed-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--suisou-color-text-sub);
+    }
+    .feed-pages-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--suisou-space-1);
+      margin-block-start: var(--suisou-space-4);
+      list-style: none;
+    }
+    .feed-pages-list span {
+      display: inline-grid;
+      place-items: center;
+      min-width: var(--suisou-size-button);
+      height: var(--suisou-size-button);
+      color: var(--suisou-color-text-sub);
+    }
+
+    .status-page {
+      padding-block: var(--suisou-space-5);
+      text-align: center;
+    }
+    .status-page h1 {
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--suisou-color-text-disabled);
+    }
+
+    .site-footer {
+      display: flex;
+      flex-direction: column;
+      gap: var(--suisou-space-1);
+      padding: var(--suisou-space-4) var(--suisou-space-3);
+      border-top: 1px solid var(--suisou-color-line-weak);
+      text-align: center;
+      font-size: var(--suisou-fs-12);
+      line-height: var(--suisou-lh-12);
+      color: var(--suisou-color-text-sub);
+    }
+    .site-footer a { color: var(--suisou-color-text); }
+    .site-footer a:hover { text-decoration: underline; }
+
+    .image-modal {
+      max-width: 95vw;
+      max-height: 95dvh;
+      padding: var(--suisou-space-1);
+    }
+    .image-modal img {
+      max-width: calc(95vw - var(--suisou-space-1) * 2);
+      max-height: calc(95dvh - var(--suisou-space-1) * 2);
+      object-fit: contain;
     }
   </style>
 &lt;/head&gt;&lt;!--</head>--&gt;
-<body>
-  <header class='container'>
+<body data-suisou-body=''>
+  <header class='site-header'>
     <b:section id='ヘッダー'>
       <b:widget id='Header0' locked='false' title='Header' type='Header'>
         <b:includable id='main'>
-          <nav>
-            <ul>
-              <li>
-                <a expr:href='data:blog.homepageUrl'>
-                  <hgroup>
-                    <h3><data:blog.title/></h3>
-                    <p><data:description/></p>
-                  </hgroup>
-                </a>
-              </li>
-            </ul>
-            <ul>
-              <li><button class='js-shelf-toggle' type='button' aria-label='メニュー' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button></li>
-              <li>
-                <ul>
-                  <li>
-                    <form action='/search' method='get' role='search'>
-                      <!-- .escaped は URL エスケープなので検索欄に %20 が出てしまう。expr: は属性値を自動で HTML エスケープするため素の query でよい -->
-                      <input expr:value='data:view.search.query' name='q' type='search' aria-label='ブログ内を検索' placeholder='ブログ内を検索'/>
-                    </form>
-                  </li>
-                  <li><button class='js-tag-list-toggle' type='button' aria-label='タグ一覧' aria-expanded='false'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M32.5 96l0 149.5c0 17 6.7 33.3 18.7 45.3l192 192c25 25 65.5 25 90.5 0L483.2 333.3c25-25 25-65.5 0-90.5l-192-192C279.2 38.7 263 32 246 32L96.5 32c-35.3 0-64 28.7-64 64zm112 16a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/></svg></button></li>
-                  <li>
-                    <button class='js-theme-toggle' type='button' aria-label='ライト/ダーク切替'>
-                      <span data-icon='light'><svg viewBox='0 -32 576 576' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M288-32c8.4 0 16.3 4.4 20.6 11.7L364.1 72.3 468.9 46c8.2-2 16.9 .4 22.8 6.3S500 67 498 75.1l-26.3 104.7 92.7 55.5c7.2 4.3 11.7 12.2 11.7 20.6s-4.4 16.3-11.7 20.6L471.7 332.1 498 436.8c2 8.2-.4 16.9-6.3 22.8S477 468 468.9 466l-104.7-26.3-55.5 92.7c-4.3 7.2-12.2 11.7-20.6 11.7s-16.3-4.4-20.6-11.7L211.9 439.7 107.2 466c-8.2 2-16.8-.4-22.8-6.3S76 445 78 436.8l26.2-104.7-92.6-55.5C4.4 272.2 0 264.4 0 256s4.4-16.3 11.7-20.6L104.3 179.9 78 75.1c-2-8.2 .3-16.8 6.3-22.8S99 44 107.2 46l104.7 26.2 55.5-92.6 1.8-2.6c4.5-5.7 11.4-9.1 18.8-9.1zm0 144a144 144 0 1 0 0 288 144 144 0 1 0 0-288zm0 240a96 96 0 1 1 0-192 96 96 0 1 1 0 192z'/></svg></span>
-                      <span data-icon='dark'><svg viewBox='0 0 512 512' width='1em' height='1em' fill='currentColor' aria-hidden='true' xmlns='http://www.w3.org/2000/svg'><path d='M256 0C114.6 0 0 114.6 0 256S114.6 512 256 512c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9 .4-9.8 .6-14.8 .6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4S322.6 8.5 312.7 6.3C294.4 2.2 275.4 0 256 0z'/></svg></span>
-                    </button>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
+          <div class='site-header-inner'>
+            <a class='site-title' expr:href='data:blog.homepageUrl'>
+              <span class='site-name'><data:blog.title/></span>
+              <span class='site-description'><data:description/></span>
+            </a>
+            <form action='/search' class='site-search' method='get' role='search'>
+              <div data-suisou-item='field'>
+                <input aria-label='ブログ内を検索' expr:value='data:view.search.query' name='q' placeholder='ブログ内を検索' type='search'/>
+              </div>
+            </form>
+            <button aria-label='メニュー' class='site-menu' data-suisou-button='icon' popovertarget='side-nav' type='button'><svg aria-hidden='true' fill='currentColor' height='1em' viewBox='0 0 512 512' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button>
+          </div>
         </b:includable>
       </b:widget>
     </b:section>
   </header>
-  <main class='container grid'>
-    <section>
+  <div class='site-body'>
+    <main class='site-main'>
       <b:section id='メインカラム'>
         <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>
           <b:widget-settings>
@@ -220,35 +378,32 @@
           </b:widget-settings>
           <b:includable id='main'>
             <b:if cond='data:view.isError'>
-              <article class='status-page'>
+              <article class='status-page' data-suisou-text='typeset'>
                 <h1>404</h1>
                 <p>お探しのページは見つかりませんでした。</p>
-                <p><a expr:href='data:blog.homepageUrl' role='button'>ホームへ戻る</a></p>
+                <p><a data-suisou-button='outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
               </article>
             <b:elseif cond='data:view.isMultipleItems'/>
-              <!-- ホーム / ラベル / 検索 / アーカイブ。一覧の中身は feed.js が Feed API から描画する -->
-              <hgroup class='js-feed-heading'/>
-              <div class='grid index-cards js-feed-index'/>
-              <nav class='pagination js-feed-pagination' aria-label='ページネーション'/>
+              <header class='feed-heading js-feed-heading'/>
+              <div class='feed-cards js-feed-index'/>
+              <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
             <b:else/>
-              <!-- 記事 (isPost) と固定ページ (isPage)。固定ページには日付もラベルも無い -->
               <b:loop values='data:posts' var='post'>
-                <article>
-                  <header>
+                <article class='post'>
+                  <header class='post-header'>
                     <b:if cond='data:view.isPost'>
-                      <time><data:post.date/></time>
+                      <time class='post-date'><data:post.date/></time>
                     </b:if>
-                    <h1><data:post.title/></h1>
+                    <h1 class='post-title'><data:post.title/></h1>
                     <b:if cond='data:view.isPost'>
-                      <div class='js-post-labels labels'>
+                      <p class='post-labels js-post-labels'>
                         <b:loop values='data:post.labels' var='label'>
-                          <a expr:href='data:label.url'><data:label.name/></a>
+                          <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
                         </b:loop>
-                      </div>
+                      </p>
                     </b:if>
-                    <hr/>
                   </header>
-                  <div class='markdown post-body'><data:post.body/></div>
+                  <div class='post-body js-post-body' data-suisou-text='typeset'><data:post.body/></div>
                 </article>
               </b:loop>
             </b:if>
@@ -277,8 +432,8 @@
           <b:includable id='threaded_comments'/>
         </b:widget>
       </b:section>
-    </section>
-    <aside>
+    </main>
+    <aside class='site-side'>
       <b:section id='インセンティブ'>
         <b:widget id='PopularPosts0' locked='false' title='関連記事' type='PopularPosts' version='1'>
           <b:widget-settings>
@@ -288,26 +443,25 @@
             <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
           </b:widget-settings>
           <b:includable id='main'>
-            <article class='content-incentive'>
-              <ul>
+            <section aria-label='関連記事' class='side-popular' data-suisou-tray=''>
+              <ul class='side-posts'>
                 <b:if cond='data:view.isPost'>
-                  <!-- 記事ページだけ人気記事を1件に絞り、同ラベルの最新/ランダムを related.js が足す -->
                   <b:loop values='data:posts' var='post'>
-                    <li class='js-popular-item'><a expr:href='data:post.href'><img expr:src='data:post.thumbnail' alt=''/><span><data:post.title/></span></a></li>
+                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><data:post.title/></span></a></li>
                   </b:loop>
                   <li class='js-latest-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                    <li><a expr:href='data:post.href'><img expr:src='data:post.thumbnail' alt=''/><span><data:post.title/></span></a></li>
+                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><data:post.title/></span></a></li>
                   </b:loop>
                 </b:if>
               </ul>
-            </article>
+            </section>
           </b:includable>
         </b:widget>
       </b:section>
-      <div class='fixed-shelf'>
+      <nav aria-label='ラベルと目次' class='side-nav js-side-nav' data-suisou-tray='drawer right' id='side-nav' popover=''>
         <b:section id='ラベルリスト/目次'>
           <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
             <b:widget-settings>
@@ -318,120 +472,52 @@
               <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
             </b:widget-settings>
             <b:includable id='main'>
-              <article class='js-label-list'>
-                <div class='labels'>
-                  <b:loop values='data:labels' var='label'>
-                    <a expr:href='data:label.url'><data:label.name/></a>
-                  </b:loop>
-                </div>
-              </article>
               <b:if cond='data:view.isPost or data:view.isPage'>
-                <article class='content-toc'>
-                  <p>目次</p>
-                  <hr/>
-                  <nav/>
-                </article>
+                <section class='side-toc js-side-toc' data-suisou-tray=''>
+                  <h2 class='side-heading'>目次</h2>
+                  <ul class='js-toc' data-suisou-text='toc'/>
+                </section>
               </b:if>
+              <section class='side-labels' data-suisou-tray=''>
+                <h2 class='side-heading'>ラベル</h2>
+                <p class='side-label-list'>
+                  <b:loop values='data:labels' var='label'>
+                    <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
+                  </b:loop>
+                </p>
+              </section>
             </b:includable>
           </b:widget>
         </b:section>
-      </div>
+      </nav>
     </aside>
-  </main>
-  <footer class='container'>
-    <nav>
-      <ul>
-        <li>
-          <svg role='img' viewBox='0 0 24 24' width='18' height='18' fill='currentColor' aria-hidden='true' style='vertical-align:middle; margin-right:.3em;' xmlns='http://www.w3.org/2000/svg'><path d='M21.976 24H2.026C.9 24 0 23.1 0 21.976V2.026C0 .9.9 0 2.025 0H22.05C23.1 0 24 .9 24 2.025v19.95C24 23.1 23.1 24 21.976 24zM12 3.975H9c-2.775 0-5.025 2.25-5.025 5.025v6c0 2.774 2.25 5.024 5.025 5.024h6c2.774 0 5.024-2.25 5.024-5.024v-3.975c0-.6-.45-1.05-1.05-1.05H18c-.524 0-.976-.45-.976-.976 0-2.776-2.25-5.026-5.024-5.026zm3.074 12H9c-.525 0-.975-.45-.975-.975s.45-.976.975-.976h6.074c.526 0 .977.45.977.976s-.45.976-.975.976zm-2.55-7.95c.527 0 .976.45.976.975s-.45.975-.975.975h-3.6c-.525 0-.976-.45-.976-.975s.45-.975.975-.975h3.6z'/></svg>
-          Powered by <a href='https://www.blogger.com'>Blogger</a>
-        </li>
-        <li>Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></li>
-      </ul>
-      <ul>
-        <li><small>
-          <a href='https://picocss.com'>Pico CSS</a> /
-          <a href='https://markdown-it.github.io'>markdown-it</a> /
-          <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
-          <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
-          <a href='https://microlink.io/'>Microlink</a> /
-          <a href='https://highlightjs.org'>Highlight.js</a>
-        </small></li>
-      </ul>
-    </nav>
+  </div>
+  <footer class='site-footer'>
+    <p>Powered by <a href='https://www.blogger.com'>Blogger</a> / Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></p>
+    <p class='site-credits'>
+      <a href='https://suisou.pages.dev'>Suisou</a> /
+      <a href='https://markdown-it.github.io'>markdown-it</a> /
+      <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
+      <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
+      <a href='https://microlink.io/'>Microlink</a> /
+      <a href='https://highlightjs.org'>Highlight.js</a>
+    </p>
   </footer>
-  <div class='tag-list-popover js-tag-list-popover labels'/>
-  <dialog class='image-modal js-image-modal'><img alt=''/></dialog>
-  <div class='js-fixed-shelf-overlay'/>
+  <dialog class='image-modal js-image-modal' data-suisou-tray=''><img alt=''/></dialog>
 
   <script>
   //&lt;![CDATA[
   (() =&gt; {
     const $ = (s, c = document) =&gt; c.querySelector(s);
     const $$ = (s, c = document) =&gt; c.querySelectorAll(s);
-    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'})[c]);
-    const HLJS = 'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/';
-    // OS が「視差効果を減らす」設定ならスムーススクロールを切る
+    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
     const motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
-    // テーマ切替
-    const getTheme = () =&gt; {
-      const v = localStorage.theme;
-      return v === 'light' || v === 'dark' ? v : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    };
-    const applyTheme = t =&gt; {
-      document.documentElement.dataset.theme = t;
-      const hl = $('.js-hljs-theme');
-      if (hl) hl.href = HLJS + (t === 'light' ? 'github.min.css' : 'github-dark.min.css');
-    };
-    $('.js-theme-toggle')?.addEventListener('click', () =&gt; {
-      const t = getTheme() === 'dark' ? 'light' : 'dark';
-      localStorage.theme = t;
-      applyTheme(t);
-    });
-    matchMedia('(prefers-color-scheme: light)').addEventListener('change', e =&gt; {
-      if (!localStorage.theme) applyTheme(e.matches ? 'light' : 'dark');
+    const sideNav = $('.js-side-nav');
+    sideNav?.addEventListener('click', e =&gt; {
+      if (e.target.closest('a') &amp;&amp; sideNav.matches(':popover-open')) sideNav.hidePopover();
     });
 
-    // モバイル shelf
-    const shelf = $('.fixed-shelf');
-    const overlay = $('.js-fixed-shelf-overlay');
-    const shelfBtn = $('.js-shelf-toggle');
-    const setShelf = open =&gt; {
-      shelf?.classList.toggle('is-open', open);
-      overlay?.classList.toggle('is-open', open);
-      shelfBtn?.setAttribute('aria-expanded', String(open));
-    };
-    shelfBtn?.addEventListener('click', () =&gt; setShelf(!shelf.classList.contains('is-open')));
-    overlay?.addEventListener('click', () =&gt; setShelf(false));
-    shelf?.addEventListener('click', e =&gt; { if (e.target.closest('a')) setShelf(false); });
-
-    // タグ一覧ポップオーバー: 初回開時にサイドの .labels を複製
-    const popover = $('.js-tag-list-popover');
-    const tagBtn = $('.js-tag-list-toggle');
-    const setPopover = open =&gt; {
-      popover?.classList.toggle('is-open', open);
-      tagBtn?.setAttribute('aria-expanded', String(open));
-    };
-    tagBtn?.addEventListener('click', e =&gt; {
-      e.stopPropagation();
-      const open = !popover.classList.contains('is-open');
-      if (open &amp;&amp; !popover.childElementCount) {
-        const src = $('aside .labels');
-        if (src) popover.innerHTML = src.innerHTML;
-      }
-      setPopover(open);
-    });
-    document.addEventListener('click', e =&gt; {
-      if (popover?.classList.contains('is-open') &amp;&amp; !popover.contains(e.target) &amp;&amp; !e.target.closest('.js-tag-list-toggle')) setPopover(false);
-    });
-    addEventListener('keydown', e =&gt; { if (e.key === 'Escape') { setShelf(false); setPopover(false); } });
-
-    // 画像モーダル (本文の img クリックで拡大)
-    // Blogger の画像 URL からサイズ指定を探して原寸寄りに差し替える。指定の形は2系統ある:
-    //   .../s320/name.png や .../w1200-h630-p-k-no-nu/name.png  (パスの後ろから2番目)
-    //   ...=s320 や ...=w640-h480-p-k-no-nu                      (末尾のサフィックス)
-    // 区切りまで含めて判定しないと、サイズ指定の無い URL でファイル名の中の "s123" を
-    // 拾ってしまい (例: screenshots1234.png → screenshots1600.png) 404 になる。
     const bigImage = url =&gt; url
       .replace(/\/(?:s\d+|w\d+-h\d+)[-\w]*\/([^/]+)$/, '/s1600/$1')
       .replace(/=(?:s\d+|w\d+-h\d+)[-\w]*$/, '=s1600');
@@ -439,7 +525,7 @@
     if (modal) {
       document.addEventListener('click', e =&gt; {
         const t = e.target;
-        if (t.tagName === 'IMG' &amp;&amp; t.closest('.post-body')) {
+        if (t.tagName === 'IMG' &amp;&amp; t.closest('.js-post-body') &amp;&amp; !t.closest('a')) {
           modal.querySelector('img').src = bigImage(t.src);
           modal.showModal();
         }
@@ -447,18 +533,6 @@
       modal.addEventListener('click', e =&gt; { if (e.target === modal) modal.close(); });
     }
 
-    // ヘッダー高さを CSS 変数に同期 (mobile sticky オフセット用)
-    // 変数は html に立てる。header に立てると、兄弟である .tag-list-popover へ継承されず
-    // フォールバック値 (96px) のままになる。
-    const titleRow = $('body &gt; header nav &gt; ul:first-child');
-    const header = $('body &gt; header');
-    if (titleRow &amp;&amp; header) {
-      const update = () =&gt; document.documentElement.style.setProperty('--hgroup-h', (titleRow.offsetHeight + parseFloat(getComputedStyle(header).paddingTop)) + 'px');
-      new ResizeObserver(update).observe(titleRow);
-      update();
-    }
-
-    // 外部ライブラリ依存処理は DCL 後に実行
     document.addEventListener('DOMContentLoaded', () =&gt; {
       renderMarkdown();
       buildTOC();
@@ -466,39 +540,37 @@
       loadLinkCards();
     });
 
-    // markdown-it レンダリング (Blogger が勝手に付ける &lt;p&gt; を剥がしてから渡す)
     function renderMarkdown() {
-      const el = $('.markdown');
+      const el = $('.js-post-body');
       if (!el || !window.markdownit) return;
-      // 非標準MD: breaks=true で単一改行も &lt;br&gt; 化 (標準に戻すなら breaks を外す)
       const md = window.markdownit({ html: true, breaks: true, linkify: true, typographer: true, langPrefix: 'hljs language-' })
         .use(window.markdownitEmoji);
-      // 外部リンクに target/rel を付与 (旧 markdown-it-link-attributes の内製置換; v4 はブラウザ用UMD非同梱のため)
       const defaultLinkOpen = md.renderer.rules.link_open || ((t, i, o, e, s) =&gt; s.renderToken(t, i, o));
       md.renderer.rules.link_open = (tokens, idx, options, env, self) =&gt; {
         const href = tokens[idx].attrGet('href');
-        if (href &amp;&amp; href.startsWith('http')) { tokens[idx].attrSet('target', '_blank'); tokens[idx].attrSet('rel', 'noopener noreferrer'); }
+        if (href &amp;&amp; href.startsWith('http')) {
+          tokens[idx].attrSet('target', '_blank');
+          tokens[idx].attrSet('rel', 'noopener noreferrer');
+        }
         return defaultLinkOpen(tokens, idx, options, env, self);
       };
-      // Blogger は本文を &lt;p&gt; で包むので除去; textarea.innerHTML でエンティティを1段デコード
       const decode = s =&gt; { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
       let src = decode(el.innerHTML.replace(/&lt;p[^&gt;]*&gt;\s*/gi, '').replace(/\s*&lt;\/p&gt;/gi, '\n\n'));
-      // 非標準MD: 連続空行を縦の余白として保持 (標準MDは潰す)。標準に戻すならこの行を消す。
-      // 空行1個=通常の段落区切り、超過した空行1個につき &lt;br&gt; 1個。控えめにするなら length-3。
       src = src.replace(/\n{3,}/g, m =&gt; '\n\n' + '&lt;br&gt;\n\n'.repeat(m.length - 2));
       el.innerHTML = md.render(src);
       el.querySelectorAll('pre code').forEach(b =&gt; window.hljs?.highlightElement(b));
       window.twemoji?.parse(el, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' });
     }
 
-    // 目次ツリーを生成
     function buildTOC() {
-      const body = $('.post-body');
-      const nav = $('.content-toc &gt; nav');
-      if (!body || !nav) return;
+      const body = $('.js-post-body');
+      const toc = $('.js-toc');
+      if (!body || !toc) return;
       const headings = body.querySelectorAll('h2, h3, h4');
-      if (!headings.length) return;
-      const root = document.createElement('ul');
+      if (!headings.length) {
+        $('.js-side-toc')?.remove();
+        return;
+      }
       const stack = [];
       headings.forEach((el, i) =&gt; {
         if (!el.id) el.id = 'toc-' + i;
@@ -506,29 +578,22 @@
         const li = document.createElement('li');
         li.innerHTML = `&lt;a href='#${el.id}'&gt;${esc(el.textContent.trim())}&lt;/a&gt;`;
         while (stack.length &amp;&amp; stack.at(-1).level &gt;= level) stack.pop();
-        if (!stack.length) root.appendChild(li);
+        if (!stack.length) toc.append(li);
         else {
           const parent = stack.at(-1).li;
-          let sub = parent.querySelector('ul');
-          if (!sub) { sub = document.createElement('ul'); parent.appendChild(sub); }
-          sub.appendChild(li);
+          let sub = parent.querySelector(':scope &gt; ul');
+          if (!sub) { sub = document.createElement('ul'); parent.append(sub); }
+          sub.append(li);
         }
         stack.push({ level, li });
       });
-      nav.appendChild(root);
     }
 
-    // スクロール位置で目次の現在地を aria-current でハイライト
-    //
-    // 旧実装は scroll のたびに全見出しへ getBoundingClientRect していたので、
-    // スクロール中ずっと強制レイアウトが走っていた。IntersectionObserver に置き換えて
-    // 「画面上端から LINE px のラインを見出しが越えたか」だけを持つ形にしてある。
-    // 判定条件 (rect.top &lt;= LINE) は旧実装と同じなので見た目の挙動は変わらない。
     function setupTOCHighlight() {
-      const nav = $('.content-toc &gt; nav');
-      if (!nav) return;
-      const links = [...nav.querySelectorAll('a')];
-      const headings = [...$$('.post-body :is(h2, h3, h4)')];
+      const toc = $('.js-toc');
+      if (!toc || !sideNav) return;
+      const links = [...toc.querySelectorAll('a')];
+      const headings = [...$$('.js-post-body :is(h2, h3, h4)')];
       if (!headings.length) return;
       const LINE = 225;
       const passed = new Map();
@@ -542,11 +607,10 @@
           a.toggleAttribute('aria-current', on);
           if (on &amp;&amp; lastActive !== a) {
             lastActive = a;
-            nav.scrollTo({ top: a.offsetTop - nav.clientHeight / 2, behavior: motion });
+            sideNav.scrollTo({ top: a.offsetTop - sideNav.clientHeight / 2, behavior: motion });
           }
         });
       };
-      // rootMargin で上端を LINE px 下げた枠を作る。枠から出た = ラインを越えた。
       const io = new IntersectionObserver(entries =&gt; {
         entries.forEach(e =&gt; passed.set(e.target, e.boundingClientRect.top &lt;= LINE));
         update();
@@ -554,7 +618,6 @@
       headings.forEach(h =&gt; io.observe(h));
     }
 
-    // リンクカード (Microlink + localStorage キャッシュ + IO 遅延ロード)
     function loadLinkCards() {
       const KEY = 'ogp:', TTL = 7 * 864e5;
       const cache = {
@@ -577,19 +640,21 @@
       const cardHTML = (href, d) =&gt; {
         let host = href;
         try { host = new URL(href).hostname; } catch {}
-        return `&lt;a class='link-card' href='${esc(href)}' target='_blank' rel='noopener noreferrer'&gt;
-          &lt;div&gt;
-            &lt;strong&gt;${esc(d.title || href)}&lt;/strong&gt;
-            ${d.description ? `&lt;small&gt;${esc(d.description)}&lt;/small&gt;` : ''}
-            &lt;small&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.style.display="none"'/&gt;` : ''}${esc(host)}&lt;/small&gt;
-          &lt;/div&gt;
-          ${d.image?.url ? `&lt;img src='${esc(d.image.url)}' alt='' loading='lazy'/&gt;` : ''}
-        &lt;/a&gt;`;
+        return `&lt;div class='link-card'&gt;
+          &lt;a class='link-card-link' data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'&gt;
+            &lt;span data-suisou-item='media-content'&gt;
+              &lt;span class='link-card-title'&gt;${esc(d.title || href)}&lt;/span&gt;
+              ${d.description ? `&lt;span class='link-card-description'&gt;${esc(d.description)}&lt;/span&gt;` : ''}
+              &lt;span class='link-card-host'&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/&gt;` : ''}${esc(host)}&lt;/span&gt;
+            &lt;/span&gt;
+            ${d.image?.url ? `&lt;img class='link-card-image' data-suisou-item='media-tail' src='${esc(d.image.url)}' alt='' loading='lazy'/&gt;` : ''}
+          &lt;/a&gt;
+        &lt;/div&gt;`;
       };
       const insert = (href, p, d) =&gt; {
         const tpl = document.createElement('template');
         tpl.innerHTML = cardHTML(href, d).trim();
-        p.parentNode.insertBefore(tpl.content.firstElementChild, p.nextSibling);
+        p.after(tpl.content.firstElementChild);
       };
       const fetchCard = (href, p) =&gt; {
         const c = cache.get(href);
@@ -599,27 +664,24 @@
           .then(j =&gt; { if (j.status === 'success') { cache.set(href, j.data); insert(href, p, j.data); } })
           .catch(() =&gt; {});
       };
-      const targets = [];
-      $$('.post-body a[href]').forEach(a =&gt; {
+      const targets = new Map();
+      $$('.js-post-body a[href]').forEach(a =&gt; {
         const href = a.getAttribute('href');
         if (!href?.startsWith('http')) return;
         const p = a.closest('p');
-        // 段落がそのリンク単体で出来ているときだけカード化する。
-        // 文中に貼ったリンクにまでカードが生えると読めたものではないし、
-        // Microlink の無料枠 (公開エンドポイントで 1日50リクエスト) も一瞬で枯れる。
         if (p &amp;&amp; p.children.length === 1 &amp;&amp; p.firstElementChild === a &amp;&amp; p.textContent.trim() === a.textContent.trim()) {
-          targets.push({ a, href, p });
+          targets.set(a, { href, p });
         }
       });
       const io = new IntersectionObserver((entries, ob) =&gt; {
         entries.forEach(e =&gt; {
           if (!e.isIntersecting) return;
           ob.unobserve(e.target);
-          const t = e.target._lc;
+          const t = targets.get(e.target);
           if (t) fetchCard(t.href, t.p);
         });
       }, { rootMargin: '1500px' });
-      targets.forEach(t =&gt; { t.a._lc = t; io.observe(t.a); });
+      targets.forEach((_, a) =&gt; io.observe(a));
     }
   })();
   //]]&gt;
@@ -628,17 +690,9 @@
   <b:if cond='data:view.isMultipleItems'>
   <script>
   //&lt;![CDATA[
-  // 一覧ページ (ホーム / ラベル / 検索 / アーカイブ) を Feed API から描画する。
-  //
-  // Blogger の data:blog.pageType はこの4つを全部 "index" と返すので、テンプレート側では
-  // 区別できない。どのビューかは URL から判定する:
-  //   /search/label/&lt;label&gt;  ラベル
-  //   /search?q=&lt;query&gt;      検索
-  //   /YYYY/MM/ , /YYYY/     アーカイブ
-  //   それ以外               ホーム
   (() =&gt; {
     const PER = 12;
-    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'})[c]);
+    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
 
     const grid = document.querySelector('.js-feed-index');
     const pag = document.querySelector('.js-feed-pagination');
@@ -647,14 +701,11 @@
 
     const HOME = document.documentElement.dataset.home || location.origin + '/';
 
-    // --- 今どのビューか ---
     const labelMatch = location.pathname.match(/^\/search\/label\/([^/]+)/);
     const archiveMatch = location.pathname.match(/^\/(\d{4})(?:\/(\d{2}))?\/$/);
     const label = labelMatch ? decodeURIComponent(labelMatch[1]) : '';
     const query = new URLSearchParams(location.search).get('q') || '';
 
-    // --- フィード URL ---
-    // ラベルはパスで、検索は q= で、アーカイブは published-min/max で絞る。
     const feedURL = n =&gt; {
       const base = HOME + 'feeds/posts/summary' + (label ? '/-/' + encodeURIComponent(label) : '');
       const p = new URLSearchParams({ alt: 'json', 'max-results': PER, 'start-index': (n - 1) * PER + 1 });
@@ -673,16 +724,16 @@
     const cache = {};
     const fetchPage = n =&gt; cache[n] ??= fetch(feedURL(n)).then(r =&gt; r.json());
 
-    // --- 見出し ---
     const archiveTitle = () =&gt; {
       const [, y, m] = archiveMatch;
       return m ? `${y}年${+m}月の記事` : `${y}年の記事`;
     };
     const title = label ? label : query ? `“${query}” の検索結果` : archiveMatch ? archiveTitle() : '';
     const setHeading = count =&gt; {
-      if (!heading || !title) return;
+      if (!heading) return;
+      if (!title) { heading.remove(); return; }
       heading.textContent = '';
-      const h = document.createElement('h2');
+      const h = document.createElement('h1');
       h.textContent = title;
       heading.append(h);
       if (count != null) {
@@ -693,19 +744,21 @@
     };
     setHeading(null);
 
-    // --- カード ---
     const cardHTML = p =&gt; {
       const url = p.link.find(l =&gt; l.rel === 'alternate').href;
       const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
       const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
-      const labels = (p.category || []).map(c =&gt; `&lt;a href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
-      return `&lt;article&gt;&lt;a href='${esc(url)}'&gt;&lt;/a&gt;${thumb ? `&lt;figure&gt;&lt;img src='${esc(thumb)}' loading='lazy' alt=''/&gt;&lt;/figure&gt;` : ''}&lt;header&gt;&lt;time&gt;${date}&lt;/time&gt;&lt;p&gt;${esc(p.title.$t)}&lt;/p&gt;&lt;/header&gt;&lt;footer&gt;&lt;div class='labels'&gt;${labels}&lt;/div&gt;&lt;/footer&gt;&lt;/article&gt;`;
+      const labels = (p.category || []).map(c =&gt; `&lt;a data-suisou-item='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
+      return `&lt;article class='feed-card' data-suisou-tray=''&gt;
+        ${thumb ? `&lt;img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/&gt;` : ''}
+        &lt;time class='feed-card-date'&gt;${date}&lt;/time&gt;
+        &lt;h2 class='feed-card-title'&gt;&lt;a class='feed-card-link' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
+        ${labels ? `&lt;p class='feed-card-labels'&gt;${labels}&lt;/p&gt;` : ''}
+      &lt;/article&gt;`;
     };
-    const skeletonHTML = `&lt;article class='js-skeleton-card'&gt;&lt;figure&gt;&lt;/figure&gt;&lt;header&gt;&lt;time&gt;0000/00/00&lt;/time&gt;&lt;p&gt;　&lt;/p&gt;&lt;/header&gt;&lt;footer&gt;&lt;/footer&gt;&lt;/article&gt;`;
+    const loadingHTML = `&lt;progress class='feed-loading' aria-label='読み込み中'&gt;&lt;/progress&gt;`;
     const emptyHTML = `&lt;p class='feed-empty'&gt;記事が見つかりませんでした。&lt;/p&gt;`;
 
-    // --- ページネーション ---
-    // ラベルや検索クエリを落とさないよう、現在の URL に page だけ足し引きする。
     const pageURL = n =&gt; {
       const p = new URLSearchParams(location.search);
       n === 1 ? p.delete('page') : p.set('page', n);
@@ -720,15 +773,16 @@
       for (let i = lo; i &lt;= hi; i++) pages.push(i);
       if (hi &lt; total - 1) pages.push(null);
       pages.push(total);
-      return '&lt;ul&gt;' + pages.map(p =&gt;
+      return `&lt;ul class='feed-pages-list'&gt;` + pages.map(p =&gt;
         p === null ? `&lt;li&gt;&lt;span aria-hidden='true'&gt;…&lt;/span&gt;&lt;/li&gt;`
-        : p === n  ? `&lt;li&gt;&lt;a href='${pageURL(p)}' aria-current='page'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
-        :            `&lt;li&gt;&lt;a class='js-pg' data-page='${p}' href='${pageURL(p)}'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
+        : p === n  ? `&lt;li&gt;&lt;a data-suisou-button='' href='${pageURL(p)}' aria-current='page'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
+        :            `&lt;li&gt;&lt;a data-suisou-button='' class='js-pg' data-page='${p}' href='${pageURL(p)}'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
       ).join('') + '&lt;/ul&gt;';
     };
 
     const loadPage = n =&gt; {
-      grid.innerHTML = skeletonHTML.repeat(PER);
+      grid.innerHTML = loadingHTML;
+      grid.setAttribute('aria-busy', 'true');
       fetchPage(n).then(data =&gt; {
         const entries = data.feed.entry || [];
         const total = +data.feed['openSearch$totalResults'].$t;
@@ -741,7 +795,7 @@
       }).catch(() =&gt; {
         grid.innerHTML = emptyHTML;
         pag.innerHTML = '';
-      });
+      }).finally(() =&gt; grid.removeAttribute('aria-busy'));
     };
     const go = n =&gt; { history.pushState({ page: n }, '', pageURL(n)); loadPage(n); scrollTo(0, 0); };
 
@@ -768,10 +822,9 @@
   <b:if cond='data:view.isPost'>
   <script>
   //&lt;![CDATA[
-  // インセンティブ: 投稿の最初のラベルから 最新1件 + ランダム1件 を引いてくる
   (() =&gt; {
     const HOME = document.documentElement.dataset.home || location.origin + '/';
-    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'})[c]);
+    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
     const label = document.querySelector('.js-post-labels a')?.textContent.trim();
     const latestSlot = document.querySelector('.js-latest-post');
     const randomSlot = document.querySelector('.js-random-post');
@@ -788,7 +841,7 @@
           .filter(p =&gt; p &amp;&amp; !location.href.includes(p.link));
         if (!posts.length) return;
         const render = (p, target) =&gt; {
-          target.innerHTML = `&lt;a href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img src='${esc(p.thumb)}' alt=''/&gt;` : ''}&lt;span&gt;${esc(p.title)}&lt;/span&gt;&lt;/a&gt;`;
+          target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content'&gt;${esc(p.title)}&lt;/span&gt;&lt;/a&gt;`;
         };
         if (latestSlot) render(posts[0], latestSlot);
         const rest = posts.slice(1);

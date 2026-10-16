@@ -1,14 +1,6 @@
-// 一覧ページ (ホーム / ラベル / 検索 / アーカイブ) を Feed API から描画する。
-//
-// Blogger の data:blog.pageType はこの4つを全部 "index" と返すので、テンプレート側では
-// 区別できない。どのビューかは URL から判定する:
-//   /search/label/<label>  ラベル
-//   /search?q=<query>      検索
-//   /YYYY/MM/ , /YYYY/     アーカイブ
-//   それ以外               ホーム
 (() => {
   const PER = 12;
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
   const grid = document.querySelector('.js-feed-index');
   const pag = document.querySelector('.js-feed-pagination');
@@ -17,14 +9,11 @@
 
   const HOME = document.documentElement.dataset.home || location.origin + '/';
 
-  // --- 今どのビューか ---
   const labelMatch = location.pathname.match(/^\/search\/label\/([^/]+)/);
   const archiveMatch = location.pathname.match(/^\/(\d{4})(?:\/(\d{2}))?\/$/);
   const label = labelMatch ? decodeURIComponent(labelMatch[1]) : '';
   const query = new URLSearchParams(location.search).get('q') || '';
 
-  // --- フィード URL ---
-  // ラベルはパスで、検索は q= で、アーカイブは published-min/max で絞る。
   const feedURL = n => {
     const base = HOME + 'feeds/posts/summary' + (label ? '/-/' + encodeURIComponent(label) : '');
     const p = new URLSearchParams({ alt: 'json', 'max-results': PER, 'start-index': (n - 1) * PER + 1 });
@@ -43,16 +32,16 @@
   const cache = {};
   const fetchPage = n => cache[n] ??= fetch(feedURL(n)).then(r => r.json());
 
-  // --- 見出し ---
   const archiveTitle = () => {
     const [, y, m] = archiveMatch;
     return m ? `${y}年${+m}月の記事` : `${y}年の記事`;
   };
   const title = label ? label : query ? `“${query}” の検索結果` : archiveMatch ? archiveTitle() : '';
   const setHeading = count => {
-    if (!heading || !title) return;
+    if (!heading) return;
+    if (!title) { heading.remove(); return; }
     heading.textContent = '';
-    const h = document.createElement('h2');
+    const h = document.createElement('h1');
     h.textContent = title;
     heading.append(h);
     if (count != null) {
@@ -63,19 +52,21 @@
   };
   setHeading(null);
 
-  // --- カード ---
   const cardHTML = p => {
     const url = p.link.find(l => l.rel === 'alternate').href;
     const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
     const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
-    const labels = (p.category || []).map(c => `<a href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
-    return `<article><a href='${esc(url)}'></a>${thumb ? `<figure><img src='${esc(thumb)}' loading='lazy' alt=''/></figure>` : ''}<header><time>${date}</time><p>${esc(p.title.$t)}</p></header><footer><div class='labels'>${labels}</div></footer></article>`;
+    const labels = (p.category || []).map(c => `<a data-suisou-item='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
+    return `<article class='feed-card' data-suisou-tray=''>
+      ${thumb ? `<img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/>` : ''}
+      <time class='feed-card-date'>${date}</time>
+      <h2 class='feed-card-title'><a class='feed-card-link' href='${esc(url)}'>${esc(p.title.$t)}</a></h2>
+      ${labels ? `<p class='feed-card-labels'>${labels}</p>` : ''}
+    </article>`;
   };
-  const skeletonHTML = `<article class='js-skeleton-card'><figure></figure><header><time>0000/00/00</time><p>　</p></header><footer></footer></article>`;
+  const loadingHTML = `<progress class='feed-loading' aria-label='読み込み中'></progress>`;
   const emptyHTML = `<p class='feed-empty'>記事が見つかりませんでした。</p>`;
 
-  // --- ページネーション ---
-  // ラベルや検索クエリを落とさないよう、現在の URL に page だけ足し引きする。
   const pageURL = n => {
     const p = new URLSearchParams(location.search);
     n === 1 ? p.delete('page') : p.set('page', n);
@@ -90,15 +81,16 @@
     for (let i = lo; i <= hi; i++) pages.push(i);
     if (hi < total - 1) pages.push(null);
     pages.push(total);
-    return '<ul>' + pages.map(p =>
+    return `<ul class='feed-pages-list'>` + pages.map(p =>
       p === null ? `<li><span aria-hidden='true'>…</span></li>`
-      : p === n  ? `<li><a href='${pageURL(p)}' aria-current='page'>${p}</a></li>`
-      :            `<li><a class='js-pg' data-page='${p}' href='${pageURL(p)}'>${p}</a></li>`
+      : p === n  ? `<li><a data-suisou-button='' href='${pageURL(p)}' aria-current='page'>${p}</a></li>`
+      :            `<li><a data-suisou-button='' class='js-pg' data-page='${p}' href='${pageURL(p)}'>${p}</a></li>`
     ).join('') + '</ul>';
   };
 
   const loadPage = n => {
-    grid.innerHTML = skeletonHTML.repeat(PER);
+    grid.innerHTML = loadingHTML;
+    grid.setAttribute('aria-busy', 'true');
     fetchPage(n).then(data => {
       const entries = data.feed.entry || [];
       const total = +data.feed['openSearch$totalResults'].$t;
@@ -111,7 +103,7 @@
     }).catch(() => {
       grid.innerHTML = emptyHTML;
       pag.innerHTML = '';
-    });
+    }).finally(() => grid.removeAttribute('aria-busy'));
   };
   const go = n => { history.pushState({ page: n }, '', pageURL(n)); loadPage(n); scrollTo(0, 0); };
 
