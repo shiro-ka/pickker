@@ -1,7 +1,6 @@
-// インセンティブ: 投稿の最初のラベルから 最新1件 + ランダム1件 を引いてくる
 (() => {
   const HOME = document.documentElement.dataset.home || location.origin + '/';
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const label = document.querySelector('.js-post-labels a')?.textContent.trim();
   const latestSlot = document.querySelector('.js-latest-post');
   const randomSlot = document.querySelector('.js-random-post');
@@ -18,7 +17,7 @@
         .filter(p => p && !location.href.includes(p.link));
       if (!posts.length) return;
       const render = (p, target) => {
-        target.innerHTML = `<a href='${esc(p.link)}'>${p.thumb ? `<img src='${esc(p.thumb)}' alt=''/>` : ''}<span>${esc(p.title)}</span></a>`;
+        target.innerHTML = `<a class='side-post' data-suisou-item='media' href='${esc(p.link)}'>${p.thumb ? `<img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/>` : ''}<span data-suisou-item='media-content'>${esc(p.title)}</span></a>`;
       };
       if (latestSlot) render(posts[0], latestSlot);
       const rest = posts.slice(1);
