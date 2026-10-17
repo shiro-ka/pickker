@@ -87,6 +87,14 @@ body {
   .post-body :is(h2, h3, h4) { scroll-margin-top: 5rem; }
 }
 
+.post-body img.emoji {
+  display: inline;
+  width: 1em;
+  height: 1em;
+  margin: 0 0.05em;
+  vertical-align: -0.1em;
+  border-radius: 0;
+}
 .post-body pre code.hljs {
   padding: 0;
   background: transparent;

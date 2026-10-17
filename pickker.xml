@@ -112,6 +112,14 @@
       .post-body :is(h2, h3, h4) { scroll-margin-top: 5rem; }
     }
 
+    .post-body img.emoji {
+      display: inline;
+      width: 1em;
+      height: 1em;
+      margin: 0 0.05em;
+      vertical-align: -0.1em;
+      border-radius: 0;
+    }
     .post-body pre code.hljs {
       padding: 0;
       background: transparent;
@@ -393,7 +401,7 @@
     if (modal) {
       document.addEventListener('click', e =&gt; {
         const t = e.target;
-        if (t.tagName === 'IMG' &amp;&amp; t.closest('.js-post-body') &amp;&amp; !t.closest('a')) {
+        if (t.tagName === 'IMG' &amp;&amp; !t.classList.contains('emoji') &amp;&amp; t.closest('.js-post-body') &amp;&amp; !t.closest('a')) {
           modal.querySelector('img').src = bigImage(t.src);
           modal.showModal();
         }
