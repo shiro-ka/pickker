@@ -41,10 +41,7 @@
       min-height: 100dvh;
     }
 
-    .site-header {
-      border-bottom: 1px solid var(--suisou-color-line-weak);
-      background: var(--suisou-color-bg);
-    }
+    .site-header { background: var(--suisou-color-bg); }
     .site-header-inner {
       display: flex;
       align-items: center;
@@ -389,7 +386,7 @@
               <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
             <b:else/>
               <b:loop values='data:posts' var='post'>
-                <article class='post'>
+                <article class='post' data-suisou-tray=''>
                   <header class='post-header'>
                     <b:if cond='data:view.isPost'>
                       <time class='post-date'><data:post.date/></time>
