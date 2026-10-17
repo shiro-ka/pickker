@@ -131,12 +131,11 @@
     const cardHTML = (href, d) => {
       let host = href;
       try { host = new URL(href).hostname; } catch {}
-      return `<div class='link-card'>
-        <a class='link-card-link' data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'>
+      return `<div class='link-card' data-suisou-item=''>
+        <a data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'>
           <span data-suisou-item='media-content'>
-            <span class='link-card-title'>${esc(d.title || href)}</span>
-            ${d.description ? `<span class='link-card-description'>${esc(d.description)}</span>` : ''}
-            <span class='link-card-host'>${d.logo?.url ? `<img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/>` : ''}${esc(host)}</span>
+            <header><span>${esc(d.title || href)}</span><span class='link-card-host'>${d.logo?.url ? `<img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/>` : ''}${esc(host)}</span></header>
+            ${d.description ? `<span data-suisou-text='fs-12'>${esc(d.description)}</span>` : ''}
           </span>
           ${d.image?.url ? `<img class='link-card-image' data-suisou-item='media-tail' src='${esc(d.image.url)}' alt='' loading='lazy'/>` : ''}
         </a>
