@@ -29,7 +29,7 @@
     <b:section id='ヘッダー'>
       <b:widget id='Header0' locked='false' title='Header' type='Header'>
         <b:includable id='main'>
-          <div class='site-header-inner'>
+          <div class='site-header-inner' data-suisou='container-l'>
             <a class='site-title' expr:href='data:blog.homepageUrl'>
               <span data-suisou-text='fs-16 fw-700'><data:blog.title/></span>
               <span data-suisou-text='fs-12'><data:description/></span>
@@ -45,7 +45,7 @@
       </b:widget>
     </b:section>
   </header>
-  <div class='site-body'>
+  <div class='site-body' data-suisou='container-l'>
     <main class='site-main'>
       <b:section id='メインカラム'>
         <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>

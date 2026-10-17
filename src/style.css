@@ -2,7 +2,6 @@
 
 :root {
   --suisou-font: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  --pickker-width: 72rem;
   --pickker-side: 18rem;
 }
 
@@ -16,8 +15,6 @@ body {
   display: flex;
   align-items: center;
   gap: var(--suisou-space-3);
-  max-width: var(--pickker-width);
-  margin-inline: auto;
   padding: var(--suisou-space-3);
 }
 .site-title {
@@ -33,9 +30,6 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--suisou-space-3);
-  width: 100%;
-  max-width: var(--pickker-width);
-  margin-inline: auto;
   padding: 0 var(--suisou-space-3) var(--suisou-space-3);
 }
 
