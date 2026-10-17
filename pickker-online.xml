@@ -31,8 +31,8 @@
         <b:includable id='main'>
           <div class='site-header-inner'>
             <a class='site-title' expr:href='data:blog.homepageUrl'>
-              <span class='site-name'><data:blog.title/></span>
-              <span class='site-description'><data:description/></span>
+              <span data-suisou-text='fs-16 fw-700'><data:blog.title/></span>
+              <span data-suisou-text='fs-12'><data:description/></span>
             </a>
             <form action='/search' class='site-search' method='get' role='search'>
               <div data-suisou-item='field'>
@@ -64,31 +64,29 @@
           </b:widget-settings>
           <b:includable id='main'>
             <b:if cond='data:view.isError'>
-              <article class='status-page' data-suisou-text='typeset'>
+              <article class='status-page' data-suisou-text='typeset' data-suisou-tray=''>
                 <h1>404</h1>
                 <p>お探しのページは見つかりませんでした。</p>
                 <p><a data-suisou-button='outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
               </article>
             <b:elseif cond='data:view.isMultipleItems'/>
-              <header class='feed-heading js-feed-heading'/>
+              <header class='feed-heading js-feed-heading' data-suisou-text='typeset'/>
               <div class='feed-cards js-feed-index'/>
               <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
             <b:else/>
               <b:loop values='data:posts' var='post'>
-                <article class='post' data-suisou-tray=''>
-                  <header class='post-header'>
-                    <b:if cond='data:view.isPost'>
-                      <time class='post-date'><data:post.date/></time>
-                    </b:if>
-                    <h1 class='post-title'><data:post.title/></h1>
-                    <b:if cond='data:view.isPost'>
-                      <p class='post-labels js-post-labels'>
-                        <b:loop values='data:post.labels' var='label'>
-                          <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
-                        </b:loop>
-                      </p>
-                    </b:if>
-                  </header>
+                <article class='post' data-suisou-text='typeset' data-suisou-tray=''>
+                  <b:if cond='data:view.isPost'>
+                    <p><small><time><data:post.date/></time></small></p>
+                  </b:if>
+                  <h1><data:post.title/></h1>
+                  <b:if cond='data:view.isPost'>
+                    <p class='post-labels js-post-labels'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
+                      </b:loop>
+                    </p>
+                  </b:if>
                   <div class='post-body js-post-body' data-suisou-text='typeset'><data:post.body/></div>
                 </article>
               </b:loop>
@@ -160,12 +158,12 @@
             <b:includable id='main'>
               <b:if cond='data:view.isPost or data:view.isPage'>
                 <section class='side-toc js-side-toc' data-suisou-tray=''>
-                  <h2 class='side-heading'>目次</h2>
+                  <h2 class='side-heading' data-suisou-text='fs-14 fw-700'>目次</h2>
                   <ul class='js-toc' data-suisou-text='toc'/>
                 </section>
               </b:if>
               <section class='side-labels' data-suisou-tray=''>
-                <h2 class='side-heading'>ラベル</h2>
+                <h2 class='side-heading' data-suisou-text='fs-14 fw-700'>ラベル</h2>
                 <p class='side-label-list'>
                   <b:loop values='data:labels' var='label'>
                     <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
@@ -178,9 +176,9 @@
       </nav>
     </aside>
   </div>
-  <footer class='site-footer'>
+  <footer class='site-footer' data-suisou-text='fs-12'>
     <p>Powered by <a href='https://www.blogger.com'>Blogger</a> / Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></p>
-    <p class='site-credits'>
+    <p>
       <a href='https://suisou.pages.dev'>Suisou</a> /
       <a href='https://markdown-it.github.io'>markdown-it</a> /
       <a href='https://fonts.bunny.net'>Bunny Fonts</a> /

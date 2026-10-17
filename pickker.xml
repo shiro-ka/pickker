@@ -29,10 +29,6 @@
       --suisou-font: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
       --pickker-width: 72rem;
       --pickker-side: 18rem;
-      scroll-behavior: smooth;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      :root { scroll-behavior: auto; }
     }
 
     body {
@@ -41,7 +37,6 @@
       min-height: 100dvh;
     }
 
-    .site-header { background: var(--suisou-color-bg); }
     .site-header-inner {
       display: flex;
       align-items: center;
@@ -56,27 +51,17 @@
       min-width: 0;
       margin-inline-end: auto;
     }
-    .site-name {
-      font-size: var(--suisou-fs-20);
-      line-height: var(--suisou-lh-20);
-      font-weight: 700;
-    }
-    .site-description {
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-      color: var(--suisou-color-text-sub);
-    }
     .site-search { width: min(16rem, 40vw); }
 
     .site-body {
       flex: 1;
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--suisou-space-4);
+      gap: var(--suisou-space-3);
       width: 100%;
       max-width: var(--pickker-width);
       margin-inline: auto;
-      padding: var(--suisou-space-4) var(--suisou-space-3);
+      padding: 0 var(--suisou-space-3) var(--suisou-space-3);
     }
 
     .site-side {
@@ -84,13 +69,7 @@
       flex-direction: column;
       gap: var(--suisou-space-3);
     }
-    .side-heading {
-      margin-block-end: var(--suisou-space-2);
-      font-size: var(--suisou-fs-14);
-      line-height: var(--suisou-lh-14);
-      font-weight: 700;
-      color: var(--suisou-color-text-sub);
-    }
+    .side-heading { margin-block-end: var(--suisou-space-2); }
     .side-toc + .side-labels { margin-block-start: var(--suisou-space-3); }
     .side-label-list,
     .post-labels,
@@ -99,29 +78,14 @@
       flex-wrap: wrap;
       gap: var(--suisou-space-1);
     }
-
     .side-posts {
       display: flex;
       flex-direction: column;
-      gap: var(--suisou-space-1);
+      gap: var(--suisou-space-2);
       list-style: none;
     }
     .side-posts &gt; li:empty,
     .side-posts &gt; .js-popular-item:nth-child(n + 2) { display: none; }
-    .side-post {
-      align-items: center;
-      padding: var(--suisou-space-1);
-      border-radius: var(--suisou-radius);
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-    }
-    .side-post:hover { background: var(--suisou-color-hover); }
-    .side-post &gt; [data-suisou-item~="media-content"] {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-    }
 
     @media (width &gt;= 1024px) {
       .site-body { grid-template-columns: minmax(0, 1fr) var(--pickker-side); }
@@ -149,58 +113,16 @@
         position: sticky;
         top: 0;
         z-index: 1;
+        background: var(--suisou-color-bg);
       }
       .post-body :is(h2, h3, h4) { scroll-margin-top: 5rem; }
     }
 
-    .post-header {
-      display: flex;
-      flex-direction: column;
-      gap: var(--suisou-space-1);
-      margin-block-end: var(--suisou-space-4);
-      padding-block-end: var(--suisou-space-3);
-      border-bottom: 1px solid var(--suisou-color-line-weak);
-    }
-    .post-date {
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-      color: var(--suisou-color-text-sub);
-    }
-    .post-title {
-      font-size: var(--suisou-fs-28);
-      line-height: var(--suisou-lh-28);
-      font-weight: 700;
-    }
-    .post-body img { cursor: zoom-in; }
-    .post-body a img { cursor: pointer; }
     .post-body pre code.hljs {
       padding: 0;
       background: transparent;
     }
 
-    .link-card-link {
-      padding: var(--suisou-space-2);
-      border: 1px solid var(--suisou-color-line-weak);
-      border-radius: var(--suisou-radius);
-      background: var(--suisou-color-panel);
-      color: inherit;
-      text-decoration: none;
-    }
-    .link-card-link:hover { background: var(--suisou-color-hover); }
-    .link-card-title,
-    .link-card-description {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-    }
-    .link-card-title { font-weight: 700; }
-    .link-card-description,
-    .link-card-host {
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-      color: var(--suisou-color-text-sub);
-    }
     .link-card-host {
       display: flex;
       align-items: center;
@@ -210,7 +132,6 @@
       width: 1rem;
       height: 1rem;
       margin: 0;
-      border-radius: 0;
     }
     .link-card-image {
       width: 7.5rem;
@@ -218,20 +139,9 @@
       max-height: none;
       margin: 0;
       object-fit: cover;
-      border-radius: var(--suisou-radius-small);
     }
 
-    .feed-heading { margin-block-end: var(--suisou-space-4); }
-    .feed-heading h1 {
-      font-size: var(--suisou-fs-24);
-      line-height: var(--suisou-lh-24);
-      font-weight: 700;
-    }
-    .feed-heading p {
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-      color: var(--suisou-color-text-sub);
-    }
+    .feed-heading { margin-block-end: var(--suisou-space-3); }
     .feed-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
@@ -245,25 +155,13 @@
       padding: 0 0 var(--suisou-space-2);
       overflow: hidden;
     }
-    .feed-card:has(.feed-card-link:hover) { border-color: var(--suisou-color-accent); }
     .feed-card &gt; :not(.feed-card-image) { margin-inline: var(--suisou-space-2); }
     .feed-card-image {
       width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
     }
-    .feed-card-date {
-      margin-block-start: var(--suisou-space-2);
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-      color: var(--suisou-color-text-sub);
-    }
-    .feed-card-title {
-      font-size: var(--suisou-fs-16);
-      line-height: var(--suisou-lh-16);
-      font-weight: 500;
-    }
-    .feed-card-link { color: inherit; }
+    .feed-card-date { margin-block-start: var(--suisou-space-2); }
     .feed-card-link::after {
       content: "";
       position: absolute;
@@ -281,14 +179,13 @@
     .feed-empty {
       grid-column: 1 / -1;
       text-align: center;
-      color: var(--suisou-color-text-sub);
     }
     .feed-pages-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: var(--suisou-space-1);
-      margin-block-start: var(--suisou-space-4);
+      margin-block-start: var(--suisou-space-3);
       list-style: none;
     }
     .feed-pages-list span {
@@ -296,41 +193,23 @@
       place-items: center;
       min-width: var(--suisou-size-button);
       height: var(--suisou-size-button);
-      color: var(--suisou-color-text-sub);
-    }
-
-    .status-page {
-      padding-block: var(--suisou-space-5);
-      text-align: center;
-    }
-    .status-page h1 {
-      font-size: 4rem;
-      line-height: 1;
-      color: var(--suisou-color-text-disabled);
     }
 
     .site-footer {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: var(--suisou-space-1);
-      padding: var(--suisou-space-4) var(--suisou-space-3);
-      border-top: 1px solid var(--suisou-color-line-weak);
-      text-align: center;
-      font-size: var(--suisou-fs-12);
-      line-height: var(--suisou-lh-12);
-      color: var(--suisou-color-text-sub);
+      padding: var(--suisou-space-3);
     }
-    .site-footer a { color: var(--suisou-color-text); }
-    .site-footer a:hover { text-decoration: underline; }
 
     .image-modal {
       max-width: 95vw;
       max-height: 95dvh;
-      padding: var(--suisou-space-1);
     }
     .image-modal img {
-      max-width: calc(95vw - var(--suisou-space-1) * 2);
-      max-height: calc(95dvh - var(--suisou-space-1) * 2);
+      max-width: calc(95vw - var(--suisou-space-2) * 2);
+      max-height: calc(95dvh - var(--suisou-space-2) * 2);
       object-fit: contain;
     }
   </style>
@@ -342,8 +221,8 @@
         <b:includable id='main'>
           <div class='site-header-inner'>
             <a class='site-title' expr:href='data:blog.homepageUrl'>
-              <span class='site-name'><data:blog.title/></span>
-              <span class='site-description'><data:description/></span>
+              <span data-suisou-text='fs-16 fw-700'><data:blog.title/></span>
+              <span data-suisou-text='fs-12'><data:description/></span>
             </a>
             <form action='/search' class='site-search' method='get' role='search'>
               <div data-suisou-item='field'>
@@ -375,31 +254,29 @@
           </b:widget-settings>
           <b:includable id='main'>
             <b:if cond='data:view.isError'>
-              <article class='status-page' data-suisou-text='typeset'>
+              <article class='status-page' data-suisou-text='typeset' data-suisou-tray=''>
                 <h1>404</h1>
                 <p>お探しのページは見つかりませんでした。</p>
                 <p><a data-suisou-button='outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
               </article>
             <b:elseif cond='data:view.isMultipleItems'/>
-              <header class='feed-heading js-feed-heading'/>
+              <header class='feed-heading js-feed-heading' data-suisou-text='typeset'/>
               <div class='feed-cards js-feed-index'/>
               <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
             <b:else/>
               <b:loop values='data:posts' var='post'>
-                <article class='post' data-suisou-tray=''>
-                  <header class='post-header'>
-                    <b:if cond='data:view.isPost'>
-                      <time class='post-date'><data:post.date/></time>
-                    </b:if>
-                    <h1 class='post-title'><data:post.title/></h1>
-                    <b:if cond='data:view.isPost'>
-                      <p class='post-labels js-post-labels'>
-                        <b:loop values='data:post.labels' var='label'>
-                          <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
-                        </b:loop>
-                      </p>
-                    </b:if>
-                  </header>
+                <article class='post' data-suisou-text='typeset' data-suisou-tray=''>
+                  <b:if cond='data:view.isPost'>
+                    <p><small><time><data:post.date/></time></small></p>
+                  </b:if>
+                  <h1><data:post.title/></h1>
+                  <b:if cond='data:view.isPost'>
+                    <p class='post-labels js-post-labels'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
+                      </b:loop>
+                    </p>
+                  </b:if>
                   <div class='post-body js-post-body' data-suisou-text='typeset'><data:post.body/></div>
                 </article>
               </b:loop>
@@ -471,12 +348,12 @@
             <b:includable id='main'>
               <b:if cond='data:view.isPost or data:view.isPage'>
                 <section class='side-toc js-side-toc' data-suisou-tray=''>
-                  <h2 class='side-heading'>目次</h2>
+                  <h2 class='side-heading' data-suisou-text='fs-14 fw-700'>目次</h2>
                   <ul class='js-toc' data-suisou-text='toc'/>
                 </section>
               </b:if>
               <section class='side-labels' data-suisou-tray=''>
-                <h2 class='side-heading'>ラベル</h2>
+                <h2 class='side-heading' data-suisou-text='fs-14 fw-700'>ラベル</h2>
                 <p class='side-label-list'>
                   <b:loop values='data:labels' var='label'>
                     <a data-suisou-item='tag' expr:href='data:label.url'><data:label.name/></a>
@@ -489,9 +366,9 @@
       </nav>
     </aside>
   </div>
-  <footer class='site-footer'>
+  <footer class='site-footer' data-suisou-text='fs-12'>
     <p>Powered by <a href='https://www.blogger.com'>Blogger</a> / Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></p>
-    <p class='site-credits'>
+    <p>
       <a href='https://suisou.pages.dev'>Suisou</a> /
       <a href='https://markdown-it.github.io'>markdown-it</a> /
       <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
@@ -637,12 +514,11 @@
       const cardHTML = (href, d) =&gt; {
         let host = href;
         try { host = new URL(href).hostname; } catch {}
-        return `&lt;div class='link-card'&gt;
-          &lt;a class='link-card-link' data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'&gt;
+        return `&lt;div class='link-card' data-suisou-item=''&gt;
+          &lt;a data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'&gt;
             &lt;span data-suisou-item='media-content'&gt;
-              &lt;span class='link-card-title'&gt;${esc(d.title || href)}&lt;/span&gt;
-              ${d.description ? `&lt;span class='link-card-description'&gt;${esc(d.description)}&lt;/span&gt;` : ''}
-              &lt;span class='link-card-host'&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/&gt;` : ''}${esc(host)}&lt;/span&gt;
+              &lt;header&gt;&lt;span&gt;${esc(d.title || href)}&lt;/span&gt;&lt;span class='link-card-host'&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/&gt;` : ''}${esc(host)}&lt;/span&gt;&lt;/header&gt;
+              ${d.description ? `&lt;span data-suisou-text='fs-12'&gt;${esc(d.description)}&lt;/span&gt;` : ''}
             &lt;/span&gt;
             ${d.image?.url ? `&lt;img class='link-card-image' data-suisou-item='media-tail' src='${esc(d.image.url)}' alt='' loading='lazy'/&gt;` : ''}
           &lt;/a&gt;
@@ -748,8 +624,8 @@
       const labels = (p.category || []).map(c =&gt; `&lt;a data-suisou-item='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
       return `&lt;article class='feed-card' data-suisou-tray=''&gt;
         ${thumb ? `&lt;img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/&gt;` : ''}
-        &lt;time class='feed-card-date'&gt;${date}&lt;/time&gt;
-        &lt;h2 class='feed-card-title'&gt;&lt;a class='feed-card-link' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
+        &lt;time class='feed-card-date' data-suisou-text='fs-12'&gt;${date}&lt;/time&gt;
+        &lt;h2 class='feed-card-title' data-suisou-text='fs-16 fw-500'&gt;&lt;a class='feed-card-link' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
         ${labels ? `&lt;p class='feed-card-labels'&gt;${labels}&lt;/p&gt;` : ''}
       &lt;/article&gt;`;
     };

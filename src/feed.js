@@ -59,8 +59,8 @@
     const labels = (p.category || []).map(c => `<a data-suisou-item='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
     return `<article class='feed-card' data-suisou-tray=''>
       ${thumb ? `<img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/>` : ''}
-      <time class='feed-card-date'>${date}</time>
-      <h2 class='feed-card-title'><a class='feed-card-link' href='${esc(url)}'>${esc(p.title.$t)}</a></h2>
+      <time class='feed-card-date' data-suisou-text='fs-12'>${date}</time>
+      <h2 class='feed-card-title' data-suisou-text='fs-16 fw-500'><a class='feed-card-link' href='${esc(url)}'>${esc(p.title.$t)}</a></h2>
       ${labels ? `<p class='feed-card-labels'>${labels}</p>` : ''}
     </article>`;
   };
