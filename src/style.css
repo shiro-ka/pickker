@@ -16,10 +16,7 @@ body {
   min-height: 100dvh;
 }
 
-.site-header {
-  border-bottom: 1px solid var(--suisou-color-line-weak);
-  background: var(--suisou-color-bg);
-}
+.site-header { background: var(--suisou-color-bg); }
 .site-header-inner {
   display: flex;
   align-items: center;

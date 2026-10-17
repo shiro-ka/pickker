@@ -75,7 +75,7 @@
               <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
             <b:else/>
               <b:loop values='data:posts' var='post'>
-                <article class='post'>
+                <article class='post' data-suisou-tray=''>
                   <header class='post-header'>
                     <b:if cond='data:view.isPost'>
                       <time class='post-date'><data:post.date/></time>
