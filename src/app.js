@@ -16,7 +16,7 @@
   if (modal) {
     document.addEventListener('click', e => {
       const t = e.target;
-      if (t.tagName === 'IMG' && t.closest('.js-post-body') && !t.closest('a')) {
+      if (t.tagName === 'IMG' && !t.classList.contains('emoji') && t.closest('.js-post-body') && !t.closest('a')) {
         modal.querySelector('img').src = bigImage(t.src);
         modal.showModal();
       }
