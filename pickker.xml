@@ -27,7 +27,6 @@
 
     :root {
       --suisou-font: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-      --pickker-width: 72rem;
       --pickker-side: 18rem;
     }
 
@@ -41,8 +40,6 @@
       display: flex;
       align-items: center;
       gap: var(--suisou-space-3);
-      max-width: var(--pickker-width);
-      margin-inline: auto;
       padding: var(--suisou-space-3);
     }
     .site-title {
@@ -58,9 +55,6 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       gap: var(--suisou-space-3);
-      width: 100%;
-      max-width: var(--pickker-width);
-      margin-inline: auto;
       padding: 0 var(--suisou-space-3) var(--suisou-space-3);
     }
 
@@ -219,7 +213,7 @@
     <b:section id='ヘッダー'>
       <b:widget id='Header0' locked='false' title='Header' type='Header'>
         <b:includable id='main'>
-          <div class='site-header-inner'>
+          <div class='site-header-inner' data-suisou='container-l'>
             <a class='site-title' expr:href='data:blog.homepageUrl'>
               <span data-suisou-text='fs-16 fw-700'><data:blog.title/></span>
               <span data-suisou-text='fs-12'><data:description/></span>
@@ -235,7 +229,7 @@
       </b:widget>
     </b:section>
   </header>
-  <div class='site-body'>
+  <div class='site-body' data-suisou='container-l'>
     <main class='site-main'>
       <b:section id='メインカラム'>
         <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>
