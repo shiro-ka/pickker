@@ -88,8 +88,8 @@
       .side-nav[popover]:not(:popover-open) {
         display: block;
         position: sticky;
-        top: var(--suisou-space-3);
         inset: auto;
+        top: var(--suisou-space-3);
         width: auto;
         height: auto;
         max-height: calc(100dvh - var(--suisou-space-3) * 2);
