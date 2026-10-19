@@ -82,7 +82,7 @@
 
   function setupTOCHighlight() {
     const toc = $('.js-toc');
-    if (!toc || !sideNav) return;
+    if (!toc) return;
     const links = [...toc.querySelectorAll('a')];
     const headings = [...$$('.js-post-body :is(h2, h3, h4)')];
     if (!headings.length) return;
@@ -98,7 +98,8 @@
         a.toggleAttribute('aria-current', on);
         if (on && lastActive !== a) {
           lastActive = a;
-          sideNav.scrollTo({ top: a.offsetTop - sideNav.clientHeight / 2, behavior: motion });
+          const offset = a.getBoundingClientRect().top - toc.getBoundingClientRect().top - toc.clientHeight / 2;
+          toc.scrollBy({ top: offset, behavior: motion });
         }
       });
     };

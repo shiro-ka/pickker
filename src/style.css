@@ -39,6 +39,21 @@ body {
   gap: var(--suisou-space-3);
 }
 .side-heading { margin-block-end: var(--suisou-space-2); }
+.side-nav :is(.section, .widget) { display: contents; }
+.side-nav:popover-open {
+  display: flex;
+  flex-direction: column;
+}
+.side-toc {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.side-toc > .js-toc {
+  min-height: 0;
+  overflow-y: auto;
+}
+.side-labels { flex: none; }
 .side-toc + .side-labels { margin-block-start: var(--suisou-space-3); }
 .side-label-list,
 .post-labels,
@@ -60,7 +75,8 @@ body {
   .site-body { grid-template-columns: minmax(0, 1fr) var(--pickker-side); }
   .site-menu { display: none; }
   .side-nav[popover]:not(:popover-open) {
-    display: block;
+    display: flex;
+    flex-direction: column;
     position: sticky;
     inset: auto;
     top: var(--suisou-space-3);

@@ -65,6 +65,21 @@
       gap: var(--suisou-space-3);
     }
     .side-heading { margin-block-end: var(--suisou-space-2); }
+    .side-nav :is(.section, .widget) { display: contents; }
+    .side-nav:popover-open {
+      display: flex;
+      flex-direction: column;
+    }
+    .side-toc {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .side-toc &gt; .js-toc {
+      min-height: 0;
+      overflow-y: auto;
+    }
+    .side-labels { flex: none; }
     .side-toc + .side-labels { margin-block-start: var(--suisou-space-3); }
     .side-label-list,
     .post-labels,
@@ -86,7 +101,8 @@
       .site-body { grid-template-columns: minmax(0, 1fr) var(--pickker-side); }
       .site-menu { display: none; }
       .side-nav[popover]:not(:popover-open) {
-        display: block;
+        display: flex;
+        flex-direction: column;
         position: sticky;
         inset: auto;
         top: var(--suisou-space-3);
@@ -468,7 +484,7 @@
 
     function setupTOCHighlight() {
       const toc = $('.js-toc');
-      if (!toc || !sideNav) return;
+      if (!toc) return;
       const links = [...toc.querySelectorAll('a')];
       const headings = [...$$('.js-post-body :is(h2, h3, h4)')];
       if (!headings.length) return;
@@ -484,7 +500,8 @@
           a.toggleAttribute('aria-current', on);
           if (on &amp;&amp; lastActive !== a) {
             lastActive = a;
-            sideNav.scrollTo({ top: a.offsetTop - sideNav.clientHeight / 2, behavior: motion });
+            const offset = a.getBoundingClientRect().top - toc.getBoundingClientRect().top - toc.clientHeight / 2;
+            toc.scrollBy({ top: offset, behavior: motion });
           }
         });
       };
