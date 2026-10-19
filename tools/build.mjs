@@ -1,21 +1,4 @@
 #!/usr/bin/env node
-// src/ から配布用のテーマを生成する。
-//
-//   pickker.xml         通常版。CSS / JS をテーマの中に全部埋め込む
-//   pickker-online.xml  オンライン版。CSS / JS は ONLINE_BASE から読む
-//   dist/               オンライン版が読む CSS / JS (Cloudflare Workers へデプロイする中身)
-//
-// Blogger はテーマを XML としてパースするため、埋め込む <style> / <script> の中身も
-// & < > をエンティティに直す必要がある。その変換をここが持つことで、
-// src 側は素の CSS / JS のまま書ける (エディタの補完もリンタも効く)。
-//
-// src/theme.xml の差し込み位置 (1行に単独で書く):
-//   @@STYLE:foo.css@@   通常版は <style>、オンライン版は <link>
-//   @@SCRIPT:foo.js@@   通常版は <script>、オンライン版は <script src>
-//
-// 使い方: node tools/build.mjs [--check]
-//   --check … 生成せず、pickker.xml / pickker-online.xml が src と一致するかだけ見る
-
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -43,7 +26,6 @@ const render = {
 
 const build = mode => {
   const xml = src('theme.xml').replace(MARKER, (_, indent, kind, name) => render[mode][kind](indent, name));
-  // 行の途中に書いた @@…@@ は置換されずに素通りするので検出する
   if (/@@[A-Z]+:/.test(xml)) throw new Error('展開されなかった @@…@@ がある (1行に単独で書くこと)');
   return xml;
 };
