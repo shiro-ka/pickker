@@ -15,8 +15,9 @@
   <meta expr:content='data:blog.title' property='og:site_name'/>
   &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
   <link as='style' href='https://suisou.pages.dev/v3/suisou.css' rel='preload'/>
-  <link href='https://fonts.bunny.net' rel='preconnect'/>
-  <link href='https://fonts.bunny.net/css?family=m-plus-rounded-1c:400,700&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&amp;display=swap' rel='stylesheet'/>
   <link href='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/styles/github-dark.min.css' rel='stylesheet'/>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
@@ -181,7 +182,7 @@
     <p>
       <a href='https://suisou.pages.dev'>Suisou</a> /
       <a href='https://markdown-it.github.io'>markdown-it</a> /
-      <a href='https://fonts.bunny.net'>Bunny Fonts</a> /
+      <a href='https://fonts.google.com'>Google Fonts</a> /
       <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
       <a href='https://microlink.io/'>Microlink</a> /
       <a href='https://highlightjs.org'>Highlight.js</a>
