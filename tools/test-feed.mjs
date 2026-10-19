@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// feed.js を最小の DOM スタブ上で走らせて、ビューごとに
-// 「どのフィード URL を叩くか」「ページリンクがどう出るか」を確認する。
-// ブラウザ無しで A-1 の核 (ラベル/検索/アーカイブの絞り込み) を検証するのが目的。
-
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,7 +24,6 @@ const FEED = {
 function run(label, url) {
   const u = new URL(url);
   const requested = [];
-  // textContent への代入は実 DOM だと子を全部消すので、そこまで再現する
   const el = () => {
     const n = {
       dataset: {}, innerHTML: '', kids: [], _text: '',
@@ -69,7 +64,6 @@ function run(label, url) {
   }, 10));
 }
 
-// 見出しは append 経由なので拾えるようにフックしておく
 for (const [label, url] of [
   ['ホーム', 'https://example.com/'],
   ['ラベル', 'https://example.com/search/label/Blogger%20Tips'],

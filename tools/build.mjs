@@ -53,8 +53,6 @@ if (process.argv.includes('--check')) {
   console.log(`✓ dist/ に ${assets.join(' / ')}`);
 }
 
-// Blogger は不正な XML を問答無用で弾くので、貼り付けてから気づく前にここで落とす。
-// xmllint が無い環境では python3 の minidom で同じ検査をする (どちらも無ければ落とす)
 for (const file of Object.keys(outputs)) {
   try {
     execFileSync('xmllint', ['--noout', at(file)], { stdio: 'inherit' });
