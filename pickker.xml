@@ -411,8 +411,19 @@
     });
 
     const bigImage = url =&gt; url
-      .replace(/\/(?:s\d+|w\d+-h\d+)[-\w]*\/([^/]+)$/, '/s1600/$1')
-      .replace(/=(?:s\d+|w\d+-h\d+)[-\w]*$/, '=s1600');
+      .replace(/\/(?:s\d+|w\d+-h\d+)[-\w]*\/([^/]+)$/, '/s0/$1')
+      .replace(/=(?:s\d+|w\d+-h\d+)[-\w]*$/, '=s0');
+    const BLOGGER_IMAGE = /^https:\/\/(?:blogger\.googleusercontent\.com|[\w-]+\.bp\.blogspot\.com)\//;
+    const normalizeBloggerImages = src =&gt; src
+      .replace(/&lt;a\b[^&gt;]*\bhref="([^"]*)"[^&gt;]*&gt;\s*(?:&lt;span\b[^&gt;]*&gt;\s*)?(&lt;img\b[^&gt;]*&gt;)\s*(?:&lt;\/span&gt;\s*)?&lt;\/a&gt;/gi,
+        (all, href, img) =&gt; BLOGGER_IMAGE.test(href) ? img : all)
+      .replace(/&lt;div\b[^&gt;]*\bclass="separator"[^&gt;]*&gt;\s*(?:&lt;span\b[^&gt;]*&gt;\s*)?(&lt;img\b[^&gt;]*&gt;)\s*(?:&lt;\/span&gt;\s*)?&lt;\/div&gt;/gi, '$1')
+      .replace(/&lt;img\b[^&gt;]*&gt;/gi, img =&gt; {
+        const url = (img.match(/\bsrc="([^"]*)"/i) || [])[1];
+        if (!url || !BLOGGER_IMAGE.test(url)) return img;
+        const alt = (img.match(/\balt="([^"]*)"/i) || [])[1] || '';
+        return `&lt;img src="${bigImage(url)}" alt="${alt}" loading="lazy"&gt;`;
+      });
     const modal = $('.js-image-modal');
     if (modal) {
       document.addEventListener('click', e =&gt; {
@@ -531,7 +542,7 @@
       const el = $('.js-post-body');
       if (!el || !window.markdownit) return;
       const decode = s =&gt; { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
-      let src = decode(el.innerHTML.replace(/&lt;p[^&gt;]*&gt;\s*/gi, '').replace(/\s*&lt;\/p&gt;/gi, '\n\n'));
+      let src = normalizeBloggerImages(decode(el.innerHTML.replace(/&lt;p[^&gt;]*&gt;\s*/gi, '').replace(/\s*&lt;\/p&gt;/gi, '\n\n')));
       src = src.replace(/\n{3,}/g, m =&gt; '\n\n' + '&lt;br&gt;\n\n'.repeat(m.length - 2));
       el.innerHTML = markdownToHTML(src);
     }
