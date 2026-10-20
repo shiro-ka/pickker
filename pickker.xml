@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:js='false' b:responsive='true' b:version='3' data-suisou-theme='hadal jelly' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' data-suisou-theme='trench jelly' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
@@ -410,7 +410,7 @@
   </div>
   <footer class='site-footer' data-suisou-layout='stack center gap-0' data-suisou-text='fs-12 center'>
     <span>Suisou</span>
-    <span>hadal x jelly</span>
+    <span>trench x jelly</span>
   </footer>
   <dialog class='image-modal js-image-modal' data-suisou-tray=''><img alt=''/></dialog>
 
