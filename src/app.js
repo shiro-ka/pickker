@@ -31,27 +31,48 @@
     loadLinkCards();
   });
 
+  let md;
+  function markdownToHTML(src) {
+    if (!md) {
+      md = window.markdownit({
+        html: true, breaks: true, linkify: true, typographer: true, langPrefix: 'hljs language-',
+        highlight: (code, lang) => {
+          if (!window.hljs) return '';
+          if (lang && window.hljs.getLanguage(lang)) return window.hljs.highlight(code, { language: lang, ignoreIllegals: true }).value;
+          return lang ? '' : window.hljs.highlightAuto(code).value;
+        },
+      }).use(window.markdownitEmoji);
+      const defaultLinkOpen = md.renderer.rules.link_open || ((t, i, o, e, s) => s.renderToken(t, i, o));
+      md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+        const href = tokens[idx].attrGet('href');
+        if (href && href.startsWith('http')) {
+          tokens[idx].attrSet('target', '_blank');
+          tokens[idx].attrSet('rel', 'noopener noreferrer');
+        }
+        return defaultLinkOpen(tokens, idx, options, env, self);
+      };
+      const defaultFence = md.renderer.rules.fence;
+      md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+        const token = tokens[idx];
+        const m = token.info.trim().match(/^([^\s:]*):(\S+)(.*)$/);
+        if (!m) return defaultFence(tokens, idx, options, env, self);
+        token.info = m[1] + m[3];
+        return `<figure><figcaption>${md.utils.escapeHtml(m[2])}</figcaption>${defaultFence(tokens, idx, options, env, self)}</figure>\n`;
+      };
+    }
+    const html = md.render(src);
+    return window.twemoji ? window.twemoji.parse(html, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' }) : html;
+  }
+
   function renderMarkdown() {
     const el = $('.js-post-body');
     if (!el || !window.markdownit) return;
-    const md = window.markdownit({ html: true, breaks: true, linkify: true, typographer: true, langPrefix: 'hljs language-' })
-      .use(window.markdownitEmoji);
-    const defaultLinkOpen = md.renderer.rules.link_open || ((t, i, o, e, s) => s.renderToken(t, i, o));
-    md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-      const href = tokens[idx].attrGet('href');
-      if (href && href.startsWith('http')) {
-        tokens[idx].attrSet('target', '_blank');
-        tokens[idx].attrSet('rel', 'noopener noreferrer');
-      }
-      return defaultLinkOpen(tokens, idx, options, env, self);
-    };
     const decode = s => { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
     let src = decode(el.innerHTML.replace(/<p[^>]*>\s*/gi, '').replace(/\s*<\/p>/gi, '\n\n'));
     src = src.replace(/\n{3,}/g, m => '\n\n' + '<br>\n\n'.repeat(m.length - 2));
-    el.innerHTML = md.render(src);
-    el.querySelectorAll('pre code').forEach(b => window.hljs?.highlightElement(b));
-    window.twemoji?.parse(el, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' });
+    el.innerHTML = markdownToHTML(src);
   }
+
 
   function buildTOC() {
     const body = $('.js-post-body');
