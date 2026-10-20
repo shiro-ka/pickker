@@ -22,6 +22,8 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@2/dist/markdown-it-emoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-deflist@4/dist/markdown-it-deflist.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-container@4/dist/markdown-it-container.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
   <style>
     @import url("https://suisou.pages.dev/v3/suisou.css") layer(suisou);
@@ -137,6 +139,16 @@
       vertical-align: -0.1em;
       border-radius: 0;
     }
+    .post-body .embed iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+    }
+    .post-body .embed-youtube iframe {
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+    .post-body .embed-spotify iframe { border-radius: 12px; }
     .post-body pre code.hljs {
       padding: 0;
       background: transparent;
@@ -415,10 +427,38 @@
 
     document.addEventListener('DOMContentLoaded', () =&gt; {
       renderMarkdown();
+      loadSoundCloud();
       buildTOC();
       setupTOCHighlight();
       loadLinkCards();
     });
+
+    const embedOf = href =&gt; {
+      let u;
+      try { u = new URL(href); } catch { return null; }
+      const host = u.hostname.replace(/^(www|m)\./, '');
+      if (host === 'youtu.be' || host === 'youtube.com' || host === 'music.youtube.com') {
+        const id = host === 'youtu.be' ? u.pathname.slice(1)
+          : u.pathname === '/watch' ? u.searchParams.get('v')
+          : (u.pathname.match(/^\/(?:shorts|embed|live)\/([\w-]+)/) || [])[1];
+        if (!id || !/^[\w-]+$/.test(id)) return null;
+        const t = u.searchParams.get('t') || u.searchParams.get('start') || '';
+        const hms = t.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
+        const start = hms ? (+(hms[1] || 0)) * 3600 + (+(hms[2] || 0)) * 60 + (+(hms[3] || 0)) : 0;
+        return `&lt;div class='embed embed-youtube'&gt;&lt;iframe src='https://www.youtube-nocookie.com/embed/${id}${start ? `?start=${start}` : ''}' title='YouTube' loading='lazy' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;`;
+      }
+      if (host === 'open.spotify.com') {
+        const m = u.pathname.match(/^\/(?:intl-[\w-]+\/)?(track|album|playlist|artist|episode|show)\/(\w+)/);
+        if (!m) return null;
+        const height = m[1] === 'track' || m[1] === 'episode' ? 152 : 352;
+        return `&lt;div class='embed embed-spotify'&gt;&lt;iframe src='https://open.spotify.com/embed/${m[1]}/${m[2]}' title='Spotify' height='${height}' loading='lazy' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'&gt;&lt;/iframe&gt;&lt;/div&gt;`;
+      }
+      if (host === 'soundcloud.com' &amp;&amp; u.pathname.split('/').filter(Boolean).length &gt;= 1) {
+        const url = esc(u.origin + u.pathname);
+        return `&lt;div class='embed embed-soundcloud js-soundcloud' data-url='${url}'&gt;&lt;a href='${url}' target='_blank' rel='noopener noreferrer'&gt;${url}&lt;/a&gt;&lt;/div&gt;`;
+      }
+      return null;
+    };
 
     let md;
     function markdownToHTML(src) {
@@ -431,6 +471,40 @@
             return lang ? '' : window.hljs.highlightAuto(code).value;
           },
         }).use(window.markdownitEmoji);
+        if (window.markdownitDeflist) md.use(window.markdownitDeflist);
+        if (window.markdownitContainer) {
+          md.use(window.markdownitContainer, 'details', {
+            validate: params =&gt; /^details(\s|$)/.test(params.trim()),
+            render: (tokens, idx) =&gt; {
+              if (tokens[idx].nesting !== 1) return '&lt;/details&gt;\n';
+              const title = tokens[idx].info.trim().replace(/^details\s*/, '') || '詳細';
+              return `&lt;details&gt;&lt;summary&gt;${md.utils.escapeHtml(title)}&lt;/summary&gt;\n`;
+            },
+          });
+          md.use(window.markdownitContainer, 'message', {
+            validate: params =&gt; /^message(\s|$)/.test(params.trim()),
+            render: (tokens, idx) =&gt; {
+              if (tokens[idx].nesting !== 1) return '&lt;/div&gt;\n';
+              const alert = /^message\s+alert\b/.test(tokens[idx].info.trim());
+              return `&lt;div data-suisou-item='notice'${alert ? " data-suisou='error'" : ''}&gt;\n`;
+            },
+          });
+        }
+        md.core.ruler.push('embed', state =&gt; {
+          const t = state.tokens;
+          for (let i = 0; i + 2 &lt; t.length; i++) {
+            if (t[i].type !== 'paragraph_open' || t[i + 1].type !== 'inline' || t[i + 2].type !== 'paragraph_close') continue;
+            const c = t[i + 1].children || [];
+            if (c.length !== 3 || c[0].type !== 'link_open' || c[2].type !== 'link_close') continue;
+            const href = c[0].attrGet('href');
+            if (c[1].content.trim() !== href) continue;
+            const html = embedOf(href);
+            if (!html) continue;
+            const block = new state.Token('html_block', '', 0);
+            block.content = html + '\n';
+            t.splice(i, 3, block);
+          }
+        });
         const defaultLinkOpen = md.renderer.rules.link_open || ((t, i, o, e, s) =&gt; s.renderToken(t, i, o));
         md.renderer.rules.link_open = (tokens, idx, options, env, self) =&gt; {
           const href = tokens[idx].attrGet('href');
@@ -462,6 +536,25 @@
       el.innerHTML = markdownToHTML(src);
     }
 
+
+    function loadSoundCloud() {
+      $$('.js-soundcloud').forEach(el =&gt; {
+        fetch('https://soundcloud.com/oembed?format=json&amp;maxheight=300&amp;url=' + encodeURIComponent(el.dataset.url))
+          .then(r =&gt; r.json())
+          .then(j =&gt; {
+            const src = (j.html || '').match(/src="(https:\/\/w\.soundcloud\.com\/player\/[^"]+)"/);
+            if (!src) return;
+            const f = document.createElement('iframe');
+            f.src = src[1].replace(/&amp;amp;/g, '&amp;');
+            f.title = j.title || 'SoundCloud';
+            f.height = j.height || 166;
+            f.loading = 'lazy';
+            f.allow = 'autoplay; encrypted-media';
+            el.replaceChildren(f);
+          })
+          .catch(() =&gt; {});
+      });
+    }
 
     function buildTOC() {
       const body = $('.js-post-body');
