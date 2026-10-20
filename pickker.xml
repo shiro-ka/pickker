@@ -214,13 +214,7 @@
       height: var(--suisou-size-button);
     }
 
-    .site-footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--suisou-space-1);
-      padding: var(--suisou-space-3);
-    }
+    .site-footer { padding: var(--suisou-space-3); }
 
     .image-modal {
       max-width: 95vw;
@@ -340,13 +334,13 @@
               <ul class='side-posts'>
                 <b:if cond='data:view.isPost'>
                   <b:loop values='data:posts' var='post'>
-                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><data:post.title/></span></a></li>
+                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content' data-suisou-text='clamp-2'><data:post.title/></span></a></li>
                   </b:loop>
                   <li class='js-latest-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><data:post.title/></span></a></li>
+                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content' data-suisou-text='clamp-2'><data:post.title/></span></a></li>
                   </b:loop>
                 </b:if>
               </ul>
@@ -385,16 +379,9 @@
       </nav>
     </aside>
   </div>
-  <footer class='site-footer' data-suisou-text='fs-12'>
-    <p>Powered by <a href='https://www.blogger.com'>Blogger</a> / Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></p>
-    <p>
-      <a href='https://suisou.pages.dev'>Suisou</a> /
-      <a href='https://markdown-it.github.io'>markdown-it</a> /
-      <a href='https://fonts.google.com'>Google Fonts</a> /
-      <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
-      <a href='https://microlink.io/'>Microlink</a> /
-      <a href='https://highlightjs.org'>Highlight.js</a>
-    </p>
+  <footer class='site-footer' data-suisou-layout='stack center gap-0' data-suisou-text='fs-12 center'>
+    <span>Suisou</span>
+    <span>hadal x jelly</span>
   </footer>
   <dialog class='image-modal js-image-modal' data-suisou-tray=''><img alt=''/></dialog>
 
@@ -537,8 +524,8 @@
         return `&lt;div class='link-card' data-suisou-item=''&gt;
           &lt;a data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'&gt;
             &lt;span data-suisou-item='media-content'&gt;
-              &lt;header&gt;&lt;span&gt;${esc(d.title || href)}&lt;/span&gt;&lt;span class='link-card-host'&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/&gt;` : ''}${esc(host)}&lt;/span&gt;&lt;/header&gt;
-              ${d.description ? `&lt;span data-suisou-text='fs-12'&gt;${esc(d.description)}&lt;/span&gt;` : ''}
+              &lt;header&gt;&lt;span data-suisou-text='clamp-2'&gt;${esc(d.title || href)}&lt;/span&gt;&lt;span class='link-card-host'&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/&gt;` : ''}${esc(host)}&lt;/span&gt;&lt;/header&gt;
+              ${d.description ? `&lt;span data-suisou-text='fs-12 clamp-2'&gt;${esc(d.description)}&lt;/span&gt;` : ''}
             &lt;/span&gt;
             ${d.image?.url ? `&lt;img class='link-card-image' data-suisou-item='media-tail' src='${esc(d.image.url)}' alt='' loading='lazy'/&gt;` : ''}
           &lt;/a&gt;
@@ -734,7 +721,7 @@
           .filter(p =&gt; p &amp;&amp; !location.href.includes(p.link));
         if (!posts.length) return;
         const render = (p, target) =&gt; {
-          target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content'&gt;${esc(p.title)}&lt;/span&gt;&lt;/a&gt;`;
+          target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content' data-suisou-text='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/a&gt;`;
         };
         if (latestSlot) render(posts[0], latestSlot);
         const rest = posts.slice(1);

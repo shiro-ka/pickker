@@ -132,13 +132,13 @@
               <ul class='side-posts'>
                 <b:if cond='data:view.isPost'>
                   <b:loop values='data:posts' var='post'>
-                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><data:post.title/></span></a></li>
+                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content' data-suisou-text='clamp-2'><data:post.title/></span></a></li>
                   </b:loop>
                   <li class='js-latest-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><data:post.title/></span></a></li>
+                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content' data-suisou-text='clamp-2'><data:post.title/></span></a></li>
                   </b:loop>
                 </b:if>
               </ul>
@@ -177,16 +177,9 @@
       </nav>
     </aside>
   </div>
-  <footer class='site-footer' data-suisou-text='fs-12'>
-    <p>Powered by <a href='https://www.blogger.com'>Blogger</a> / Theme : <a href='https://github.com/shiro-ka/pickker'>pickker</a></p>
-    <p>
-      <a href='https://suisou.pages.dev'>Suisou</a> /
-      <a href='https://markdown-it.github.io'>markdown-it</a> /
-      <a href='https://fonts.google.com'>Google Fonts</a> /
-      <a href='https://fonts.google.com/specimen/M+PLUS+Rounded+1c'>M PLUS Rounded 1c</a> /
-      <a href='https://microlink.io/'>Microlink</a> /
-      <a href='https://highlightjs.org'>Highlight.js</a>
-    </p>
+  <footer class='site-footer' data-suisou-layout='stack center gap-0' data-suisou-text='fs-12 center'>
+    <span>Suisou</span>
+    <span>hadal x jelly</span>
   </footer>
   <dialog class='image-modal js-image-modal' data-suisou-tray=''><img alt=''/></dialog>
 

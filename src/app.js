@@ -135,8 +135,8 @@
       return `<div class='link-card' data-suisou-item=''>
         <a data-suisou-item='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'>
           <span data-suisou-item='media-content'>
-            <header><span>${esc(d.title || href)}</span><span class='link-card-host'>${d.logo?.url ? `<img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/>` : ''}${esc(host)}</span></header>
-            ${d.description ? `<span data-suisou-text='fs-12'>${esc(d.description)}</span>` : ''}
+            <header><span data-suisou-text='clamp-2'>${esc(d.title || href)}</span><span class='link-card-host'>${d.logo?.url ? `<img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/>` : ''}${esc(host)}</span></header>
+            ${d.description ? `<span data-suisou-text='fs-12 clamp-2'>${esc(d.description)}</span>` : ''}
           </span>
           ${d.image?.url ? `<img class='link-card-image' data-suisou-item='media-tail' src='${esc(d.image.url)}' alt='' loading='lazy'/>` : ''}
         </a>

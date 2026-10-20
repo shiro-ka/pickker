@@ -188,13 +188,7 @@ body {
   height: var(--suisou-size-button);
 }
 
-.site-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--suisou-space-1);
-  padding: var(--suisou-space-3);
-}
+.site-footer { padding: var(--suisou-space-3); }
 
 .image-modal {
   max-width: 95vw;

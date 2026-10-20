@@ -17,7 +17,7 @@
         .filter(p => p && !location.href.includes(p.link));
       if (!posts.length) return;
       const render = (p, target) => {
-        target.innerHTML = `<a class='side-post' data-suisou-item='media' href='${esc(p.link)}'>${p.thumb ? `<img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/>` : ''}<span data-suisou-item='media-content'>${esc(p.title)}</span></a>`;
+        target.innerHTML = `<a class='side-post' data-suisou-item='media' href='${esc(p.link)}'>${p.thumb ? `<img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/>` : ''}<span data-suisou-item='media-content' data-suisou-text='clamp-2'>${esc(p.title)}</span></a>`;
       };
       if (latestSlot) render(posts[0], latestSlot);
       const rest = posts.slice(1);
