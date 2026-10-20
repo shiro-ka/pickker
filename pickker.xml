@@ -334,13 +334,13 @@
               <ul class='side-posts'>
                 <b:if cond='data:view.isPost'>
                   <b:loop values='data:posts' var='post'>
-                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content' data-suisou-text='clamp-2'><data:post.title/></span></a></li>
+                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
                   <li class='js-latest-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content' data-suisou-text='clamp-2'><data:post.title/></span></a></li>
+                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
                 </b:if>
               </ul>
@@ -721,7 +721,7 @@
           .filter(p =&gt; p &amp;&amp; !location.href.includes(p.link));
         if (!posts.length) return;
         const render = (p, target) =&gt; {
-          target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content' data-suisou-text='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/a&gt;`;
+          target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content'&gt;&lt;span data-suisou-text='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;`;
         };
         if (latestSlot) render(posts[0], latestSlot);
         const rest = posts.slice(1);
