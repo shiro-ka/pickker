@@ -121,9 +121,27 @@ body {
   aspect-ratio: 16 / 9;
 }
 .post-body .embed-spotify iframe { border-radius: 12px; }
-.post-body pre code.hljs {
-  padding: 0;
-  background: transparent;
+.post-body .hljs-comment,
+.post-body .hljs-quote { color: var(--suisou-color-text-note); }
+.post-body .hljs-keyword,
+.post-body .hljs-built_in,
+.post-body .hljs-selector-tag,
+.post-body .hljs-section,
+.post-body .hljs-name,
+.post-body .hljs-meta .hljs-keyword { color: var(--suisou-color-accent); }
+.post-body .hljs-string,
+.post-body .hljs-regexp,
+.post-body .hljs-symbol,
+.post-body .hljs-template-variable { color: var(--suisou-color-success); }
+.post-body .hljs-number,
+.post-body .hljs-literal { color: var(--suisou-color-warning); }
+.post-body .hljs-addition {
+  color: var(--suisou-color-success);
+  background: var(--suisou-color-success-tint);
+}
+.post-body .hljs-deletion {
+  color: var(--suisou-color-error);
+  background: var(--suisou-color-error-tint);
 }
 
 .link-card-host {
