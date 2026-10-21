@@ -134,7 +134,7 @@
       };
     }
     const html = md.render(src);
-    return window.twemoji ? window.twemoji.parse(html, { base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@v14.0.2/assets/' }) : html;
+    return window.twemoji ? window.twemoji.parse(html, { base: 'https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.3/assets/' }) : html;
   }
 
   function renderMarkdown() {

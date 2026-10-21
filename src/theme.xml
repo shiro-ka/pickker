@@ -23,7 +23,7 @@
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@3/dist/markdown-it-emoji.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-deflist@4/dist/markdown-it-deflist.min.js'></script>
   <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-container@4/dist/markdown-it-container.min.js'></script>
-  <script defer='defer' src='https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@twemoji/api@17.0.3/dist/twemoji.min.js'></script>
   @@STYLE:style.css@@
 &lt;/head&gt;&lt;!--</head>--&gt;
 <body data-suisou-body=''>
