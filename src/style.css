@@ -117,8 +117,11 @@ body {
   border: 0;
 }
 .post-body .embed-youtube iframe {
+  width: min(100%, 40rem, min(30rem, 50svh) * 16 / 9);
   height: auto;
   aspect-ratio: 16 / 9;
+  margin-inline: auto;
+  border-radius: var(--suisou-radius);
 }
 .post-body .embed-spotify iframe { border-radius: 12px; }
 .post-body .hljs-comment,
