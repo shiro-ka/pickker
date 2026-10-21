@@ -412,8 +412,8 @@
     </aside>
   </div>
   <footer class='site-footer' data-suisou-layout='stack center gap-0' data-suisou-text='fs-12 center'>
-    <span>Suisou</span>
-    <span>trench x jelly</span>
+    <a data-suisou-text='link' href='https://github.com/shiro-ka/pickker'>pickker</a>
+    <span>Suisou trench x jelly</span>
   </footer>
   <dialog class='image-modal js-image-modal' data-suisou-tray=''><img alt=''/></dialog>
 
