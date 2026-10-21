@@ -4,7 +4,7 @@
 <head>
   <b:include data='blog' name='all-head-content'/>
   <meta content='width=device-width, initial-scale=1' name='viewport'/>
-  <meta content='dark' name='color-scheme'/>
+  <meta content='light dark' name='color-scheme'/>
   <b:if cond='data:view.isPost or data:view.isPage'>
     <title><data:blog.pageName/> - <data:blog.title/></title>
     <meta content='article' property='og:type'/>
@@ -178,7 +178,7 @@
     </aside>
   </div>
   <footer class='site-footer'>
-    <span>pickker</span>
+    <a href='https://github.com/shiro-ka/pickker'>pickker</a>
   </footer>
   <dialog class='image-modal panel js-image-modal'><img alt=''/></dialog>
 
