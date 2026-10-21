@@ -847,6 +847,15 @@
   (() =&gt; {
     const HOME = document.documentElement.dataset.home || location.origin + '/';
     const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
+    const pathOf = href =&gt; { try { return new URL(href, location.href).pathname; } catch { return href; } };
+    const shown = new Set([location.pathname]);
+
+    document.querySelectorAll('.js-popular-item').forEach(li =&gt; {
+      if (shown.has(pathOf(li.querySelector('a')?.href || ''))) li.remove();
+    });
+    const popular = document.querySelector('.js-popular-item a');
+    if (popular) shown.add(pathOf(popular.href));
+
     const label = document.querySelector('.js-post-labels a')?.textContent.trim();
     const latestSlot = document.querySelector('.js-latest-post');
     const randomSlot = document.querySelector('.js-random-post');
@@ -860,7 +869,7 @@
             const link = p.link.find(l =&gt; l.rel === 'alternate')?.href;
             return link ? { link, title: p.title.$t, thumb: p.media$thumbnail?.url || '' } : null;
           })
-          .filter(p =&gt; p &amp;&amp; !location.href.includes(p.link));
+          .filter(p =&gt; p &amp;&amp; !shown.has(pathOf(p.link)));
         if (!posts.length) return;
         const render = (p, target) =&gt; {
           target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content'&gt;&lt;span data-suisou-text='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;`;
