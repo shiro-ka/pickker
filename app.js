@@ -81,6 +81,33 @@
     return null;
   };
 
+  const CJK = /[ᄀ-ᅟ⺀-〾ぁ-㏿㐀-䶿一-鿿ꀀ-꓏ꥠ-꥿가-힣豈-﫿︐-︙︰-﹯＀-￯\u{16fe0}-\u{18aff}\u{1b000}-\u{1b2ff}\u{1f200}-\u{1f2ff}\u{20000}-\u{3fffd}]/u;
+  const isCjk = c => {
+    const s = String.fromCodePoint(c);
+    return CJK.test(s) && !/\p{Emoji_Presentation}/u.test(s);
+  };
+  const cjkEmphasis = md => {
+    const { isWhiteSpace, isMdAsciiPunct, isPunctChar } = md.utils;
+    const punct = c => isMdAsciiPunct(c) || isPunctChar(String.fromCodePoint(c));
+    md.inline.State = class extends md.inline.State {
+      scanDelims(start, canSplitWord) {
+        const marker = this.src.charCodeAt(start);
+        let pos = start;
+        while (pos < this.posMax && this.src.charCodeAt(pos) === marker) pos++;
+        const length = pos - start;
+        const before = start > 0 ? [...this.src.slice(Math.max(0, start - 2), start)].pop().codePointAt(0) : 0x20;
+        const after = pos < this.posMax ? this.src.codePointAt(pos) : 0x20;
+        if (isWhiteSpace(before) || isWhiteSpace(after)) return { can_open: !isWhiteSpace(after), can_close: !isWhiteSpace(before), length };
+        const cjk = canSplitWord && (isCjk(before) || isCjk(after));
+        return {
+          can_open: punct(before) || (canSplitWord && (cjk || !punct(after))),
+          can_close: punct(after) || (canSplitWord && (cjk || !punct(before))),
+          length,
+        };
+      }
+    };
+  };
+
   let md;
   function markdownToHTML(src) {
     if (!md) {
@@ -91,7 +118,7 @@
           if (lang && window.hljs.getLanguage(lang)) return window.hljs.highlight(code, { language: lang, ignoreIllegals: true }).value;
           return lang ? '' : window.hljs.highlightAuto(code).value;
         },
-      }).use(window.markdownitEmoji);
+      }).use(window.markdownitEmoji).use(cjkEmphasis);
       if (window.markdownitDeflist) md.use(window.markdownitDeflist);
       if (window.markdownitContainer) {
         md.use(window.markdownitContainer, 'details', {
