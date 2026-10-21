@@ -848,6 +848,7 @@
     const HOME = document.documentElement.dataset.home || location.origin + '/';
     const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
     const pathOf = href =&gt; { try { return new URL(href, location.href).pathname; } catch { return href; } };
+    const pick = list =&gt; list[Math.floor(Math.random() * list.length)];
     const shown = new Set([location.pathname]);
 
     document.querySelectorAll('.js-popular-item').forEach(li =&gt; {
@@ -856,29 +857,41 @@
     const popular = document.querySelector('.js-popular-item a');
     if (popular) shown.add(pathOf(popular.href));
 
-    const label = document.querySelector('.js-post-labels a')?.textContent.trim();
-    const latestSlot = document.querySelector('.js-latest-post');
-    const randomSlot = document.querySelector('.js-random-post');
-    if (!label || (!latestSlot &amp;&amp; !randomSlot)) return;
+    const labelSlot = document.querySelector('.js-latest-post');
+    const blogSlot = document.querySelector('.js-random-post');
+    if (!labelSlot &amp;&amp; !blogSlot) return;
+    const all = [...document.querySelectorAll('.js-post-labels a')].map(a =&gt; a.textContent.trim()).filter(Boolean);
+    const first = pick(all);
+    const labels = all.length ? [first, ...all.filter(l =&gt; l !== first)] : [];
 
-    fetch(HOME + 'feeds/posts/summary/-/' + encodeURIComponent(label) + '?alt=json&amp;max-results=10')
+    const feed = path =&gt; fetch(HOME + 'feeds/posts/summary' + path + '?alt=json&amp;max-results=20')
       .then(r =&gt; r.json())
-      .then(data =&gt; {
-        const posts = (data.feed?.entry || [])
-          .map(p =&gt; {
-            const link = p.link.find(l =&gt; l.rel === 'alternate')?.href;
-            return link ? { link, title: p.title.$t, thumb: p.media$thumbnail?.url || '' } : null;
-          })
-          .filter(p =&gt; p &amp;&amp; !shown.has(pathOf(p.link)));
-        if (!posts.length) return;
-        const render = (p, target) =&gt; {
-          target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content'&gt;&lt;span data-suisou-text='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;`;
-        };
-        if (latestSlot) render(posts[0], latestSlot);
-        const rest = posts.slice(1);
-        if (randomSlot &amp;&amp; rest.length) render(rest[Math.floor(Math.random() * rest.length)], randomSlot);
-      })
-      .catch(() =&gt; {});
+      .then(data =&gt; (data.feed?.entry || [])
+        .map(p =&gt; {
+          const link = p.link.find(l =&gt; l.rel === 'alternate')?.href;
+          return link ? { link, title: p.title.$t, thumb: p.media$thumbnail?.url || '' } : null;
+        })
+        .filter(Boolean))
+      .catch(() =&gt; []);
+    const fresh = posts =&gt; posts.filter(p =&gt; !shown.has(pathOf(p.link)));
+    const render = (p, target) =&gt; {
+      shown.add(pathOf(p.link));
+      target.innerHTML = `&lt;a class='side-post' data-suisou-item='media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' data-suisou-item='media-figure square large' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span data-suisou-item='media-content'&gt;&lt;span data-suisou-text='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;`;
+    };
+
+    const blogPosts = blogSlot ? feed('') : null;
+    (async () =&gt; {
+      if (labelSlot) {
+        for (const label of labels) {
+          const posts = fresh(await feed('/-/' + encodeURIComponent(label)));
+          if (posts.length) { render(pick(posts), labelSlot); break; }
+        }
+      }
+      if (blogSlot) {
+        const posts = fresh(await blogPosts);
+        if (posts.length) render(pick(posts), blogSlot);
+      }
+    })();
   })();
   //]]&gt;
   </script>
