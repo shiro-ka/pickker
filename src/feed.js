@@ -57,7 +57,7 @@
     const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
     const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
     const labels = (p.category || []).map(c => `<a data-suisou-item='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
-    return `<article class='feed-card' data-suisou-tray=''>
+    return `<article class='feed-card' data-suisou-tray='link'>
       ${thumb ? `<img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/>` : ''}
       <time class='feed-card-date' data-suisou-text='fs-12'>${date}</time>
       <h2 class='feed-card-title' data-suisou-text='fs-16 fw-500'><a class='feed-card-link' href='${esc(url)}'>${esc(p.title.$t)}</a></h2>

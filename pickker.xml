@@ -771,7 +771,7 @@
       const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
       const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
       const labels = (p.category || []).map(c =&gt; `&lt;a data-suisou-item='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
-      return `&lt;article class='feed-card' data-suisou-tray=''&gt;
+      return `&lt;article class='feed-card' data-suisou-tray='link'&gt;
         ${thumb ? `&lt;img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/&gt;` : ''}
         &lt;time class='feed-card-date' data-suisou-text='fs-12'&gt;${date}&lt;/time&gt;
         &lt;h2 class='feed-card-title' data-suisou-text='fs-16 fw-500'&gt;&lt;a class='feed-card-link' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
