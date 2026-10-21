@@ -6,42 +6,47 @@ import { execFileSync } from 'node:child_process';
 const ONLINE_BASE = 'https://pickker.shiro-ka.workers.dev';
 
 const at = p => fileURLToPath(new URL('../' + p, import.meta.url));
-const src = name => readFileSync(at('suisou/' + name), 'utf8');
+const read = (dir, name) => readFileSync(at(dir + name), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const indented = (s, indent) => esc(s.replace(/\n+$/, '')).split('\n').map(l => l ? indent + l : '').join('\n');
 
 const MARKER = /^([ \t]*)@@(STYLE|SCRIPT):([\w./-]+)@@[ \t]*$/gm;
-const assets = [...src('theme.xml').matchAll(MARKER)].map(m => m[3]);
+const assetsOf = dir => [...read(dir, 'theme.xml').matchAll(MARKER)].map(m => m[3]);
 
 const render = {
   inline: {
-    STYLE: (i, name) => `${i}<style>\n${indented(src(name), i + '  ')}\n${i}</style>`,
-    SCRIPT: (i, name) => `${i}<script>\n${i}//&lt;![CDATA[\n${indented(src(name), i)}\n${i}//]]&gt;\n${i}</script>`,
+    STYLE: (dir, i, name) => `${i}<style>\n${indented(read(dir, name), i + '  ')}\n${i}</style>`,
+    SCRIPT: (dir, i, name) => `${i}<script>\n${i}//&lt;![CDATA[\n${indented(read(dir, name), i)}\n${i}//]]&gt;\n${i}</script>`,
   },
   online: {
-    STYLE: (i, name) => `${i}<link href='${ONLINE_BASE}/${name}' rel='stylesheet'/>`,
-    SCRIPT: (i, name) => `${i}<script src='${ONLINE_BASE}/${name}'></script>`,
+    STYLE: (dir, i, name) => `${i}<link href='${ONLINE_BASE}/${name}' rel='stylesheet'/>`,
+    SCRIPT: (dir, i, name) => `${i}<script src='${ONLINE_BASE}/${name}'></script>`,
   },
 };
 
-const build = mode => {
-  const xml = src('theme.xml').replace(MARKER, (_, indent, kind, name) => render[mode][kind](indent, name));
+const build = (dir, mode) => {
+  const xml = read(dir, 'theme.xml').replace(MARKER, (_, indent, kind, name) => render[mode][kind](dir, indent, name));
   if (/@@[A-Z]+:/.test(xml)) throw new Error('展開されなかった @@…@@ がある (1行に単独で書くこと)');
   return xml;
 };
 
-const outputs = { 'pickker-suisou.xml': build('inline'), 'pickker-suisou-online.xml': build('online') };
+const outputs = {
+  'pickker.xml': build('', 'inline'),
+  'pickker-suisou.xml': build('suisou/', 'inline'),
+  'pickker-suisou-online.xml': build('suisou/', 'online'),
+};
+if (/suisou/i.test(outputs['pickker.xml'])) throw new Error('pickker.xml に suisou が入っている');
 
 if (process.argv.includes('--check')) {
   let ok = true;
   for (const [file, xml] of Object.entries(outputs)) {
     if (readFileSync(at(file), 'utf8') !== xml) {
-      console.error(`✗ ${file} が suisou/ と一致しない。node tools/build.mjs で作り直すこと。`);
+      console.error(`✗ ${file} が原本と一致しない。node tools/build.mjs で作り直すこと。`);
       ok = false;
     }
   }
   if (!ok) process.exit(1);
-  console.log(`✓ ${Object.keys(outputs).join(' / ')} は suisou/ と一致している`);
+  console.log(`✓ ${Object.keys(outputs).join(' / ')} は原本と一致している`);
 } else {
   for (const [file, xml] of Object.entries(outputs)) {
     writeFileSync(at(file), xml);
@@ -49,7 +54,8 @@ if (process.argv.includes('--check')) {
   }
   rmSync(at('dist'), { recursive: true, force: true });
   mkdirSync(at('dist'));
-  for (const name of assets) writeFileSync(at('dist/' + name), src(name));
+  const assets = assetsOf('suisou/');
+  for (const name of assets) writeFileSync(at('dist/' + name), read('suisou/', name));
   console.log(`✓ dist/ に ${assets.join(' / ')}`);
 }
 

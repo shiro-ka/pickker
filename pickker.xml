@@ -1,0 +1,1553 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <b:include data='blog' name='all-head-content'/>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <meta content='dark' name='color-scheme'/>
+  <b:if cond='data:view.isPost or data:view.isPage'>
+    <title><data:blog.pageName/> - <data:blog.title/></title>
+    <meta content='article' property='og:type'/>
+  <b:else/>
+    <title><data:blog.pageTitle/></title>
+    <meta content='website' property='og:type'/>
+  </b:if>
+  <meta expr:content='data:blog.title' property='og:site_name'/>
+  &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&amp;display=swap' rel='stylesheet'/>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@15/dist/browser/markdown-it.umd.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@3/dist/markdown-it-emoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-deflist@4/dist/markdown-it-deflist.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-container@4/dist/markdown-it-container.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@twemoji/api@17.0.3/dist/twemoji.min.js'></script>
+  <style>
+    @layer base {
+    :root {
+      color-scheme: dark;
+      --color-bg: oklch(19.50% 0.037 281);
+      --color-panel: oklch(23.50% 0.037 281);
+      --color-item: oklch(29.50% 0.037 281);
+      --color-tint: oklch(34.50% 0.037 281);
+      --color-text: oklch(94.00% 0.025 281);
+      --color-text-control: oklch(86.00% 0.025 281);
+      --color-text-note: oklch(78.00% 0.025 281);
+      --color-text-disabled: oklch(62.00% 0.025 281);
+      --color-accent: oklch(74.00% 0.1159 255);
+      --color-accent-tint: oklch(34.50% 0.0806 255);
+      --color-error: oklch(73.00% 0.1580 22);
+      --color-warning: oklch(82.00% 0.1592 90);
+      --color-success: oklch(76.00% 0.1785 155);
+      --color-error-tint: oklch(34.50% 0.0700 15);
+      --color-warning-tint: oklch(34.50% 0.0500 90);
+      --color-success-tint: oklch(34.50% 0.0500 155);
+      --color-hover: oklch(55.00% 0 0 / 0.1);
+      --color-line-weak: oklch(100.00% 0 0 / 0.15);
+      --color-line-strong: oklch(100.00% 0 0 / 0.25);
+      --color-field: oklch(100.00% 0 0 / 0.07);
+      --color-backdrop: oklch(0.00% 0 0 / 0.72);
+      --fs-12: 0.75rem;   --lh-12: 1rem;
+      --fs-14: 0.875rem;  --lh-14: 1.25rem;
+      --fs-16: 1rem;      --lh-16: 1.5rem;
+      --fs-20: 1.25rem;   --lh-20: 1.75rem;
+      --fs-24: 1.5rem;    --lh-24: 2rem;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 1rem;
+      --space-4: 1.5rem;
+      --space-5: 3rem;
+      --size-icon: 1.125rem;
+      --size-icon-small: 1rem;
+      --size-button: 2rem;
+      --size-drawer: 20rem;
+      --radius-small: 0.25rem;
+      --radius: 0.5rem;
+      --radius-pill: 999px;
+      --font: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --duration-fast: 120ms;
+      --duration: 200ms;
+      --ease: cubic-bezier(0.2, 0, 0, 1);
+      scrollbar-color: var(--color-line-strong) transparent;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --duration-fast: 0.01ms;
+        --duration: 0.01ms;
+      }
+    }
+    :where(:root, body, body *) { scrollbar-width: thin; }
+    :where(*, *::before, *::after) { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: var(--fs-14);
+      line-height: var(--lh-14);
+      background: var(--color-bg);
+      color: var(--color-text);
+      accent-color: var(--color-accent);
+    }
+    :where(body) :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol, pre) { margin: 0; }
+    :where(body) :where(ul, ol) { padding-inline-start: 0; }
+    :where(body) :where(img, svg, video, canvas) {
+      display: block;
+      max-width: 100%;
+    }
+    :where(body) :where(button, input, textarea, select) {
+      font: inherit;
+      color: inherit;
+    }
+    :where(a) {
+      color: inherit;
+      text-decoration: none;
+    }
+    :where(a:focus-visible) {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+    [hidden]:where(:not([hidden="until-found"])) { display: none; }
+    dialog:not([open]) { display: none; }
+    [popover]:not(:popover-open) { display: none; }
+
+    .container {
+      width: 100%;
+      max-width: 80rem;
+      margin-inline: auto;
+    }
+    .clamp-2 {
+      min-width: 0;
+      overflow: clip;
+      overflow-clip-margin: content-box;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    .typeset {
+      font-size: var(--fs-14);
+      line-height: calc(var(--lh-14) + 0.25rem);
+    }
+    .typeset :where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, pre, blockquote, table, figure, hr) { margin: 0; }
+    .typeset :where(h1) { font-size: var(--fs-24); line-height: var(--lh-24); font-weight: 700; }
+    .typeset :where(h2) { font-size: var(--fs-20); line-height: var(--lh-20); font-weight: 700; }
+    .typeset :where(h3) { font-size: var(--fs-16); line-height: var(--lh-16); font-weight: 700; }
+    .typeset :where(h4, h5, h6) { font-size: var(--fs-14); line-height: var(--lh-14); font-weight: 700; }
+    .typeset :where(h2, h3, h4, h5, h6) { position: relative; padding-inline-start: calc(4px + var(--space-2) - 6px); }
+    .typeset :where(h2, h3, h4, h5, h6)::before {
+      content: "";
+      position: absolute;
+      top: 0.25em;
+      bottom: 0.25em;
+      inset-inline-start: -6px;
+      translate: 0 0.025em;
+      border-radius: var(--radius-pill);
+    }
+    .typeset :where(h2)::before { width: 4px; background: var(--color-accent); }
+    .typeset :where(h3)::before { top: 0.375em; bottom: 0.375em; width: 5px; border: 1.5px solid var(--color-accent); box-sizing: border-box; }
+    .typeset :where(h4, h5, h6)::before { width: 3px; background: var(--color-text-disabled); }
+    .typeset :where(small) { font-size: var(--fs-12); line-height: calc(var(--lh-12) + 0.25rem); }
+    .typeset :where(strong, b) { font-weight: 700; }
+    .typeset &gt; :where(* + :is(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, table, figure, hr, div, section, article, aside, details, img, video)) { margin-block-start: var(--space-2); }
+    .typeset &gt; :where(* + :is(table, blockquote, pre, figure, img, video, details), :is(table, blockquote, pre, figure, img, video, details) + :is(p, ul, ol, dl, pre, blockquote, table, figure, div, section, article, aside, details, img, video)) { margin-block-start: var(--space-4); }
+    .typeset &gt; :where(* + :is(h1, h2, h3, h4, h5, h6)) { margin-block-start: var(--space-3); }
+    .typeset &gt; :where(* + h2) { margin-block-start: var(--space-5); }
+    .typeset &gt; :where(* + h3) { margin-block-start: var(--space-4); }
+    .typeset &gt; :where(:is(h1, h2, h3, h4, h5, h6) + h3) { margin-block-start: var(--space-3); }
+    .typeset &gt; :where(h2 + :is(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, table, figure, hr, div, section, article, aside, details, img, video)) { margin-block-start: var(--space-3); }
+    .typeset :where(hr) {
+      border: 0;
+      border-top: 1px solid var(--color-line-weak);
+    }
+    .typeset &gt; :where(hr),
+    .typeset &gt; :where(hr + :is(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, table, figure, hr, div, section, article, aside, details, img, video)) { margin-block-start: var(--space-3); }
+    .typeset :where(img, video) {
+      display: block;
+      width: auto;
+      max-width: min(100%, 40rem);
+      height: auto;
+      max-height: min(30rem, 50svh);
+      margin-inline: auto;
+      border-radius: var(--radius);
+    }
+    .typeset :where(figure:not(:has(&gt; pre)) &gt; figcaption) {
+      margin-block-start: var(--space-2);
+      text-align: center;
+      font-size: var(--fs-12);
+      line-height: calc(var(--lh-12) + 0.25rem);
+      color: var(--color-text-note);
+    }
+    .typeset :where(dt) { color: var(--color-text-note); font-weight: 700; }
+    .typeset :where(dd) { margin-block-start: var(--space-1); padding-inline-start: var(--space-4); }
+    .typeset :where(dd + dt) { margin-block-start: var(--space-3); }
+    .typeset :where(blockquote) {
+      position: relative;
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      padding: var(--space-2) var(--space-3) var(--space-2) calc(var(--space-2) * 2 + 1em);
+      color: var(--color-text-note);
+    }
+    .typeset :where(blockquote)::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: var(--space-2);
+      top: calc(var(--space-2) + (1lh - 1em) / 2);
+      width: 1em;
+      height: 1em;
+      background: var(--color-accent);
+      mask: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="7" cy="15.5" r="3.2" fill="black" stroke="none"/%3E%3Cpath d="M4 15.5C4 10.5 6 7.5 9.5 6.5"/%3E%3Ccircle cx="17" cy="15.5" r="3.2" fill="black" stroke="none"/%3E%3Cpath d="M14 15.5C14 10.5 16 7.5 19.5 6.5"/%3E%3C/svg%3E') center / contain no-repeat;
+    }
+    .typeset :where(blockquote) :where(p) + :where(p) { margin-block-start: var(--space-2); }
+    .typeset :where(ul, ol) { padding-inline-start: var(--space-4); }
+    .typeset :where(ul, ol) :where(li)::marker { color: var(--color-text-note); }
+    .typeset :where(ul, ol) :where(li) + :where(li) { margin-block-start: var(--space-1); }
+    .typeset :where(ul, ol) :where(ul, ol) { margin-block-start: var(--space-1); }
+    .typeset :where(code) {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      white-space: nowrap;
+      background: var(--color-item);
+      border-radius: var(--radius-small);
+      padding: 0 var(--space-1);
+    }
+    .typeset :where(pre) {
+      font-family: var(--font-mono);
+      font-size: var(--fs-12);
+      line-height: var(--lh-14);
+      padding: var(--space-2);
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      overflow-x: auto;
+    }
+    .typeset :where(pre)::before,
+    .typeset :where(figure:has(&gt; pre) &gt; figcaption)::before {
+      content: "";
+      width: var(--fs-14);
+      background: var(--color-accent);
+      mask: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M7.5 4H7.0a2.5 2.5 0 0 0-2.5 2.5V9.5L1.5 12.0l3.0 2.5V17.5a2.5 2.5 0 0 0 2.5 2.5H7.5M16.5 4H17.0a2.5 2.5 0 0 1 2.5 2.5V9.5L22.5 12.0l-3.0 2.5V17.5a2.5 2.5 0 0 1-2.5 2.5H16.5"/%3E%3Ccircle cx="12.6" cy="8.5" r="1.9" fill="black" stroke="none"/%3E%3Ccircle cx="11.2" cy="15" r="1.3" fill="black" stroke="none"/%3E%3C/svg%3E') left center / var(--fs-14) no-repeat;
+    }
+    .typeset :where(pre)::before {
+      display: block;
+      position: sticky;
+      inset-inline-start: 0;
+      height: 1lh;
+      margin-block-end: var(--space-1);
+    }
+    .typeset :where(figure:has(&gt; pre)) {
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .typeset :where(figure:has(&gt; pre) &gt; figcaption) {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      border-bottom: 1px solid var(--color-line-weak);
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+      color: var(--color-text-note);
+    }
+    .typeset :where(figure:has(&gt; pre) &gt; figcaption)::before { height: var(--fs-14); flex: none; }
+    .typeset :where(figure:has(&gt; pre) &gt; pre) { border: 0; border-radius: 0; }
+    .typeset :where(figure:has(&gt; figcaption) &gt; pre)::before { content: none; }
+    .typeset :where(details) {
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+    }
+    .typeset :where(details &gt; summary) {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      list-style: none;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+      border-radius: calc(var(--radius) - 1px);
+      transition: background-color var(--duration-fast) var(--ease);
+    }
+    .typeset :where(details &gt; summary):hover { background-color: var(--color-hover); }
+    .typeset :where(details &gt; summary):focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+    .typeset :where(details &gt; summary)::before {
+      content: "";
+      flex: none;
+      width: var(--fs-14);
+      height: var(--fs-14);
+      background: var(--color-accent);
+      mask: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="m9 5 7 7-7 7"/%3E%3C/svg%3E') center / contain no-repeat;
+      transition: rotate var(--duration-fast) var(--ease);
+    }
+    .typeset :where(details[open] &gt; summary) { border-bottom: 1px solid var(--color-line-weak); border-end-start-radius: 0; border-end-end-radius: 0; }
+    .typeset :where(details[open] &gt; summary)::before { rotate: 90deg; }
+    .typeset :where(details)::details-content { padding-inline: var(--space-3); }
+    .typeset :where(details[open])::details-content { animation: details-open var(--duration) var(--ease); }
+    .typeset :where(details &gt; :not(summary)) { margin-block: var(--space-2); }
+    @keyframes details-open { from { opacity: 0; translate: 0 -0.25rem; } }
+    @media (forced-colors: active) {
+      .typeset :where(blockquote, pre, figure:has(&gt; pre) &gt; figcaption, details &gt; summary)::before { forced-color-adjust: none; background: CanvasText; }
+    }
+    .typeset :where(pre) :where(code) {
+      font-size: inherit;
+      white-space: inherit;
+      background: none;
+      border-radius: 0;
+      padding: 0;
+    }
+    .typeset :where(a) {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+      transition: color var(--duration-fast) var(--ease);
+    }
+    .typeset :where(a:hover) { color: var(--color-accent); }
+    .typeset :where(a:has(&gt; img:only-child)) { text-decoration: none; }
+    .typeset :where(table) {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: var(--fs-12);
+      line-height: calc(var(--lh-12) + 0.25rem);
+    }
+    .typeset :where(table) :where(th, td) {
+      text-align: start;
+      vertical-align: top;
+      padding: var(--space-1) var(--space-2);
+      border-bottom: 1px solid var(--color-line-weak);
+    }
+    .typeset :where(table) :where(th) {
+      color: var(--color-text-note);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .typeset :where(table) :where(thead th) {
+      border-bottom: 0;
+      background: var(--color-item);
+    }
+    .typeset :where(table) :where(thead th:first-child) { border-start-start-radius: var(--radius); }
+    .typeset :where(table) :where(thead th:last-child) { border-start-end-radius: var(--radius); }
+    .typeset :where(table) :where(tbody tr:last-child) :where(th, td) { border-bottom: 0; }
+
+    :where(body button, .button) {
+      padding: calc((var(--size-button) - 1lh) / 2 - 1px) var(--space-2);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--color-text-control);
+      border: 1px solid transparent;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+      transition: background-color var(--duration-fast) var(--ease),
+                  color            var(--duration-fast) var(--ease),
+                  border-color     var(--duration-fast) var(--ease);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+    .button { text-decoration: none; }
+    :where(body button, .button):hover {
+      background: var(--color-hover);
+      color: var(--color-text);
+    }
+    :where(body button, .button):active { background: var(--color-tint); }
+    :where(body button, .button):focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+    :where(body button, .button) &gt; svg {
+      width: var(--size-icon);
+      height: var(--size-icon);
+      flex-shrink: 0;
+    }
+    .button-outline { border-color: var(--color-line-strong); }
+    :where(body button, .button)[aria-current]:where(:not([aria-current="false"])) {
+      background: var(--color-tint);
+      color: var(--color-text);
+    }
+    :where(body button, .button)[aria-current]:not([aria-current="false"]):where(:hover) {
+      background-image: linear-gradient(var(--color-hover), var(--color-hover));
+    }
+    .button-icon { padding: calc((var(--size-button) - var(--size-icon)) / 2 - 1px); }
+    @media (forced-colors: active) {
+      :where(body button, .button)[aria-current]:not([aria-current="false"]) {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+        border-color: Highlight;
+      }
+    }
+
+    :where(body input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"]), body textarea, body select) {
+      padding: calc((var(--size-button) - 1lh) / 2 - 1px) var(--space-2);
+      border-radius: var(--radius);
+      background: var(--color-field);
+      color: var(--color-text);
+      border: 1px solid var(--color-line-strong);
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+    :where(body :is(input, textarea))::placeholder { color: var(--color-text-disabled); }
+    :where(body :is(input, textarea, select)):focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+    .field {
+      display: flex;
+      align-items: stretch;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--color-field);
+      border: 1px solid var(--color-line-strong);
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+    .field &gt; :where(input, textarea, select) {
+      block-size: auto;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .field &gt; :where(input, textarea, select):focus-visible { outline: none; }
+    .field:has(&gt; :is(input, textarea, select):focus-visible) {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    .panel {
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      padding: var(--space-2);
+      background: var(--color-panel);
+    }
+    :where(a.panel-link) { display: block; }
+    .panel-link:hover { background-image: linear-gradient(var(--color-hover), var(--color-hover)); }
+    :where(dialog).panel::backdrop { background: var(--color-backdrop); }
+    :where(dialog, [popover]):is(.panel, .drawer) { color: var(--color-text); }
+    :where(dialog).panel {
+      opacity: 0;
+      transition: opacity var(--duration) var(--ease),
+                  display var(--duration) allow-discrete,
+                  overlay var(--duration) allow-discrete;
+    }
+    :where(dialog).panel:where([open]) { opacity: 1; }
+    @starting-style {
+      :where(dialog).panel:where([open]) { opacity: 0; }
+    }
+    :where(dialog).panel::backdrop {
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease),
+                  display var(--duration-fast) allow-discrete,
+                  overlay var(--duration-fast) allow-discrete;
+    }
+    :where(dialog).panel:where([open])::backdrop { opacity: 1; }
+    @starting-style {
+      :where(dialog).panel:where([open])::backdrop { opacity: 0; }
+    }
+    :where([popover]).drawer {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(var(--size-drawer), 90vw);
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: var(--space-2);
+      background: var(--color-panel);
+      border: 0;
+      border-left: 1px solid var(--color-line-strong);
+      translate: 100% 0;
+      transition: translate var(--duration) var(--ease),
+                  display var(--duration) allow-discrete,
+                  overlay var(--duration) allow-discrete;
+    }
+    :where([popover]).drawer:popover-open { translate: 0 0; }
+    @starting-style {
+      :where([popover]).drawer:popover-open { translate: 100% 0; }
+    }
+    :where([popover]).drawer::backdrop {
+      background: var(--color-backdrop);
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease),
+                  display var(--duration-fast) allow-discrete,
+                  overlay var(--duration-fast) allow-discrete;
+    }
+    :where([popover]).drawer:popover-open::backdrop { opacity: 1; }
+    @starting-style {
+      :where([popover]).drawer:popover-open::backdrop { opacity: 0; }
+    }
+
+    .media {
+      display: flex;
+      gap: var(--space-2);
+      align-items: flex-start;
+      text-decoration: none;
+    }
+    .media-content {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .media-tail { flex: none; }
+    .media-content :where(header) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-2);
+    }
+    :where(.media-content header &gt; :first-child) {
+      font-size: var(--fs-14);
+      line-height: var(--lh-14);
+      font-weight: 700;
+    }
+    :where(.media-content header &gt; :not(:first-child)) {
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+      color: var(--color-text-note);
+    }
+    :where(a, button).media .media-content &gt; :where(:first-child) { transition: color var(--duration-fast) var(--ease); }
+    :where(a, button).media:where(:hover) .media-content &gt; :where(:first-child) { color: var(--color-accent); }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+      padding: 0 var(--space-2);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-line-weak);
+      color: var(--color-text-note);
+      background: transparent;
+      text-decoration: none;
+      transition: background-color var(--duration-fast) var(--ease),
+                  color var(--duration-fast) var(--ease),
+                  border-color var(--duration-fast) var(--ease);
+    }
+    .tag:where(a, button):where(:hover) { background: var(--color-hover); }
+
+    .notice {
+      background: var(--color-item);
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      padding: var(--space-2) var(--space-3);
+      color: var(--color-text);
+    }
+    .notice-alert {
+      border-color: var(--color-error);
+      background: var(--color-error-tint);
+    }
+
+    .toc { font-size: var(--fs-14); line-height: var(--lh-14); }
+    .toc:where(ul), .toc :where(ul) { list-style: none; margin: 0; padding: 0; }
+    .toc :where(li) { position: relative; margin: 0; padding-inline-start: 20px; }
+    .toc :where(li li li) { font-size: var(--fs-12); line-height: var(--lh-12); }
+    .toc :where(li) &gt; :where(a, span) {
+      display: block;
+      padding-block: calc((var(--size-button) - 1lh) / 2);
+      color: var(--color-text-note);
+      text-decoration: none;
+    }
+    .toc :where(li li li) &gt; :where(a, span) { padding-block: calc((var(--size-button) - var(--space-1) - 1lh) / 2); }
+    .toc :where(li) &gt; :where(a):hover { color: var(--color-text); }
+    .toc :where(li) &gt; :where(a)[aria-current]:not([aria-current="false"]) { color: var(--color-accent); }
+    .toc :where(li:not(li li))::before,
+    .toc :where(li li:not(li li li))::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: 4px;
+      top: calc((var(--size-button) - 8px) / 2);
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      box-sizing: border-box;
+    }
+    .toc :where(li:not(li li))::before { background: var(--color-line-strong); }
+    .toc :where(li li:not(li li li))::before {
+      inset-inline-start: 5px;
+      top: calc((var(--size-button) - 6px) / 2);
+      width: 6px;
+      height: 6px;
+      border: 1.5px solid var(--color-line-strong);
+    }
+    .toc :where(li:not(li li)):has(&gt; a[aria-current]:not([aria-current="false"]))::before { background: var(--color-accent); }
+    .toc :where(li li:not(li li li)):has(&gt; a[aria-current]:not([aria-current="false"]))::before { border-color: var(--color-accent); }
+    .toc :where(li:not(li li)):not(:last-child)::after {
+      content: "";
+      position: absolute;
+      inset-inline-start: 7px;
+      top: calc((var(--size-button) + 8px) / 2 + 4px);
+      bottom: calc(4px - (var(--size-button) - 8px) / 2);
+      width: 2px;
+      border-radius: var(--radius-pill);
+      background: var(--color-line-weak);
+    }
+
+    @property --size-spinner { syntax: "*"; inherits: false; }
+    @property --loading-t { syntax: "&lt;number&gt;"; inherits: false; initial-value: 0; }
+    @keyframes loading-t { to { --loading-t: 1; } }
+    @keyframes loading-pulse { 50% { opacity: 0.35; } }
+    :where(body progress:indeterminate) {
+      color: var(--color-accent);
+      appearance: none;
+      display: inline-block;
+      vertical-align: middle;
+      flex: none;
+      width: var(--size-spinner, 2rem);
+      height: var(--size-spinner, 2rem);
+      border: 0;
+      border-radius: var(--radius-pill);
+      background-color: transparent;
+      background-image:
+        radial-gradient(circle, currentColor calc(var(--size-spinner, 2rem) * 0.07), transparent calc(var(--size-spinner, 2rem) * 0.07 + 0.5px)),
+        radial-gradient(circle, transparent calc(var(--size-spinner, 2rem) * 0.06), currentColor calc(var(--size-spinner, 2rem) * 0.06 + 0.5px) calc(var(--size-spinner, 2rem) * 0.1), transparent calc(var(--size-spinner, 2rem) * 0.1 + 0.5px)),
+        radial-gradient(circle, currentColor calc(var(--size-spinner, 2rem) * 0.05), transparent calc(var(--size-spinner, 2rem) * 0.05 + 0.5px)),
+        radial-gradient(circle, transparent calc(var(--size-spinner, 2rem) * 0.04), currentColor calc(var(--size-spinner, 2rem) * 0.04 + 0.5px) calc(var(--size-spinner, 2rem) * 0.07), transparent calc(var(--size-spinner, 2rem) * 0.07 + 0.5px));
+      background-repeat: repeat-y;
+      background-size:
+        calc(var(--size-spinner, 2rem) * 0.3) calc(var(--size-spinner, 2rem) * 0.9),
+        calc(var(--size-spinner, 2rem) * 0.35) calc(var(--size-spinner, 2rem) * 1.1),
+        calc(var(--size-spinner, 2rem) * 0.25) calc(var(--size-spinner, 2rem) * 0.7),
+        calc(var(--size-spinner, 2rem) * 0.3) calc(var(--size-spinner, 2rem) * 1.3);
+      background-position:
+        10% calc(var(--size-spinner, 2rem) * -0.9 * (0 + var(--loading-t))),
+        45% calc(var(--size-spinner, 2rem) * -1.1 * (0.55 + var(--loading-t))),
+        75% calc(var(--size-spinner, 2rem) * -0.7 * (0.25 + var(--loading-t))),
+        100% calc(var(--size-spinner, 2rem) * -1.3 * (0.8 + var(--loading-t)));
+      mask-image: radial-gradient(closest-side, black 55%, transparent);
+      animation: loading-t 4s linear infinite;
+    }
+    :where(body progress:indeterminate)::-webkit-progress-bar { background: transparent; }
+    :where(body progress:indeterminate)::-moz-progress-bar { background: transparent; }
+    @media (prefers-reduced-motion: reduce) {
+      :where(body progress:indeterminate) { animation: loading-pulse 1.6s ease-in-out infinite; }
+    }
+    @media (forced-colors: active) {
+      :where(body progress:indeterminate) { color: Highlight; forced-color-adjust: none; }
+    }
+    }
+
+    :root { --side: 18rem; }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+    .site-title {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-inline-end: auto;
+    }
+    .site-name {
+      font-size: var(--fs-16);
+      line-height: var(--lh-16);
+      font-weight: 700;
+    }
+    .site-description {
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+    }
+    .site-search { width: min(16rem, 40vw); }
+
+    .site-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-3);
+      padding: 0 var(--space-3) var(--space-3);
+    }
+
+    .site-side {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .side-heading {
+      margin-block-end: var(--space-2);
+      font-size: var(--fs-14);
+      line-height: var(--lh-14);
+      font-weight: 700;
+    }
+    .side-nav :is(.section, .widget) { display: contents; }
+    .side-nav:popover-open {
+      display: flex;
+      flex-direction: column;
+    }
+    .side-toc {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .side-toc &gt; .js-toc {
+      min-height: 0;
+      overflow-y: auto;
+    }
+    .side-labels { flex: none; }
+    .side-toc + .side-labels { margin-block-start: var(--space-3); }
+    .side-label-list,
+    .post-labels,
+    .feed-card-labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+    }
+    .side-posts {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      list-style: none;
+    }
+    .side-post-image {
+      flex: none;
+      width: 3rem;
+      height: 3rem;
+      object-fit: cover;
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      background: var(--color-item);
+    }
+    .side-posts &gt; li:empty,
+    .side-posts &gt; .js-popular-item:nth-child(n + 2) { display: none; }
+
+    @media (width &gt;= 1024px) {
+      .site-body { grid-template-columns: minmax(0, 1fr) var(--side); }
+      .site-menu { display: none; }
+      .side-nav[popover]:not(:popover-open) {
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        inset: auto;
+        top: var(--space-3);
+        width: auto;
+        height: auto;
+        max-height: calc(100dvh - var(--space-3) * 2);
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+        border: 0;
+        background: none;
+        color: inherit;
+        translate: none;
+        transition: none;
+      }
+    }
+    @media (width &lt; 1024px) {
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--color-bg);
+      }
+      .post-body :is(h2, h3, h4) { scroll-margin-top: 5rem; }
+    }
+
+    .post-body img.emoji {
+      display: inline;
+      width: 1em;
+      height: 1em;
+      margin: 0 0.05em;
+      vertical-align: -0.1em;
+      border-radius: 0;
+    }
+    .post-body .embed iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+    }
+    .post-body .embed-youtube iframe {
+      width: min(100%, 40rem, min(30rem, 50svh) * 16 / 9);
+      height: auto;
+      aspect-ratio: 16 / 9;
+      margin-inline: auto;
+      border-radius: var(--radius);
+    }
+    .post-body .embed-spotify iframe { border-radius: 12px; }
+    .post-body .hljs-comment,
+    .post-body .hljs-quote { color: var(--color-text-note); }
+    .post-body .hljs-keyword,
+    .post-body .hljs-built_in,
+    .post-body .hljs-selector-tag,
+    .post-body .hljs-section,
+    .post-body .hljs-name,
+    .post-body .hljs-meta .hljs-keyword { color: var(--color-accent); }
+    .post-body .hljs-string,
+    .post-body .hljs-regexp,
+    .post-body .hljs-symbol,
+    .post-body .hljs-template-variable { color: var(--color-success); }
+    .post-body .hljs-number,
+    .post-body .hljs-literal { color: var(--color-warning); }
+    .post-body .hljs-addition {
+      color: var(--color-success);
+      background: var(--color-success-tint);
+    }
+    .post-body .hljs-deletion {
+      color: var(--color-error);
+      background: var(--color-error-tint);
+    }
+
+    .link-card {
+      border: 1px solid var(--color-line-weak);
+      border-radius: var(--radius);
+      padding: var(--space-2);
+      background: var(--color-item);
+    }
+    .link-card-description {
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+    }
+    .link-card-host {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+    .link-card-host img {
+      width: 1rem;
+      height: 1rem;
+      margin: 0;
+    }
+    .link-card-image {
+      width: 7.5rem;
+      height: 5rem;
+      max-height: none;
+      margin: 0;
+      object-fit: cover;
+    }
+
+    .feed-heading { margin-block-end: var(--space-3); }
+    .feed-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      gap: var(--space-3);
+    }
+    .feed-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding: 0 0 var(--space-2);
+      overflow: hidden;
+    }
+    .feed-card &gt; :not(.feed-card-image) { margin-inline: var(--space-2); }
+    .feed-card-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    .feed-card-date {
+      margin-block-start: var(--space-2);
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+    }
+    .feed-card-title {
+      font-size: var(--fs-16);
+      line-height: var(--lh-16);
+      font-weight: 500;
+    }
+    .feed-card-link::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+    .feed-card-labels {
+      position: relative;
+      z-index: 1;
+    }
+    .feed-loading {
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-block: var(--space-5);
+    }
+    .feed-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+    .feed-pages-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-1);
+      margin-block-start: var(--space-3);
+      list-style: none;
+    }
+    .feed-pages-list span {
+      display: inline-grid;
+      place-items: center;
+      min-width: var(--size-button);
+      height: var(--size-button);
+    }
+
+    .site-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-3);
+      font-size: var(--fs-12);
+      line-height: var(--lh-12);
+      text-align: center;
+    }
+
+    .image-modal {
+      max-width: 95vw;
+      max-height: 95dvh;
+    }
+    .image-modal img {
+      max-width: calc(95vw - var(--space-2) * 2);
+      max-height: calc(95dvh - var(--space-2) * 2);
+      object-fit: contain;
+    }
+  </style>
+&lt;/head&gt;&lt;!--</head>--&gt;
+<body>
+  <header class='site-header'>
+    <b:section id='ヘッダー'>
+      <b:widget id='Header0' locked='false' title='Header' type='Header'>
+        <b:includable id='main'>
+          <div class='site-header-inner container'>
+            <a class='site-title' expr:href='data:blog.homepageUrl'>
+              <span class='site-name'><data:blog.title/></span>
+              <span class='site-description'><data:description/></span>
+            </a>
+            <form action='/search' class='site-search' method='get' role='search'>
+              <div class='field'>
+                <input aria-label='ブログ内を検索' expr:value='data:view.search.query' name='q' placeholder='ブログ内を検索' type='search'/>
+              </div>
+            </form>
+            <button aria-label='メニュー' class='site-menu button-icon' popovertarget='side-nav' type='button'><svg aria-hidden='true' fill='currentColor' height='1em' viewBox='0 0 512 512' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button>
+          </div>
+        </b:includable>
+      </b:widget>
+    </b:section>
+  </header>
+  <div class='site-body container'>
+    <main class='site-main'>
+      <b:section id='メインカラム'>
+        <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+            <b:widget-setting name='showShareButtons'>false</b:widget-setting>
+            <b:widget-setting name='showCommentLink'>false</b:widget-setting>
+            <b:widget-setting name='showAuthor'>true</b:widget-setting>
+            <b:widget-setting name='showAuthorProfile'>false</b:widget-setting>
+            <b:widget-setting name='showLabels'>true</b:widget-setting>
+            <b:widget-setting name='showLocation'>false</b:widget-setting>
+            <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+            <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+            <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+            <b:widget-setting name='showReactions'>false</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <b:if cond='data:view.isError'>
+              <article class='status-page panel typeset'>
+                <h1>404</h1>
+                <p>お探しのページは見つかりませんでした。</p>
+                <p><a class='button button-outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
+              </article>
+            <b:elseif cond='data:view.isMultipleItems'/>
+              <header class='feed-heading typeset js-feed-heading'/>
+              <div class='feed-cards js-feed-index'/>
+              <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
+            <b:else/>
+              <b:loop values='data:posts' var='post'>
+                <article class='post panel typeset'>
+                  <b:if cond='data:view.isPost'>
+                    <p><small><time><data:post.date/></time></small></p>
+                  </b:if>
+                  <h1><data:post.title/></h1>
+                  <b:if cond='data:view.isPost'>
+                    <p class='post-labels js-post-labels'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <a class='tag' expr:href='data:label.url'><data:label.name/></a>
+                      </b:loop>
+                    </p>
+                  </b:if>
+                  <div class='post-body typeset js-post-body'><data:post.body/></div>
+                </article>
+              </b:loop>
+            </b:if>
+          </b:includable>
+          <b:includable id='backlinkDeleteIcon'/>
+          <b:includable id='backlinks'/>
+          <b:includable id='comment-form'/>
+          <b:includable id='commentDeleteIcon'/>
+          <b:includable id='comment_count_picker'/>
+          <b:includable id='comment_picker'/>
+          <b:includable id='comments'/>
+          <b:includable id='feedLinks'/>
+          <b:includable id='feedLinksBody'/>
+          <b:includable id='iframe_comments'/>
+          <b:includable id='mobile-index-post'/>
+          <b:includable id='mobile-main'/>
+          <b:includable id='mobile-nextprev'/>
+          <b:includable id='mobile-post'/>
+          <b:includable id='nextprev'/>
+          <b:includable id='post'/>
+          <b:includable id='postQuickEdit'/>
+          <b:includable id='shareButtons'/>
+          <b:includable id='status-message'/>
+          <b:includable id='threaded-comment-form'/>
+          <b:includable id='threaded_comment_js'/>
+          <b:includable id='threaded_comments'/>
+        </b:widget>
+      </b:section>
+    </main>
+    <aside class='site-side'>
+      <b:section id='インセンティブ'>
+        <b:widget id='PopularPosts0' locked='false' title='関連記事' type='PopularPosts' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
+            <b:widget-setting name='showThumbnails'>true</b:widget-setting>
+            <b:widget-setting name='showSnippets'>false</b:widget-setting>
+            <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <section aria-label='関連記事' class='side-popular panel'>
+              <ul class='side-posts'>
+                <b:if cond='data:view.isPost'>
+                  <b:loop values='data:posts' var='post'>
+                    <li class='js-popular-item'><a class='side-post media' expr:href='data:post.href'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
+                  </b:loop>
+                  <li class='js-latest-post'/>
+                  <li class='js-random-post'/>
+                <b:else/>
+                  <b:loop values='data:posts' var='post'>
+                    <li><a class='side-post media' expr:href='data:post.href'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
+                  </b:loop>
+                </b:if>
+              </ul>
+            </section>
+          </b:includable>
+        </b:widget>
+      </b:section>
+      <nav aria-label='ラベルと目次' class='side-nav drawer js-side-nav' id='side-nav' popover=''>
+        <b:section id='ラベルリスト/目次'>
+          <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+              <b:widget-setting name='display'>CLOUD</b:widget-setting>
+              <b:widget-setting name='selectedLabelsList'/>
+              <b:widget-setting name='showType'>ALL</b:widget-setting>
+              <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <b:if cond='data:view.isPost or data:view.isPage'>
+                <section class='side-toc panel js-side-toc'>
+                  <h2 class='side-heading'>目次</h2>
+                  <ul class='toc js-toc'/>
+                </section>
+              </b:if>
+              <section class='side-labels panel'>
+                <h2 class='side-heading'>ラベル</h2>
+                <p class='side-label-list'>
+                  <b:loop values='data:labels' var='label'>
+                    <a class='tag' expr:href='data:label.url'><data:label.name/></a>
+                  </b:loop>
+                </p>
+              </section>
+            </b:includable>
+          </b:widget>
+        </b:section>
+      </nav>
+    </aside>
+  </div>
+  <footer class='site-footer'>
+    <span>pickker</span>
+  </footer>
+  <dialog class='image-modal panel js-image-modal'><img alt=''/></dialog>
+
+  <script>
+  //&lt;![CDATA[
+  (() =&gt; {
+    const $ = (s, c = document) =&gt; c.querySelector(s);
+    const $$ = (s, c = document) =&gt; c.querySelectorAll(s);
+    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
+    const motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+    const sideNav = $('.js-side-nav');
+    sideNav?.addEventListener('click', e =&gt; {
+      if (e.target.closest('a') &amp;&amp; sideNav.matches(':popover-open')) sideNav.hidePopover();
+    });
+
+    const bigImage = url =&gt; url
+      .replace(/\/(?:s\d+|w\d+-h\d+)[-\w]*\/([^/]+)$/, '/s0/$1')
+      .replace(/=(?:s\d+|w\d+-h\d+)[-\w]*$/, '=s0');
+    const BLOGGER_IMAGE = /^https:\/\/(?:blogger\.googleusercontent\.com|[\w-]+\.bp\.blogspot\.com)\//;
+    const normalizeBloggerImages = src =&gt; src
+      .replace(/&lt;a\b[^&gt;]*\bhref="([^"]*)"[^&gt;]*&gt;\s*(?:&lt;span\b[^&gt;]*&gt;\s*)?(&lt;img\b[^&gt;]*&gt;)\s*(?:&lt;\/span&gt;\s*)?&lt;\/a&gt;/gi,
+        (all, href, img) =&gt; BLOGGER_IMAGE.test(href) ? img : all)
+      .replace(/&lt;div\b[^&gt;]*\bclass="separator"[^&gt;]*&gt;\s*(?:&lt;span\b[^&gt;]*&gt;\s*)?(&lt;img\b[^&gt;]*&gt;)\s*(?:&lt;\/span&gt;\s*)?&lt;\/div&gt;/gi, '$1')
+      .replace(/&lt;img\b[^&gt;]*&gt;/gi, img =&gt; {
+        const url = (img.match(/\bsrc="([^"]*)"/i) || [])[1];
+        if (!url || !BLOGGER_IMAGE.test(url)) return img;
+        const alt = (img.match(/\balt="([^"]*)"/i) || [])[1] || '';
+        return `&lt;img src="${bigImage(url)}" alt="${alt}" loading="lazy"&gt;`;
+      });
+    const modal = $('.js-image-modal');
+    if (modal) {
+      document.addEventListener('click', e =&gt; {
+        const t = e.target;
+        if (t.tagName === 'IMG' &amp;&amp; !t.classList.contains('emoji') &amp;&amp; t.closest('.js-post-body') &amp;&amp; !t.closest('a')) {
+          modal.querySelector('img').src = bigImage(t.src);
+          modal.showModal();
+        }
+      });
+      modal.addEventListener('click', e =&gt; { if (e.target === modal) modal.close(); });
+    }
+
+    document.addEventListener('DOMContentLoaded', () =&gt; {
+      renderMarkdown();
+      loadSoundCloud();
+      buildTOC();
+      setupTOCHighlight();
+      loadLinkCards();
+    });
+
+    const embedOf = href =&gt; {
+      let u;
+      try { u = new URL(href); } catch { return null; }
+      const host = u.hostname.replace(/^(www|m)\./, '');
+      if (host === 'youtu.be' || host === 'youtube.com' || host === 'music.youtube.com') {
+        const id = host === 'youtu.be' ? u.pathname.slice(1)
+          : u.pathname === '/watch' ? u.searchParams.get('v')
+          : (u.pathname.match(/^\/(?:shorts|embed|live)\/([\w-]+)/) || [])[1];
+        if (!id || !/^[\w-]+$/.test(id)) return null;
+        const t = u.searchParams.get('t') || u.searchParams.get('start') || '';
+        const hms = t.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
+        const start = hms ? (+(hms[1] || 0)) * 3600 + (+(hms[2] || 0)) * 60 + (+(hms[3] || 0)) : 0;
+        return `&lt;div class='embed embed-youtube'&gt;&lt;iframe src='https://www.youtube-nocookie.com/embed/${id}${start ? `?start=${start}` : ''}' title='YouTube' loading='lazy' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;`;
+      }
+      if (host === 'open.spotify.com') {
+        const m = u.pathname.match(/^\/(?:intl-[\w-]+\/)?(track|album|playlist|artist|episode|show)\/(\w+)/);
+        if (!m) return null;
+        const height = m[1] === 'track' || m[1] === 'episode' ? 152 : 352;
+        return `&lt;div class='embed embed-spotify'&gt;&lt;iframe src='https://open.spotify.com/embed/${m[1]}/${m[2]}' title='Spotify' height='${height}' loading='lazy' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'&gt;&lt;/iframe&gt;&lt;/div&gt;`;
+      }
+      if (host === 'soundcloud.com' &amp;&amp; u.pathname.split('/').filter(Boolean).length &gt;= 1) {
+        const url = esc(u.origin + u.pathname);
+        return `&lt;div class='embed embed-soundcloud js-soundcloud' data-url='${url}'&gt;&lt;a href='${url}' target='_blank' rel='noopener noreferrer'&gt;${url}&lt;/a&gt;&lt;/div&gt;`;
+      }
+      return null;
+    };
+
+    let md;
+    function markdownToHTML(src) {
+      if (!md) {
+        md = window.markdownit({
+          html: true, breaks: true, linkify: true, typographer: true, langPrefix: 'hljs language-',
+          highlight: (code, lang) =&gt; {
+            if (!window.hljs) return '';
+            if (lang &amp;&amp; window.hljs.getLanguage(lang)) return window.hljs.highlight(code, { language: lang, ignoreIllegals: true }).value;
+            return lang ? '' : window.hljs.highlightAuto(code).value;
+          },
+        }).use(window.markdownitEmoji);
+        if (window.markdownitDeflist) md.use(window.markdownitDeflist);
+        if (window.markdownitContainer) {
+          md.use(window.markdownitContainer, 'details', {
+            validate: params =&gt; /^details(\s|$)/.test(params.trim()),
+            render: (tokens, idx) =&gt; {
+              if (tokens[idx].nesting !== 1) return '&lt;/details&gt;\n';
+              const title = tokens[idx].info.trim().replace(/^details\s*/, '') || '詳細';
+              return `&lt;details&gt;&lt;summary&gt;${md.utils.escapeHtml(title)}&lt;/summary&gt;\n`;
+            },
+          });
+          md.use(window.markdownitContainer, 'message', {
+            validate: params =&gt; /^message(\s|$)/.test(params.trim()),
+            render: (tokens, idx) =&gt; {
+              if (tokens[idx].nesting !== 1) return '&lt;/div&gt;\n';
+              const alert = /^message\s+alert\b/.test(tokens[idx].info.trim());
+              return `&lt;div class='notice${alert ? ' notice-alert' : ''}'&gt;\n`;
+            },
+          });
+        }
+        md.core.ruler.push('embed', state =&gt; {
+          const t = state.tokens;
+          for (let i = 0; i + 2 &lt; t.length; i++) {
+            if (t[i].type !== 'paragraph_open' || t[i + 1].type !== 'inline' || t[i + 2].type !== 'paragraph_close') continue;
+            const c = t[i + 1].children || [];
+            if (c.length !== 3 || c[0].type !== 'link_open' || c[2].type !== 'link_close') continue;
+            const href = c[0].attrGet('href');
+            if (c[1].content.trim() !== href) continue;
+            const html = embedOf(href);
+            if (!html) continue;
+            const block = new state.Token('html_block', '', 0);
+            block.content = html + '\n';
+            t.splice(i, 3, block);
+          }
+        });
+        const defaultLinkOpen = md.renderer.rules.link_open || ((t, i, o, e, s) =&gt; s.renderToken(t, i, o));
+        md.renderer.rules.link_open = (tokens, idx, options, env, self) =&gt; {
+          const href = tokens[idx].attrGet('href');
+          if (href &amp;&amp; href.startsWith('http')) {
+            tokens[idx].attrSet('target', '_blank');
+            tokens[idx].attrSet('rel', 'noopener noreferrer');
+          }
+          return defaultLinkOpen(tokens, idx, options, env, self);
+        };
+        const defaultFence = md.renderer.rules.fence;
+        md.renderer.rules.fence = (tokens, idx, options, env, self) =&gt; {
+          const token = tokens[idx];
+          const m = token.info.trim().match(/^([^\s:]*):(\S+)(.*)$/);
+          if (!m) return defaultFence(tokens, idx, options, env, self);
+          token.info = m[1] + m[3];
+          return `&lt;figure&gt;&lt;figcaption&gt;${md.utils.escapeHtml(m[2])}&lt;/figcaption&gt;${defaultFence(tokens, idx, options, env, self)}&lt;/figure&gt;\n`;
+        };
+      }
+      const html = md.render(src);
+      return window.twemoji ? window.twemoji.parse(html, { base: 'https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.3/assets/' }) : html;
+    }
+
+    function renderMarkdown() {
+      const el = $('.js-post-body');
+      if (!el || !window.markdownit) return;
+      const decode = s =&gt; { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
+      let src = normalizeBloggerImages(decode(el.innerHTML.replace(/&lt;p[^&gt;]*&gt;\s*/gi, '').replace(/\s*&lt;\/p&gt;/gi, '\n\n')));
+      src = src.replace(/\n{3,}/g, m =&gt; '\n\n' + '&lt;br&gt;\n\n'.repeat(m.length - 2));
+      el.innerHTML = markdownToHTML(src);
+    }
+
+
+    function loadSoundCloud() {
+      $$('.js-soundcloud').forEach(el =&gt; {
+        fetch('https://soundcloud.com/oembed?format=json&amp;maxheight=300&amp;url=' + encodeURIComponent(el.dataset.url))
+          .then(r =&gt; r.json())
+          .then(j =&gt; {
+            const src = (j.html || '').match(/src="(https:\/\/w\.soundcloud\.com\/player\/[^"]+)"/);
+            if (!src) return;
+            const f = document.createElement('iframe');
+            f.src = src[1].replace(/&amp;amp;/g, '&amp;');
+            f.title = j.title || 'SoundCloud';
+            f.height = j.height || 166;
+            f.loading = 'lazy';
+            f.allow = 'autoplay; encrypted-media';
+            el.replaceChildren(f);
+          })
+          .catch(() =&gt; {});
+      });
+    }
+
+    function buildTOC() {
+      const body = $('.js-post-body');
+      const toc = $('.js-toc');
+      if (!body || !toc) return;
+      const headings = body.querySelectorAll('h2, h3, h4');
+      if (!headings.length) {
+        $('.js-side-toc')?.remove();
+        return;
+      }
+      const stack = [];
+      headings.forEach((el, i) =&gt; {
+        if (!el.id) el.id = 'toc-' + i;
+        const level = +el.tagName[1];
+        const li = document.createElement('li');
+        li.innerHTML = `&lt;a href='#${el.id}'&gt;${esc(el.textContent.trim())}&lt;/a&gt;`;
+        while (stack.length &amp;&amp; stack.at(-1).level &gt;= level) stack.pop();
+        if (!stack.length) toc.append(li);
+        else {
+          const parent = stack.at(-1).li;
+          let sub = parent.querySelector(':scope &gt; ul');
+          if (!sub) { sub = document.createElement('ul'); parent.append(sub); }
+          sub.append(li);
+        }
+        stack.push({ level, li });
+      });
+    }
+
+    function setupTOCHighlight() {
+      const toc = $('.js-toc');
+      if (!toc) return;
+      const links = [...toc.querySelectorAll('a')];
+      const headings = [...$$('.js-post-body :is(h2, h3, h4)')];
+      if (!headings.length) return;
+      const LINE = 225;
+      const passed = new Map();
+      let lastActive = null;
+
+      const update = () =&gt; {
+        let current = null;
+        headings.forEach(h =&gt; { if (passed.get(h)) current = h; });
+        links.forEach(a =&gt; {
+          const on = !!current &amp;&amp; a.getAttribute('href') === '#' + current.id;
+          a.toggleAttribute('aria-current', on);
+          if (on &amp;&amp; lastActive !== a) {
+            lastActive = a;
+            const offset = a.getBoundingClientRect().top - toc.getBoundingClientRect().top - toc.clientHeight / 2;
+            toc.scrollBy({ top: offset, behavior: motion });
+          }
+        });
+      };
+      const io = new IntersectionObserver(entries =&gt; {
+        entries.forEach(e =&gt; passed.set(e.target, e.boundingClientRect.top &lt;= LINE));
+        update();
+      }, { rootMargin: `-${LINE}px 0px 0px 0px` });
+      headings.forEach(h =&gt; io.observe(h));
+    }
+
+    function loadLinkCards() {
+      const KEY = 'ogp:', TTL = 7 * 864e5;
+      const cache = {
+        get(u) {
+          try {
+            const o = JSON.parse(localStorage.getItem(KEY + u) || 'null');
+            if (!o || Date.now() - o.ts &gt; TTL) { localStorage.removeItem(KEY + u); return null; }
+            return o.data;
+          } catch { return null; }
+        },
+        set(u, data) {
+          const v = JSON.stringify({ ts: Date.now(), data });
+          try { localStorage.setItem(KEY + u, v); }
+          catch {
+            Object.keys(localStorage).forEach(k =&gt; k.startsWith(KEY) &amp;&amp; localStorage.removeItem(k));
+            try { localStorage.setItem(KEY + u, v); } catch {}
+          }
+        }
+      };
+      const cardHTML = (href, d) =&gt; {
+        let host = href;
+        try { host = new URL(href).hostname; } catch {}
+        return `&lt;div class='link-card'&gt;
+          &lt;a class='media' href='${esc(href)}' target='_blank' rel='noopener noreferrer'&gt;
+            &lt;span class='media-content'&gt;
+              &lt;header&gt;&lt;span class='clamp-2'&gt;${esc(d.title || href)}&lt;/span&gt;&lt;span class='link-card-host'&gt;${d.logo?.url ? `&lt;img src='${esc(d.logo.url)}' alt='' onerror='this.remove()'/&gt;` : ''}${esc(host)}&lt;/span&gt;&lt;/header&gt;
+              ${d.description ? `&lt;span class='link-card-description clamp-2'&gt;${esc(d.description)}&lt;/span&gt;` : ''}
+            &lt;/span&gt;
+            ${d.image?.url ? `&lt;img class='link-card-image media-tail' src='${esc(d.image.url)}' alt='' loading='lazy'/&gt;` : ''}
+          &lt;/a&gt;
+        &lt;/div&gt;`;
+      };
+      const insert = (href, p, d) =&gt; {
+        const tpl = document.createElement('template');
+        tpl.innerHTML = cardHTML(href, d).trim();
+        p.after(tpl.content.firstElementChild);
+      };
+      const fetchCard = (href, p) =&gt; {
+        const c = cache.get(href);
+        if (c) return insert(href, p, c);
+        fetch('https://api.microlink.io/?url=' + encodeURIComponent(href))
+          .then(r =&gt; r.json())
+          .then(j =&gt; { if (j.status === 'success') { cache.set(href, j.data); insert(href, p, j.data); } })
+          .catch(() =&gt; {});
+      };
+      const targets = new Map();
+      $$('.js-post-body a[href]').forEach(a =&gt; {
+        const href = a.getAttribute('href');
+        if (!href?.startsWith('http')) return;
+        const p = a.closest('p');
+        if (p &amp;&amp; p.children.length === 1 &amp;&amp; p.firstElementChild === a &amp;&amp; p.textContent.trim() === a.textContent.trim()) {
+          targets.set(a, { href, p });
+        }
+      });
+      const io = new IntersectionObserver((entries, ob) =&gt; {
+        entries.forEach(e =&gt; {
+          if (!e.isIntersecting) return;
+          ob.unobserve(e.target);
+          const t = targets.get(e.target);
+          if (t) fetchCard(t.href, t.p);
+        });
+      }, { rootMargin: '1500px' });
+      targets.forEach((_, a) =&gt; io.observe(a));
+    }
+  })();
+  //]]&gt;
+  </script>
+
+  <b:if cond='data:view.isMultipleItems'>
+  <script>
+  //&lt;![CDATA[
+  (() =&gt; {
+    const PER = 12;
+    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
+
+    const grid = document.querySelector('.js-feed-index');
+    const pag = document.querySelector('.js-feed-pagination');
+    const heading = document.querySelector('.js-feed-heading');
+    if (!grid || !pag) return;
+
+    const HOME = document.documentElement.dataset.home || location.origin + '/';
+
+    const labelMatch = location.pathname.match(/^\/search\/label\/([^/]+)/);
+    const archiveMatch = location.pathname.match(/^\/(\d{4})(?:\/(\d{2}))?\/$/);
+    const label = labelMatch ? decodeURIComponent(labelMatch[1]) : '';
+    const query = new URLSearchParams(location.search).get('q') || '';
+
+    const feedURL = n =&gt; {
+      const base = HOME + 'feeds/posts/summary' + (label ? '/-/' + encodeURIComponent(label) : '');
+      const p = new URLSearchParams({ alt: 'json', 'max-results': PER, 'start-index': (n - 1) * PER + 1 });
+      if (query) p.set('q', query);
+      if (archiveMatch) {
+        const [, y, m] = archiveMatch;
+        const from = m ? new Date(Date.UTC(+y, +m - 1, 1)) : new Date(Date.UTC(+y, 0, 1));
+        const to = m ? new Date(Date.UTC(+y, +m, 1)) : new Date(Date.UTC(+y + 1, 0, 1));
+        const iso = d =&gt; d.toISOString().replace(/\.\d+Z$/, '');
+        p.set('published-min', iso(from));
+        p.set('published-max', iso(to));
+      }
+      return base + '?' + p;
+    };
+
+    const cache = {};
+    const fetchPage = n =&gt; cache[n] ??= fetch(feedURL(n)).then(r =&gt; r.json());
+
+    const archiveTitle = () =&gt; {
+      const [, y, m] = archiveMatch;
+      return m ? `${y}年${+m}月の記事` : `${y}年の記事`;
+    };
+    const title = label ? label : query ? `“${query}” の検索結果` : archiveMatch ? archiveTitle() : '';
+    const setHeading = count =&gt; {
+      if (!heading) return;
+      if (!title) { heading.remove(); return; }
+      heading.textContent = '';
+      const h = document.createElement('h1');
+      h.textContent = title;
+      heading.append(h);
+      if (count != null) {
+        const p = document.createElement('p');
+        p.textContent = `${count} 件`;
+        heading.append(p);
+      }
+    };
+    setHeading(null);
+
+    const cardHTML = p =&gt; {
+      const url = p.link.find(l =&gt; l.rel === 'alternate').href;
+      const thumb = (p.media$thumbnail?.url || '').replace(/\/s\d+[^/]*\//, '/s0/').replace(/=s\d+\S*$/, '=s0');
+      const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
+      const labels = (p.category || []).map(c =&gt; `&lt;a class='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
+      return `&lt;article class='feed-card panel panel-link'&gt;
+        ${thumb ? `&lt;img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/&gt;` : ''}
+        &lt;time class='feed-card-date'&gt;${date}&lt;/time&gt;
+        &lt;h2 class='feed-card-title'&gt;&lt;a class='feed-card-link' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
+        ${labels ? `&lt;p class='feed-card-labels'&gt;${labels}&lt;/p&gt;` : ''}
+      &lt;/article&gt;`;
+    };
+    const loadingHTML = `&lt;progress class='feed-loading' aria-label='読み込み中'&gt;&lt;/progress&gt;`;
+    const emptyHTML = `&lt;p class='feed-empty'&gt;記事が見つかりませんでした。&lt;/p&gt;`;
+
+    const pageURL = n =&gt; {
+      const p = new URLSearchParams(location.search);
+      n === 1 ? p.delete('page') : p.set('page', n);
+      const q = p.toString();
+      return location.pathname + (q ? '?' + q : '');
+    };
+    const pagHTML = (n, total) =&gt; {
+      if (total &lt;= 1) return '';
+      const lo = Math.max(2, n - 1), hi = Math.min(total - 1, n + 1);
+      const pages = [1];
+      if (lo &gt; 2) pages.push(null);
+      for (let i = lo; i &lt;= hi; i++) pages.push(i);
+      if (hi &lt; total - 1) pages.push(null);
+      pages.push(total);
+      return `&lt;ul class='feed-pages-list'&gt;` + pages.map(p =&gt;
+        p === null ? `&lt;li&gt;&lt;span aria-hidden='true'&gt;…&lt;/span&gt;&lt;/li&gt;`
+        : p === n  ? `&lt;li&gt;&lt;a class='button' href='${pageURL(p)}' aria-current='page'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
+        :            `&lt;li&gt;&lt;a class='button js-pg' data-page='${p}' href='${pageURL(p)}'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
+      ).join('') + '&lt;/ul&gt;';
+    };
+
+    const loadPage = n =&gt; {
+      grid.innerHTML = loadingHTML;
+      grid.setAttribute('aria-busy', 'true');
+      fetchPage(n).then(data =&gt; {
+        const entries = data.feed.entry || [];
+        const total = +data.feed['openSearch$totalResults'].$t;
+        const totalPages = Math.ceil(total / PER);
+        setHeading(total);
+        grid.innerHTML = entries.length ? entries.map(cardHTML).join('') : emptyHTML;
+        pag.innerHTML = pagHTML(n, totalPages);
+        if (n &gt; 1) fetchPage(n - 1);
+        if (n &lt; totalPages) fetchPage(n + 1);
+      }).catch(() =&gt; {
+        grid.innerHTML = emptyHTML;
+        pag.innerHTML = '';
+      }).finally(() =&gt; grid.removeAttribute('aria-busy'));
+    };
+    const go = n =&gt; { history.pushState({ page: n }, '', pageURL(n)); loadPage(n); scrollTo(0, 0); };
+
+    pag.addEventListener('mouseover', e =&gt; {
+      const a = e.target.closest('.js-pg');
+      if (a) fetchPage(+a.dataset.page);
+    });
+    pag.addEventListener('click', e =&gt; {
+      const a = e.target.closest('.js-pg');
+      if (!a) return;
+      e.preventDefault();
+      go(+a.dataset.page);
+    });
+    addEventListener('popstate', e =&gt; { loadPage(e.state?.page || 1); scrollTo(0, 0); });
+
+    const cur = +new URLSearchParams(location.search).get('page') || 1;
+    history.replaceState({ page: cur }, '');
+    loadPage(cur);
+  })();
+  //]]&gt;
+  </script>
+  </b:if>
+
+  <b:if cond='data:view.isPost'>
+  <script>
+  //&lt;![CDATA[
+  (() =&gt; {
+    const HOME = document.documentElement.dataset.home || location.origin + '/';
+    const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
+    const pathOf = href =&gt; { try { return new URL(href, location.href).pathname; } catch { return href; } };
+    const pick = list =&gt; list[Math.floor(Math.random() * list.length)];
+    const shown = new Set([location.pathname]);
+
+    document.querySelectorAll('.js-popular-item').forEach(li =&gt; {
+      if (shown.has(pathOf(li.querySelector('a')?.href || ''))) li.remove();
+    });
+    const popular = document.querySelector('.js-popular-item a');
+    if (popular) shown.add(pathOf(popular.href));
+
+    const labelSlot = document.querySelector('.js-latest-post');
+    const blogSlot = document.querySelector('.js-random-post');
+    if (!labelSlot &amp;&amp; !blogSlot) return;
+    const all = [...document.querySelectorAll('.js-post-labels a')].map(a =&gt; a.textContent.trim()).filter(Boolean);
+    const first = pick(all);
+    const labels = all.length ? [first, ...all.filter(l =&gt; l !== first)] : [];
+
+    const feed = path =&gt; fetch(HOME + 'feeds/posts/summary' + path + '?alt=json&amp;max-results=20')
+      .then(r =&gt; r.json())
+      .then(data =&gt; (data.feed?.entry || [])
+        .map(p =&gt; {
+          const link = p.link.find(l =&gt; l.rel === 'alternate')?.href;
+          return link ? { link, title: p.title.$t, thumb: p.media$thumbnail?.url || '' } : null;
+        })
+        .filter(Boolean))
+      .catch(() =&gt; []);
+    const fresh = posts =&gt; posts.filter(p =&gt; !shown.has(pathOf(p.link)));
+    const render = (p, target) =&gt; {
+      shown.add(pathOf(p.link));
+      target.innerHTML = `&lt;a class='side-post media' href='${esc(p.link)}'&gt;${p.thumb ? `&lt;img alt='' class='side-post-image' src='${esc(p.thumb)}'/&gt;` : ''}&lt;span class='media-content'&gt;&lt;span class='clamp-2'&gt;${esc(p.title)}&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;`;
+    };
+
+    const blogPosts = blogSlot ? feed('') : null;
+    (async () =&gt; {
+      if (labelSlot) {
+        for (const label of labels) {
+          const posts = fresh(await feed('/-/' + encodeURIComponent(label)));
+          if (posts.length) { render(pick(posts), labelSlot); break; }
+        }
+      }
+      if (blogSlot) {
+        const posts = fresh(await blogPosts);
+        if (posts.length) render(pick(posts), blogSlot);
+      }
+    })();
+  })();
+  //]]&gt;
+  </script>
+  </b:if>
+</body>
+</html>

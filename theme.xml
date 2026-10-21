@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:js='false' b:responsive='true' b:version='3' expr:data-page='data:blog.pageType' expr:data-home='data:blog.homepageUrl' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <b:include data='blog' name='all-head-content'/>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <meta content='dark' name='color-scheme'/>
+  <b:if cond='data:view.isPost or data:view.isPage'>
+    <title><data:blog.pageName/> - <data:blog.title/></title>
+    <meta content='article' property='og:type'/>
+  <b:else/>
+    <title><data:blog.pageTitle/></title>
+    <meta content='website' property='og:type'/>
+  </b:if>
+  <meta expr:content='data:blog.title' property='og:site_name'/>
+  &lt;style&gt;&lt;!--/*<b:skin><![CDATA[*/]]></b:skin>
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&amp;display=swap' rel='stylesheet'/>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11/highlight.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it@15/dist/browser/markdown-it.umd.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-emoji@3/dist/markdown-it-emoji.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-deflist@4/dist/markdown-it-deflist.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/markdown-it-container@4/dist/markdown-it-container.min.js'></script>
+  <script defer='defer' src='https://cdn.jsdelivr.net/npm/@twemoji/api@17.0.3/dist/twemoji.min.js'></script>
+  @@STYLE:style.css@@
+&lt;/head&gt;&lt;!--</head>--&gt;
+<body>
+  <header class='site-header'>
+    <b:section id='ヘッダー'>
+      <b:widget id='Header0' locked='false' title='Header' type='Header'>
+        <b:includable id='main'>
+          <div class='site-header-inner container'>
+            <a class='site-title' expr:href='data:blog.homepageUrl'>
+              <span class='site-name'><data:blog.title/></span>
+              <span class='site-description'><data:description/></span>
+            </a>
+            <form action='/search' class='site-search' method='get' role='search'>
+              <div class='field'>
+                <input aria-label='ブログ内を検索' expr:value='data:view.search.query' name='q' placeholder='ブログ内を検索' type='search'/>
+              </div>
+            </form>
+            <button aria-label='メニュー' class='site-menu button-icon' popovertarget='side-nav' type='button'><svg aria-hidden='true' fill='currentColor' height='1em' viewBox='0 0 512 512' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M48 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L192 64zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l288 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-288 0zM48 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM96 256a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z'/></svg></button>
+          </div>
+        </b:includable>
+      </b:widget>
+    </b:section>
+  </header>
+  <div class='site-body container'>
+    <main class='site-main'>
+      <b:section id='メインカラム'>
+        <b:widget id='Blog0' locked='false' title='ブログの投稿' type='Blog' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+            <b:widget-setting name='showShareButtons'>false</b:widget-setting>
+            <b:widget-setting name='showCommentLink'>false</b:widget-setting>
+            <b:widget-setting name='showAuthor'>true</b:widget-setting>
+            <b:widget-setting name='showAuthorProfile'>false</b:widget-setting>
+            <b:widget-setting name='showLabels'>true</b:widget-setting>
+            <b:widget-setting name='showLocation'>false</b:widget-setting>
+            <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+            <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+            <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+            <b:widget-setting name='showReactions'>false</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <b:if cond='data:view.isError'>
+              <article class='status-page panel typeset'>
+                <h1>404</h1>
+                <p>お探しのページは見つかりませんでした。</p>
+                <p><a class='button button-outline' expr:href='data:blog.homepageUrl'>ホームへ戻る</a></p>
+              </article>
+            <b:elseif cond='data:view.isMultipleItems'/>
+              <header class='feed-heading typeset js-feed-heading'/>
+              <div class='feed-cards js-feed-index'/>
+              <nav aria-label='ページ' class='feed-pages js-feed-pagination'/>
+            <b:else/>
+              <b:loop values='data:posts' var='post'>
+                <article class='post panel typeset'>
+                  <b:if cond='data:view.isPost'>
+                    <p><small><time><data:post.date/></time></small></p>
+                  </b:if>
+                  <h1><data:post.title/></h1>
+                  <b:if cond='data:view.isPost'>
+                    <p class='post-labels js-post-labels'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <a class='tag' expr:href='data:label.url'><data:label.name/></a>
+                      </b:loop>
+                    </p>
+                  </b:if>
+                  <div class='post-body typeset js-post-body'><data:post.body/></div>
+                </article>
+              </b:loop>
+            </b:if>
+          </b:includable>
+          <b:includable id='backlinkDeleteIcon'/>
+          <b:includable id='backlinks'/>
+          <b:includable id='comment-form'/>
+          <b:includable id='commentDeleteIcon'/>
+          <b:includable id='comment_count_picker'/>
+          <b:includable id='comment_picker'/>
+          <b:includable id='comments'/>
+          <b:includable id='feedLinks'/>
+          <b:includable id='feedLinksBody'/>
+          <b:includable id='iframe_comments'/>
+          <b:includable id='mobile-index-post'/>
+          <b:includable id='mobile-main'/>
+          <b:includable id='mobile-nextprev'/>
+          <b:includable id='mobile-post'/>
+          <b:includable id='nextprev'/>
+          <b:includable id='post'/>
+          <b:includable id='postQuickEdit'/>
+          <b:includable id='shareButtons'/>
+          <b:includable id='status-message'/>
+          <b:includable id='threaded-comment-form'/>
+          <b:includable id='threaded_comment_js'/>
+          <b:includable id='threaded_comments'/>
+        </b:widget>
+      </b:section>
+    </main>
+    <aside class='site-side'>
+      <b:section id='インセンティブ'>
+        <b:widget id='PopularPosts0' locked='false' title='関連記事' type='PopularPosts' version='1'>
+          <b:widget-settings>
+            <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
+            <b:widget-setting name='showThumbnails'>true</b:widget-setting>
+            <b:widget-setting name='showSnippets'>false</b:widget-setting>
+            <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <section aria-label='関連記事' class='side-popular panel'>
+              <ul class='side-posts'>
+                <b:if cond='data:view.isPost'>
+                  <b:loop values='data:posts' var='post'>
+                    <li class='js-popular-item'><a class='side-post media' expr:href='data:post.href'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
+                  </b:loop>
+                  <li class='js-latest-post'/>
+                  <li class='js-random-post'/>
+                <b:else/>
+                  <b:loop values='data:posts' var='post'>
+                    <li><a class='side-post media' expr:href='data:post.href'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
+                  </b:loop>
+                </b:if>
+              </ul>
+            </section>
+          </b:includable>
+        </b:widget>
+      </b:section>
+      <nav aria-label='ラベルと目次' class='side-nav drawer js-side-nav' id='side-nav' popover=''>
+        <b:section id='ラベルリスト/目次'>
+          <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
+            <b:widget-settings>
+              <b:widget-setting name='sorting'>FREQUENCY</b:widget-setting>
+              <b:widget-setting name='display'>CLOUD</b:widget-setting>
+              <b:widget-setting name='selectedLabelsList'/>
+              <b:widget-setting name='showType'>ALL</b:widget-setting>
+              <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
+            </b:widget-settings>
+            <b:includable id='main'>
+              <b:if cond='data:view.isPost or data:view.isPage'>
+                <section class='side-toc panel js-side-toc'>
+                  <h2 class='side-heading'>目次</h2>
+                  <ul class='toc js-toc'/>
+                </section>
+              </b:if>
+              <section class='side-labels panel'>
+                <h2 class='side-heading'>ラベル</h2>
+                <p class='side-label-list'>
+                  <b:loop values='data:labels' var='label'>
+                    <a class='tag' expr:href='data:label.url'><data:label.name/></a>
+                  </b:loop>
+                </p>
+              </section>
+            </b:includable>
+          </b:widget>
+        </b:section>
+      </nav>
+    </aside>
+  </div>
+  <footer class='site-footer'>
+    <span>pickker</span>
+  </footer>
+  <dialog class='image-modal panel js-image-modal'><img alt=''/></dialog>
+
+  @@SCRIPT:app.js@@
+
+  <b:if cond='data:view.isMultipleItems'>
+  @@SCRIPT:feed.js@@
+  </b:if>
+
+  <b:if cond='data:view.isPost'>
+  @@SCRIPT:related.js@@
+  </b:if>
+</body>
+</html>
