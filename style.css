@@ -46,31 +46,29 @@
   --ease: cubic-bezier(0.2, 0, 0, 1);
   scrollbar-color: var(--color-line-strong) transparent;
 }
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --color-bg: oklch(97.00% 0.005 264);
-    --color-panel: oklch(100.00% 0 0);
-    --color-item: oklch(96.00% 0.006 264);
-    --color-tint: oklch(93.50% 0.009 264);
-    --color-text: oklch(35.50% 0.016 264);
-    --color-text-control: oklch(44.00% 0.020 264);
-    --color-text-note: oklch(52.70% 0.024 264);
-    --color-text-disabled: oklch(65.00% 0.020 264);
-    --color-accent: oklch(52.90% 0.125 242);
-    --color-accent-tint: oklch(94.00% 0.030 242);
-    --color-error: oklch(52.00% 0.170 25);
-    --color-warning: oklch(56.00% 0.120 70);
-    --color-success: oklch(52.00% 0.120 160);
-    --color-error-tint: oklch(95.00% 0.030 25);
-    --color-warning-tint: oklch(96.00% 0.045 90);
-    --color-success-tint: oklch(95.00% 0.035 160);
-    --color-hover: oklch(55.00% 0.020 264 / 0.1);
-    --color-line-weak: oklch(35.00% 0.020 264 / 0.12);
-    --color-line-strong: oklch(35.00% 0.020 264 / 0.25);
-    --color-field: oklch(100.00% 0 0 / 0.8);
-    --color-backdrop: oklch(20.00% 0.020 264 / 0.4);
-  }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: oklch(97.00% 0.005 264);
+  --color-panel: oklch(100.00% 0 0);
+  --color-item: oklch(96.00% 0.006 264);
+  --color-tint: oklch(93.50% 0.009 264);
+  --color-text: oklch(35.50% 0.016 264);
+  --color-text-control: oklch(44.00% 0.020 264);
+  --color-text-note: oklch(52.70% 0.024 264);
+  --color-text-disabled: oklch(65.00% 0.020 264);
+  --color-accent: oklch(52.90% 0.125 242);
+  --color-accent-tint: oklch(94.00% 0.030 242);
+  --color-error: oklch(52.00% 0.170 25);
+  --color-warning: oklch(56.00% 0.120 70);
+  --color-success: oklch(52.00% 0.120 160);
+  --color-error-tint: oklch(95.00% 0.030 25);
+  --color-warning-tint: oklch(96.00% 0.045 90);
+  --color-success-tint: oklch(95.00% 0.035 160);
+  --color-hover: oklch(55.00% 0.020 264 / 0.1);
+  --color-line-weak: oklch(35.00% 0.020 264 / 0.12);
+  --color-line-strong: oklch(35.00% 0.020 264 / 0.25);
+  --color-field: oklch(100.00% 0 0 / 0.8);
+  --color-backdrop: oklch(20.00% 0.020 264 / 0.4);
 }
 @media (prefers-reduced-motion: reduce) {
   :root {
@@ -661,6 +659,8 @@ body {
   line-height: var(--lh-12);
 }
 .site-search { width: min(16rem, 40vw); }
+:root[data-theme="light"] .theme-icon-moon,
+:root:not([data-theme="light"]) .theme-icon-sun { display: none; }
 
 .site-body {
   flex: 1;

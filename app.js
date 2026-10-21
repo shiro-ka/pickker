@@ -4,6 +4,17 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const motion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
+  const theme = () => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+  $('.js-theme-toggle')?.addEventListener('click', () => {
+    const t = theme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t;
+    try { localStorage.theme = t; } catch {}
+  });
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+    let saved;
+    try { saved = localStorage.theme; } catch {}
+    if (!saved) document.documentElement.dataset.theme = e.matches ? 'light' : 'dark';
+  });
   const sideNav = $('.js-side-nav');
   sideNav?.addEventListener('click', e => {
     if (e.target.closest('a') && sideNav.matches(':popover-open')) sideNav.hidePopover();
