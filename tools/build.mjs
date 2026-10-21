@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 const ONLINE_BASE = 'https://pickker.shiro-ka.workers.dev';
 
 const at = p => fileURLToPath(new URL('../' + p, import.meta.url));
-const src = name => readFileSync(at('src/' + name), 'utf8');
+const src = name => readFileSync(at('suisou/' + name), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const indented = (s, indent) => esc(s.replace(/\n+$/, '')).split('\n').map(l => l ? indent + l : '').join('\n');
 
@@ -30,18 +30,18 @@ const build = mode => {
   return xml;
 };
 
-const outputs = { 'pickker.xml': build('inline'), 'pickker-online.xml': build('online') };
+const outputs = { 'pickker-suisou.xml': build('inline'), 'pickker-suisou-online.xml': build('online') };
 
 if (process.argv.includes('--check')) {
   let ok = true;
   for (const [file, xml] of Object.entries(outputs)) {
     if (readFileSync(at(file), 'utf8') !== xml) {
-      console.error(`✗ ${file} が src と一致しない。node tools/build.mjs で作り直すこと。`);
+      console.error(`✗ ${file} が suisou/ と一致しない。node tools/build.mjs で作り直すこと。`);
       ok = false;
     }
   }
   if (!ok) process.exit(1);
-  console.log('✓ pickker.xml / pickker-online.xml は src と一致している');
+  console.log(`✓ ${Object.keys(outputs).join(' / ')} は suisou/ と一致している`);
 } else {
   for (const [file, xml] of Object.entries(outputs)) {
     writeFileSync(at(file), xml);

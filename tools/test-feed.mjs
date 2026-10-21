@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
-const SRC = join(dirname(fileURLToPath(import.meta.url)), '..', 'src');
+const SRC = join(dirname(fileURLToPath(import.meta.url)), '..', 'suisou');
 
 const read = name => readFileSync(join(SRC, name), 'utf8');
 
