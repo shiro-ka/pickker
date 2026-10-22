@@ -1187,11 +1187,13 @@
       return null;
     };
 
-    const CJK = /[ᄀ-ᅟ⺀-〾ぁ-㏿㐀-䶿一-鿿ꀀ-꓏ꥠ-꥿가-힣豈-﫿︐-︙︰-﹯＀-￯\u{16fe0}-\u{18aff}\u{1b000}-\u{1b2ff}\u{1f200}-\u{1f2ff}\u{20000}-\u{3fffd}]/u;
-    const isCjk = c =&gt; {
-      const s = String.fromCodePoint(c);
-      return CJK.test(s) &amp;&amp; !/\p{Emoji_Presentation}/u.test(s);
-    };
+    const CJK = [
+      [0x1100, 0x115f], [0x2e80, 0x303e], [0x3041, 0x33ff], [0x3400, 0x4dbf], [0x4e00, 0x9fff],
+      [0xa000, 0xa4cf], [0xa960, 0xa97f], [0xac00, 0xd7a3], [0xf900, 0xfaff], [0xfe10, 0xfe19],
+      [0xfe30, 0xfe6f], [0xff00, 0xffef], [0x16fe0, 0x18aff], [0x1b000, 0x1b2ff], [0x1f200, 0x1f2ff],
+      [0x20000, 0x3fffd],
+    ];
+    const isCjk = c =&gt; CJK.some(([from, to]) =&gt; from &lt;= c &amp;&amp; c &lt;= to) &amp;&amp; !/\p{Emoji_Presentation}/u.test(String.fromCodePoint(c));
     const cjkEmphasis = md =&gt; {
       const { isWhiteSpace, isMdAsciiPunct, isPunctChar } = md.utils;
       const punct = c =&gt; isMdAsciiPunct(c) || isPunctChar(String.fromCodePoint(c));
@@ -1231,7 +1233,7 @@
             validate: params =&gt; /^details(\s|$)/.test(params.trim()),
             render: (tokens, idx) =&gt; {
               if (tokens[idx].nesting !== 1) return '&lt;/details&gt;\n';
-              const title = tokens[idx].info.trim().replace(/^details\s*/, '') || '詳細';
+              const title = tokens[idx].info.trim().replace(/^details\s*/, '') || '\u8a73\u7d30';
               return `&lt;details&gt;&lt;summary&gt;${md.utils.escapeHtml(title)}&lt;/summary&gt;\n`;
             },
           });
@@ -1474,9 +1476,9 @@
 
     const archiveTitle = () =&gt; {
       const [, y, m] = archiveMatch;
-      return m ? `${y}年${+m}月の記事` : `${y}年の記事`;
+      return m ? `${y}\u5e74${+m}\u6708\u306e\u8a18\u4e8b` : `${y}\u5e74\u306e\u8a18\u4e8b`;
     };
-    const title = label ? label : query ? `“${query}” の検索結果` : archiveMatch ? archiveTitle() : '';
+    const title = label ? label : query ? `\u201c${query}\u201d \u306e\u691c\u7d22\u7d50\u679c` : archiveMatch ? archiveTitle() : '';
     const setHeading = count =&gt; {
       if (!heading) return;
       if (!title) { heading.remove(); return; }
@@ -1486,7 +1488,7 @@
       heading.append(h);
       if (count != null) {
         const p = document.createElement('p');
-        p.textContent = `${count} 件`;
+        p.textContent = `${count} \u4ef6`;
         heading.append(p);
       }
     };
@@ -1504,8 +1506,8 @@
         ${labels ? `&lt;p class='feed-card-labels'&gt;${labels}&lt;/p&gt;` : ''}
       &lt;/article&gt;`;
     };
-    const loadingHTML = `&lt;progress class='feed-loading' aria-label='読み込み中'&gt;&lt;/progress&gt;`;
-    const emptyHTML = `&lt;p class='feed-empty'&gt;記事が見つかりませんでした。&lt;/p&gt;`;
+    const loadingHTML = `&lt;progress class='feed-loading' aria-label='\u8aad\u307f\u8fbc\u307f\u4e2d'&gt;&lt;/progress&gt;`;
+    const emptyHTML = `&lt;p class='feed-empty'&gt;\u8a18\u4e8b\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f\u3002&lt;/p&gt;`;
 
     const pageURL = n =&gt; {
       const p = new URLSearchParams(location.search);
@@ -1522,7 +1524,7 @@
       if (hi &lt; total - 1) pages.push(null);
       pages.push(total);
       return `&lt;ul class='feed-pages-list'&gt;` + pages.map(p =&gt;
-        p === null ? `&lt;li&gt;&lt;span aria-hidden='true'&gt;…&lt;/span&gt;&lt;/li&gt;`
+        p === null ? `&lt;li&gt;&lt;span aria-hidden='true'&gt;\u2026&lt;/span&gt;&lt;/li&gt;`
         : p === n  ? `&lt;li&gt;&lt;a class='button' href='${pageURL(p)}' aria-current='page'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
         :            `&lt;li&gt;&lt;a class='button js-pg' data-page='${p}' href='${pageURL(p)}'&gt;${p}&lt;/a&gt;&lt;/li&gt;`
       ).join('') + '&lt;/ul&gt;';

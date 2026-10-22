@@ -8,6 +8,11 @@ const ONLINE_BASE = 'https://pickker.shiro-ka.workers.dev';
 const at = p => fileURLToPath(new URL('../' + p, import.meta.url));
 const read = (dir, name) => readFileSync(at(dir + name), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const asciiJS = s => s.replace(/[^\x00-\x7f]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
+const asciiCSS = (s, name) => {
+  if (/[^\x00-\x7f]/.test(s)) throw new Error(`${name} に ASCII 以外の文字がある (全部入りの XML に埋め込むと Blogger が書き換える)`);
+  return s;
+};
 const indented = (s, indent) => esc(s.replace(/\n+$/, '')).split('\n').map(l => l ? indent + l : '').join('\n');
 
 const MARKER = /^([ \t]*)@@(STYLE|SCRIPT):([\w./-]+)@@[ \t]*$/gm;
@@ -15,8 +20,8 @@ const assetsOf = dir => [...read(dir, 'theme.xml').matchAll(MARKER)].map(m => m[
 
 const render = {
   inline: {
-    STYLE: (dir, i, name) => `${i}<style>\n${indented(read(dir, name), i + '  ')}\n${i}</style>`,
-    SCRIPT: (dir, i, name) => `${i}<script>\n${i}//&lt;![CDATA[\n${indented(read(dir, name), i)}\n${i}//]]&gt;\n${i}</script>`,
+    STYLE: (dir, i, name) => `${i}<style>\n${indented(asciiCSS(read(dir, name), name), i + '  ')}\n${i}</style>`,
+    SCRIPT: (dir, i, name) => `${i}<script>\n${i}//&lt;![CDATA[\n${indented(asciiJS(read(dir, name)), i)}\n${i}//]]&gt;\n${i}</script>`,
   },
   online: {
     STYLE: (dir, i, name) => `${i}<link href='${ONLINE_BASE}/${name}' rel='stylesheet'/>`,

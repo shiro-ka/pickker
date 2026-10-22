@@ -70,11 +70,13 @@
     return null;
   };
 
-  const CJK = /[ᄀ-ᅟ⺀-〾ぁ-㏿㐀-䶿一-鿿ꀀ-꓏ꥠ-꥿가-힣豈-﫿︐-︙︰-﹯＀-￯\u{16fe0}-\u{18aff}\u{1b000}-\u{1b2ff}\u{1f200}-\u{1f2ff}\u{20000}-\u{3fffd}]/u;
-  const isCjk = c => {
-    const s = String.fromCodePoint(c);
-    return CJK.test(s) && !/\p{Emoji_Presentation}/u.test(s);
-  };
+  const CJK = [
+    [0x1100, 0x115f], [0x2e80, 0x303e], [0x3041, 0x33ff], [0x3400, 0x4dbf], [0x4e00, 0x9fff],
+    [0xa000, 0xa4cf], [0xa960, 0xa97f], [0xac00, 0xd7a3], [0xf900, 0xfaff], [0xfe10, 0xfe19],
+    [0xfe30, 0xfe6f], [0xff00, 0xffef], [0x16fe0, 0x18aff], [0x1b000, 0x1b2ff], [0x1f200, 0x1f2ff],
+    [0x20000, 0x3fffd],
+  ];
+  const isCjk = c => CJK.some(([from, to]) => from <= c && c <= to) && !/\p{Emoji_Presentation}/u.test(String.fromCodePoint(c));
   const cjkEmphasis = md => {
     const { isWhiteSpace, isMdAsciiPunct, isPunctChar } = md.utils;
     const punct = c => isMdAsciiPunct(c) || isPunctChar(String.fromCodePoint(c));
