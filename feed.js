@@ -7,7 +7,7 @@
   const heading = document.querySelector('.js-feed-heading');
   if (!grid || !pag) return;
 
-  const HOME = document.documentElement.dataset.home || location.origin + '/';
+  const HOME = (u => u.origin + u.pathname)(new URL(document.documentElement.dataset.home || '/', location.href));
 
   const labelMatch = location.pathname.match(/^\/search\/label\/([^/]+)/);
   const archiveMatch = location.pathname.match(/^\/(\d{4})(?:\/(\d{2}))?\/$/);

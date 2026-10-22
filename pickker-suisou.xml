@@ -753,7 +753,7 @@
     const heading = document.querySelector('.js-feed-heading');
     if (!grid || !pag) return;
 
-    const HOME = document.documentElement.dataset.home || location.origin + '/';
+    const HOME = (u =&gt; u.origin + u.pathname)(new URL(document.documentElement.dataset.home || '/', location.href));
 
     const labelMatch = location.pathname.match(/^\/search\/label\/([^/]+)/);
     const archiveMatch = location.pathname.match(/^\/(\d{4})(?:\/(\d{2}))?\/$/);
@@ -877,7 +877,7 @@
   <script>
   //&lt;![CDATA[
   (() =&gt; {
-    const HOME = document.documentElement.dataset.home || location.origin + '/';
+    const HOME = (u =&gt; u.origin + u.pathname)(new URL(document.documentElement.dataset.home || '/', location.href));
     const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
     const pathOf = href =&gt; { try { return new URL(href, location.href).pathname; } catch { return href; } };
     const pick = list =&gt; list[Math.floor(Math.random() * list.length)];

@@ -1,5 +1,5 @@
 (() => {
-  const HOME = document.documentElement.dataset.home || location.origin + '/';
+  const HOME = (u => u.origin + u.pathname)(new URL(document.documentElement.dataset.home || '/', location.href));
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const pathOf = href => { try { return new URL(href, location.href).pathname; } catch { return href; } };
   const pick = list => list[Math.floor(Math.random() * list.length)];
