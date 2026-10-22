@@ -368,7 +368,7 @@
                   <b:loop values='data:posts' var='post'>
                     <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
-                  <li class='js-latest-post'/>
+                  <li class='js-label-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
@@ -887,7 +887,7 @@
     const popular = document.querySelector('.js-popular-item a');
     if (popular) shown.add(pathOf(popular.href));
 
-    const labelSlot = document.querySelector('.js-latest-post');
+    const labelSlot = document.querySelector('.js-label-post');
     const blogSlot = document.querySelector('.js-random-post');
     if (!labelSlot &amp;&amp; !blogSlot) return;
     const all = [...document.querySelectorAll('.js-post-labels a')].map(a =&gt; a.textContent.trim()).filter(Boolean);

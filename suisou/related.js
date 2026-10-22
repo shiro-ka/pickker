@@ -11,7 +11,7 @@
   const popular = document.querySelector('.js-popular-item a');
   if (popular) shown.add(pathOf(popular.href));
 
-  const labelSlot = document.querySelector('.js-latest-post');
+  const labelSlot = document.querySelector('.js-label-post');
   const blogSlot = document.querySelector('.js-random-post');
   if (!labelSlot && !blogSlot) return;
   const all = [...document.querySelectorAll('.js-post-labels a')].map(a => a.textContent.trim()).filter(Boolean);
