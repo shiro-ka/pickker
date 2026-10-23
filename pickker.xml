@@ -865,7 +865,7 @@
     .feed-heading { margin-block-end: var(--space-3); }
     .feed-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(14rem, (100% - var(--space-3)) / 2), 1fr));
       gap: var(--space-3);
     }
     .feed-card {
