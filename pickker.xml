@@ -934,13 +934,6 @@
       line-height: var(--lh-12);
       text-align: center;
     }
-    .site-footer a {
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 0.2em;
-      transition: color var(--duration-fast) var(--ease);
-    }
-    .site-footer a:hover { color: var(--color-accent); }
 
     .image-modal {
       max-width: 95vw;
