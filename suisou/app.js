@@ -1,4 +1,9 @@
 (() => {
+  const here = new URL(location.href);
+  if (here.searchParams.has('m')) {
+    here.searchParams.delete('m');
+    history.replaceState(history.state, '', here);
+  }
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => c.querySelectorAll(s);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);

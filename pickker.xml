@@ -1105,6 +1105,11 @@
   <script>
   //&lt;![CDATA[
   (() =&gt; {
+    const here = new URL(location.href);
+    if (here.searchParams.has('m')) {
+      here.searchParams.delete('m');
+      history.replaceState(history.state, '', here);
+    }
     const $ = (s, c = document) =&gt; c.querySelector(s);
     const $$ = (s, c = document) =&gt; c.querySelectorAll(s);
     const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;"']/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' })[c]);
