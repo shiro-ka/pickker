@@ -451,7 +451,6 @@
 
     document.addEventListener('DOMContentLoaded', () =&gt; {
       renderMarkdown();
-      loadSoundCloud();
       buildTOC();
       setupTOCHighlight();
       loadLinkCards();
@@ -478,8 +477,7 @@
         return `&lt;div class='embed embed-spotify'&gt;&lt;iframe src='https://open.spotify.com/embed/${m[1]}/${m[2]}' title='Spotify' height='${height}' loading='lazy' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'&gt;&lt;/iframe&gt;&lt;/div&gt;`;
       }
       if (host === 'soundcloud.com' &amp;&amp; u.pathname.split('/').filter(Boolean).length &gt;= 1) {
-        const url = esc(u.origin + u.pathname);
-        return `&lt;div class='embed embed-soundcloud js-soundcloud' data-url='${url}'&gt;&lt;a href='${url}' target='_blank' rel='noopener noreferrer'&gt;${url}&lt;/a&gt;&lt;/div&gt;`;
+        return `&lt;div class='embed embed-soundcloud'&gt;&lt;iframe src='https://w.soundcloud.com/player/?url=${encodeURIComponent(u.origin + u.pathname)}&amp;amp;visual=true' title='SoundCloud' height='300' loading='lazy' allow='autoplay; encrypted-media'&gt;&lt;/iframe&gt;&lt;/div&gt;`;
       }
       return null;
     };
@@ -587,26 +585,6 @@
       let src = normalizeBloggerImages(decode(el.innerHTML.replace(/&lt;p[^&gt;]*&gt;\s*/gi, '').replace(/\s*&lt;\/p&gt;/gi, '\n\n')));
       src = src.replace(/\n{3,}/g, m =&gt; '\n\n' + '&lt;br&gt;\n\n'.repeat(m.length - 2));
       el.innerHTML = markdownToHTML(src);
-    }
-
-
-    function loadSoundCloud() {
-      $$('.js-soundcloud').forEach(el =&gt; {
-        fetch('https://soundcloud.com/oembed?format=json&amp;maxheight=300&amp;url=' + encodeURIComponent(el.dataset.url))
-          .then(r =&gt; r.json())
-          .then(j =&gt; {
-            const src = (j.html || '').match(/src="(https:\/\/w\.soundcloud\.com\/player\/[^"]+)"/);
-            if (!src) return;
-            const f = document.createElement('iframe');
-            f.src = src[1].replace(/&amp;amp;/g, '&amp;');
-            f.title = j.title || 'SoundCloud';
-            f.height = j.height || 166;
-            f.loading = 'lazy';
-            f.allow = 'autoplay; encrypted-media';
-            el.replaceChildren(f);
-          })
-          .catch(() =&gt; {});
-      });
     }
 
     function buildTOC() {

@@ -53,7 +53,6 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     renderMarkdown();
-    loadSoundCloud();
     buildTOC();
     setupTOCHighlight();
     loadLinkCards();
@@ -80,8 +79,7 @@
       return `<div class='embed embed-spotify'><iframe src='https://open.spotify.com/embed/${m[1]}/${m[2]}' title='Spotify' height='${height}' loading='lazy' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe></div>`;
     }
     if (host === 'soundcloud.com' && u.pathname.split('/').filter(Boolean).length >= 1) {
-      const url = esc(u.origin + u.pathname);
-      return `<div class='embed embed-soundcloud js-soundcloud' data-url='${url}'><a href='${url}' target='_blank' rel='noopener noreferrer'>${url}</a></div>`;
+      return `<div class='embed embed-soundcloud'><iframe src='https://w.soundcloud.com/player/?url=${encodeURIComponent(u.origin + u.pathname)}&amp;visual=true' title='SoundCloud' height='300' loading='lazy' allow='autoplay; encrypted-media'></iframe></div>`;
     }
     return null;
   };
@@ -189,26 +187,6 @@
     let src = normalizeBloggerImages(decode(el.innerHTML.replace(/<p[^>]*>\s*/gi, '').replace(/\s*<\/p>/gi, '\n\n')));
     src = src.replace(/\n{3,}/g, m => '\n\n' + '<br>\n\n'.repeat(m.length - 2));
     el.innerHTML = markdownToHTML(src);
-  }
-
-
-  function loadSoundCloud() {
-    $$('.js-soundcloud').forEach(el => {
-      fetch('https://soundcloud.com/oembed?format=json&maxheight=300&url=' + encodeURIComponent(el.dataset.url))
-        .then(r => r.json())
-        .then(j => {
-          const src = (j.html || '').match(/src="(https:\/\/w\.soundcloud\.com\/player\/[^"]+)"/);
-          if (!src) return;
-          const f = document.createElement('iframe');
-          f.src = src[1].replace(/&amp;/g, '&');
-          f.title = j.title || 'SoundCloud';
-          f.height = j.height || 166;
-          f.loading = 'lazy';
-          f.allow = 'autoplay; encrypted-media';
-          el.replaceChildren(f);
-        })
-        .catch(() => {});
-    });
   }
 
   function buildTOC() {
