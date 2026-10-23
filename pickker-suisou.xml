@@ -104,20 +104,8 @@
       .side-nav[popover]:not(:popover-open) {
         display: flex;
         flex-direction: column;
-        position: sticky;
-        inset: auto;
         top: var(--suisou-space-3);
-        width: auto;
-        height: auto;
         max-height: calc(100dvh - var(--suisou-space-3) * 2);
-        margin: 0;
-        padding: 0;
-        overflow-y: auto;
-        border: 0;
-        background: none;
-        color: inherit;
-        translate: none;
-        transition: none;
       }
     }
     @media (width &lt; 1024px) {
@@ -380,7 +368,7 @@
           </b:includable>
         </b:widget>
       </b:section>
-      <nav aria-label='ラベルと目次' class='side-nav js-side-nav' data-suisou-tray='drawer right' id='side-nav' popover=''>
+      <nav aria-label='ラベルと目次' class='side-nav js-side-nav' data-suisou-tray='drawer right m:dock' id='side-nav' popover=''>
         <b:section id='ラベルリスト/目次'>
           <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
             <b:widget-settings>

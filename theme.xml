@@ -148,7 +148,7 @@
           </b:includable>
         </b:widget>
       </b:section>
-      <nav aria-label='ラベルと目次' class='side-nav drawer js-side-nav' id='side-nav' popover=''>
+      <nav aria-label='ラベルと目次' class='side-nav drawer dock js-side-nav' id='side-nav' popover=''>
         <b:section id='ラベルリスト/目次'>
           <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
             <b:widget-settings>

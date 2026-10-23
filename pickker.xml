@@ -134,7 +134,10 @@
     }
     [hidden]:where(:not([hidden="until-found"])) { display: none; }
     dialog:not([open]) { display: none; }
-    [popover]:not(:popover-open) { display: none; }
+    [popover]:not(:popover-open):not(.drawer.dock) { display: none; }
+    @media (width &lt; 1024px) {
+      [popover].drawer.dock:not(:popover-open) { display: none; }
+    }
 
     .container {
       width: 100%;
@@ -503,6 +506,24 @@
     @starting-style {
       :where([popover]).drawer:popover-open::backdrop { opacity: 0; }
     }
+    @media (width &gt;= 1024px) {
+      :where([popover]).drawer.dock:not(:popover-open) {
+        display: block;
+        position: sticky;
+        inset: auto;
+        top: 0;
+        translate: none;
+        width: auto;
+        max-width: none;
+        height: auto;
+        max-height: 100dvh;
+        overflow: auto;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        transition: none;
+      }
+    }
 
     .media {
       display: flex;
@@ -755,20 +776,8 @@
       .side-nav[popover]:not(:popover-open) {
         display: flex;
         flex-direction: column;
-        position: sticky;
-        inset: auto;
         top: var(--space-3);
-        width: auto;
-        height: auto;
         max-height: calc(100dvh - var(--space-3) * 2);
-        margin: 0;
-        padding: 0;
-        overflow-y: auto;
-        border: 0;
-        background: none;
-        color: inherit;
-        translate: none;
-        transition: none;
       }
     }
     @media (width &lt; 1024px) {
@@ -1066,7 +1075,7 @@
           </b:includable>
         </b:widget>
       </b:section>
-      <nav aria-label='ラベルと目次' class='side-nav drawer js-side-nav' id='side-nav' popover=''>
+      <nav aria-label='ラベルと目次' class='side-nav drawer dock js-side-nav' id='side-nav' popover=''>
         <b:section id='ラベルリスト/目次'>
           <b:widget id='Label0' locked='false' title='ラベル' type='Label' version='1'>
             <b:widget-settings>

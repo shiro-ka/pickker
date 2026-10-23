@@ -77,20 +77,8 @@ body {
   .side-nav[popover]:not(:popover-open) {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    inset: auto;
     top: var(--suisou-space-3);
-    width: auto;
-    height: auto;
     max-height: calc(100dvh - var(--suisou-space-3) * 2);
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-    border: 0;
-    background: none;
-    color: inherit;
-    translate: none;
-    transition: none;
   }
 }
 @media (width < 1024px) {
