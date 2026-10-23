@@ -12,7 +12,9 @@
   const theme = () => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
   $('.js-theme-toggle')?.addEventListener('click', () => {
     const t = theme() === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = t;
+    const apply = () => { document.documentElement.dataset.theme = t; };
+    if (motion === 'smooth' && document.startViewTransition) document.startViewTransition(apply);
+    else apply();
     try { localStorage.theme = t; } catch {}
   });
   matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
