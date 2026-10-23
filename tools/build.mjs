@@ -36,9 +36,9 @@ const build = (dir, mode) => {
 };
 
 const outputs = {
-  'pickker.xml': build('', 'inline'),
-  'pickker-suisou.xml': build('suisou/', 'inline'),
-  'pickker-suisou-online.xml': build('suisou/', 'online'),
+  'pickker.xml': build('src/', 'inline'),
+  'suisou/pickker-suisou.xml': build('suisou/', 'inline'),
+  'suisou/pickker-suisou-online.xml': build('suisou/', 'online'),
 };
 if (/suisou/i.test(outputs['pickker.xml'])) throw new Error('pickker.xml に suisou が入っている');
 
@@ -57,11 +57,11 @@ if (process.argv.includes('--check')) {
     writeFileSync(at(file), xml);
     console.log(`✓ ${file} を生成 (${xml.split('\n').length} 行)`);
   }
-  rmSync(at('dist'), { recursive: true, force: true });
-  mkdirSync(at('dist'));
+  rmSync(at('suisou/dist'), { recursive: true, force: true });
+  mkdirSync(at('suisou/dist'));
   const assets = assetsOf('suisou/');
-  for (const name of assets) writeFileSync(at('dist/' + name), read('suisou/', name));
-  console.log(`✓ dist/ に ${assets.join(' / ')}`);
+  for (const name of assets) writeFileSync(at('suisou/dist/' + name), read('suisou/', name));
+  console.log(`✓ suisou/dist/ に ${assets.join(' / ')}`);
 }
 
 for (const file of Object.keys(outputs)) {
