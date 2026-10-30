@@ -159,29 +159,9 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(min(14rem, (100% - var(--suisou-space-3)) / 2), 1fr));
   gap: var(--suisou-space-3);
 }
-.feed-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--suisou-space-1);
-  padding: 0 0 var(--suisou-space-2);
-  overflow: hidden;
-}
-.feed-card > :not(.feed-card-image) { margin-inline: var(--suisou-space-2); }
 .feed-card-image {
-  width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-}
-.feed-card-date { margin-block-start: var(--suisou-space-2); }
-.feed-card-link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-.feed-card-labels {
-  position: relative;
-  z-index: 1;
 }
 .feed-loading {
   grid-column: 1 / -1;
