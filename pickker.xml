@@ -453,6 +453,32 @@
     }
     :where(a.panel-link) { display: block; }
     .panel-link:hover { background-image: linear-gradient(var(--color-hover), var(--color-hover)); }
+    :where(.panel-link:has(.panel-stretch)) { position: relative; }
+    .panel-stretch::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+    :where(.panel-link:has(.panel-stretch) :is(a, button, input, select, textarea, summary, label):not(.panel-stretch)) {
+      position: relative;
+      z-index: 1;
+    }
+    .panel-link:has(:is(a, button, input, select, textarea, summary, label):not(.panel-stretch):hover) { background-image: none; }
+    .panel-link:has(.panel-stretch:focus-visible) {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+    .panel-stretch:focus-visible { outline: none; }
+    .panel:has(&gt; .panel-bleed) { overflow: clip; }
+    .panel &gt; .panel-bleed {
+      inline-size: calc(100% + 2 * var(--space-2));
+      max-inline-size: none;
+      margin-inline: calc(-1 * var(--space-2));
+    }
+    .panel &gt; .panel-bleed:first-child { margin-block-start: calc(-1 * var(--space-2)); }
+    .panel &gt; .panel-bleed:last-child { margin-block-end: calc(-1 * var(--space-2)); }
+    .panel &gt; .panel-bleed:first-child:not(:last-child) { margin-block-end: var(--space-2); }
+    .panel &gt; .panel-bleed:last-child:not(:first-child) { margin-block-start: var(--space-2); }
     :where(dialog).panel::backdrop { background: var(--color-backdrop); }
     :where(dialog, [popover]):is(.panel, .drawer) { color: var(--color-text); }
     :where(dialog).panel {
@@ -869,21 +895,15 @@
       gap: var(--space-3);
     }
     .feed-card {
-      position: relative;
       display: flex;
       flex-direction: column;
       gap: var(--space-1);
-      padding: 0 0 var(--space-2);
-      overflow: hidden;
     }
-    .feed-card &gt; :not(.feed-card-image) { margin-inline: var(--space-2); }
     .feed-card-image {
-      width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
     }
     .feed-card-date {
-      margin-block-start: var(--space-2);
       font-size: var(--fs-12);
       line-height: var(--lh-12);
     }
@@ -891,15 +911,6 @@
       font-size: var(--fs-16);
       line-height: var(--lh-16);
       font-weight: 500;
-    }
-    .feed-card-link::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-    }
-    .feed-card-labels {
-      position: relative;
-      z-index: 1;
     }
     .feed-loading {
       grid-column: 1 / -1;
@@ -1487,9 +1498,9 @@
       const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
       const labels = (p.category || []).map(c =&gt; `&lt;a class='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'&gt;${esc(c.term)}&lt;/a&gt;`).join('');
       return `&lt;article class='feed-card panel panel-link'&gt;
-        ${thumb ? `&lt;img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/&gt;` : ''}
+        ${thumb ? `&lt;img class='feed-card-image panel-bleed' src='${esc(thumb)}' loading='lazy' alt=''/&gt;` : ''}
         &lt;time class='feed-card-date'&gt;${date}&lt;/time&gt;
-        &lt;h2 class='feed-card-title'&gt;&lt;a class='feed-card-link' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
+        &lt;h2 class='feed-card-title'&gt;&lt;a class='panel-stretch' href='${esc(url)}'&gt;${esc(p.title.$t)}&lt;/a&gt;&lt;/h2&gt;
         ${labels ? `&lt;p class='feed-card-labels'&gt;${labels}&lt;/p&gt;` : ''}
       &lt;/article&gt;`;
     };

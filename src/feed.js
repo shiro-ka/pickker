@@ -58,9 +58,9 @@
     const date = new Date(p.published.$t).toLocaleDateString('ja-JP');
     const labels = (p.category || []).map(c => `<a class='tag' href='${esc(HOME)}search/label/${encodeURIComponent(c.term)}'>${esc(c.term)}</a>`).join('');
     return `<article class='feed-card panel panel-link'>
-      ${thumb ? `<img class='feed-card-image' src='${esc(thumb)}' loading='lazy' alt=''/>` : ''}
+      ${thumb ? `<img class='feed-card-image panel-bleed' src='${esc(thumb)}' loading='lazy' alt=''/>` : ''}
       <time class='feed-card-date'>${date}</time>
-      <h2 class='feed-card-title'><a class='feed-card-link' href='${esc(url)}'>${esc(p.title.$t)}</a></h2>
+      <h2 class='feed-card-title'><a class='panel-stretch' href='${esc(url)}'>${esc(p.title.$t)}</a></h2>
       ${labels ? `<p class='feed-card-labels'>${labels}</p>` : ''}
     </article>`;
   };
