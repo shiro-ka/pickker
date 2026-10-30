@@ -134,13 +134,13 @@
               <ul class='side-posts'>
                 <b:if cond='data:view.isPost'>
                   <b:loop values='data:posts' var='post'>
-                    <li class='js-popular-item'><a class='side-post media' expr:href='data:post.href'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
+                    <li class='js-popular-item'><a class='side-post media' expr:href='data:post.href'><b:if cond='data:post.thumbnail'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/></b:if><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
                   <li class='js-label-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                    <li><a class='side-post media' expr:href='data:post.href'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
+                    <li><a class='side-post media' expr:href='data:post.href'><b:if cond='data:post.thumbnail'><img alt='' class='side-post-image' expr:src='data:post.thumbnail'/></b:if><span class='media-content'><span class='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
                 </b:if>
               </ul>

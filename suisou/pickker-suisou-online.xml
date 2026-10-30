@@ -133,13 +133,13 @@
               <ul class='side-posts'>
                 <b:if cond='data:view.isPost'>
                   <b:loop values='data:posts' var='post'>
-                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
+                    <li class='js-popular-item'><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><b:if cond='data:post.thumbnail'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/></b:if><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
                   <li class='js-label-post'/>
                   <li class='js-random-post'/>
                 <b:else/>
                   <b:loop values='data:posts' var='post'>
-                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
+                    <li><a class='side-post' data-suisou-item='media' expr:href='data:post.href'><b:if cond='data:post.thumbnail'><img alt='' class='side-post-image' data-suisou-item='media-figure square large' expr:src='data:post.thumbnail'/></b:if><span data-suisou-item='media-content'><span data-suisou-text='clamp-2'><data:post.title/></span></span></a></li>
                   </b:loop>
                 </b:if>
               </ul>
