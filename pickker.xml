@@ -945,6 +945,7 @@
       line-height: var(--lh-12);
       text-align: center;
     }
+    .site-footer a { user-select: none; }
 
     .image-modal {
       max-width: 95vw;
