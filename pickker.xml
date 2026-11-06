@@ -532,6 +532,8 @@
     @starting-style {
       :where([popover]).drawer:popover-open::backdrop { opacity: 0; }
     }
+    :where(body:has([popover].drawer:popover-open)) { pointer-events: none; }
+    :where(body:has([popover].drawer:popover-open) [popover]:popover-open) { pointer-events: auto; }
     @media (width &gt;= 1024px) {
       :where([popover]).drawer.dock:not(:popover-open) {
         display: block;
